@@ -2,7 +2,6 @@ package main
 
 import (
 	"math/rand"
-	"os"
 	"fmt"
 	"log"
 	"net/http"
@@ -10,26 +9,21 @@ import (
 
 	"go.opentelemetry.io/otel/api/trace"
 	"go.opentelemetry.io/otel/api/global"
+	"go.opentelemetry.io/otel/exporters/otlp"
 	"go.opentelemetry.io/otel/instrumentation/httptrace"
 
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
-
-	"github.com/honeycombio/opentelemetry-exporter-go/honeycomb"
 )
 
 func main() {
 	years := []int{2015, 2016, 2017, 2018, 2019, 2020}
-	exp, err := honeycomb.NewExporter(
-		honeycomb.Config{
-			APIKey: os.Getenv("HONEYCOMB_WRITE_KEY"),
-		},
-		honeycomb.TargetingDataset(os.Getenv("HONEYCOMB_DATASET")),
-		honeycomb.WithServiceName("year-service"),
+	exp, err := otlp.NewExporter(
+		otlp.WithAddress("localhost:9090"),
+		otlp.WithInsecure(),
 	)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer exp.Close()
 
 	config := sdktrace.Config{
 		DefaultSampler: sdktrace.AlwaysSample(),
@@ -43,7 +37,6 @@ func main() {
 	tracer := global.Tracer("greeting-service/year-service")
 
 	mux := http.NewServeMux()
-
 	mux.HandleFunc("/year", func(w http.ResponseWriter, r *http.Request) {
 		attrs, _, spanCtx := httptrace.Extract(r.Context(), r)
 		_, span := tracer.Start(

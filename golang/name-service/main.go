@@ -14,7 +14,6 @@ import (
 	beeline "github.com/honeycombio/beeline-go"
 	"github.com/honeycombio/beeline-go/propagation"
 	"github.com/honeycombio/beeline-go/wrappers/hnynethttp"
-	"github.com/honeycombio/beeline-go/trace"
 
 	"go.opentelemetry.io/otel/plugin/httptrace"
 )
@@ -24,16 +23,6 @@ func main() {
 		WriteKey: os.Getenv("HONEYCOMB_WRITE_KEY"),
 		Dataset: os.Getenv("HONEYCOMB_DATASET"),
 		ServiceName: "name-service-golang",
-		TraceHTTPHeaderPropagationHook: func(ctx context.Context, r *http.Request) []trace.HTTPPropagator {
-			return []trace.HTTPPropagator{
-				propagation.W3CHTTPPropagator{},
-			}
-		},
-		TraceHTTPHeaderParserHook: func(ctx context.Context, r *http.Request) []trace.HTTPPropagator {
-			return []trace.HTTPPropagator{
-				propagation.W3CHTTPPropagator{},
-			}
-		},
     })
     defer beeline.Close()
 
@@ -56,7 +45,20 @@ func main() {
 		fmt.Fprintf(w, names[rand.Intn(len(names))])
 	})
 
-	log.Fatal(http.ListenAndServe(":8000", hnynethttp.WrapHandler(mux)))
+	traceHeaderParserHook := func(r *http.Request) *propagation.PropagationContext {
+		prop, _ := propagation.UnmarshalAmazonTraceContext(r.Header.Get("X-Amzn-Trace-Id"))
+		fmt.Println(prop)
+		return prop
+	}
+
+	log.Println("Listening on ", ":8000")
+	log.Fatal(http.ListenAndServe(":8000", hnynethttp.WrapHandlerWithTraceParserHook(mux, traceHeaderParserHook)))
+}
+
+func propagateTraceHook(r *http.Request, prop *propagation.PropagationContext) map[string]string {
+	ctx := r.Context()
+	ctx, headers := propagation.MarshalW3CTraceContext(ctx, prop)
+	return headers
 }
 
 func getYear(ctx context.Context) (int, context.Context) {
@@ -64,7 +66,7 @@ func getYear(ctx context.Context) (int, context.Context) {
 	ctx, req = httptrace.W3C(ctx, req)
 	httptrace.Inject(ctx, req)
 	client := &http.Client{
-		Transport: hnynethttp.WrapRoundTripper(http.DefaultTransport),
+		Transport: hnynethttp.WrapRoundTripper(http.DefaultTransport, propagateTraceHook),
 		Timeout:   time.Second * 5,
 	}
 	res, err := client.Do(req)
