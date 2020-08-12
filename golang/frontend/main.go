@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-
 	"net/http"
+	"os"
 
 	"go.opentelemetry.io/otel/api/trace"
 	"go.opentelemetry.io/otel/api/global"
 	"go.opentelemetry.io/otel/api/correlation"
-	"go.opentelemetry.io/otel/plugin/httptrace"
+	"go.opentelemetry.io/otel/instrumentation/httptrace"
 
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 

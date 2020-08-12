@@ -128,6 +128,8 @@ github.com/gorilla/mux v1.7.4/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB7
 github.com/hashicorp/hcl v1.0.0/go.mod h1:E5yfLk+7swimpb2L/Alb/PJmXilQ/rhwaUYs4T20WEQ=
 github.com/honeycombio/beeline-go v0.5.1 h1:LA2thwy8kaEOMO5DDxuBED/EA3zjUgLh3Shv1M0Xgn0=
 github.com/honeycombio/beeline-go v0.5.1/go.mod h1:C21mjPik8BRO9BAoN8sRdU/EnQI09nbbzOMS5EGhdx4=
+github.com/honeycombio/beeline-go v0.6.1 h1:zCi7Pkz+x2b9VTPLvFuagtn0i1Pf7zBcWQPr5MHPxpA=
+github.com/honeycombio/beeline-go v0.6.1/go.mod h1:HYUlLvE4IC7ibxg+RvCF9KE6/QGVpJozdyku5WLmcV8=
 github.com/honeycombio/libhoney-go v1.12.4 h1:rWAoxhpvu2briq85wZc04osHgKtueCLAk/3igqTX3+Q=
 github.com/honeycombio/libhoney-go v1.12.4/go.mod h1:tp2qtK0xMZyG/ZfykkebQESKFS78xpyPr2wEswZ1j6U=
 github.com/honeycombio/opentelemetry-exporter-go v0.5.0/go.mod h1:eMiV6U/Jir55jTtAKiHASk7CFIu/O8gABXeWKiM0H1w=
@@ -285,6 +287,7 @@ go.opentelemetry.io/otel v0.6.0/go.mod h1:jzBIgIzK43Iu1BpDAXwqOd6UPsSAk+ewVZ5ofS
 go.opentelemetry.io/otel v0.8.0 h1:he/8j/EBlKjENVtDvFalawIUcQ+1E3uHRsvJZWLIa7M=
 go.opentelemetry.io/otel v0.8.0/go.mod h1:ckxzUEfk7tAkTwEMVdkllBM+YOfE/K9iwg6zYntFYSg=
 go.opentelemetry.io/otel v0.9.0 h1:nsdCDHzQx1Yv8E2nwCPcMXMfg+EMIlx1LBOXNC8qSQ8=
+go.opentelemetry.io/otel v0.10.0 h1:2y/HYj1dIfG1nPh0Z15X4se8WwYWuTyKHLSgRb/mbQ0=
 go.uber.org/atomic v1.3.2/go.mod h1:gD2HeocX3+yG+ygLZcrzQJaqmWj9AIm7n08wl/qW/PE=
 go.uber.org/atomic v1.4.0/go.mod h1:gD2HeocX3+yG+ygLZcrzQJaqmWj9AIm7n08wl/qW/PE=
 go.uber.org/multierr v1.1.0/go.mod h1:wR5kodmAFQ0UK8QlbwjlSNy0Z68gJhDJUG5sjR94q/0=

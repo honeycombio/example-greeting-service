@@ -1,29 +1,36 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"math/rand"
 	"net/http"
+	"os"
 	"time"
 
 	beeline "github.com/honeycombio/beeline-go"
 	"github.com/honeycombio/beeline-go/wrappers/hnynethttp"
 	"github.com/honeycombio/beeline-go/propagation"
-	"github.com/honeycombio/beeline-go/trace"
 )
+
+func traceParserHook(r *http.Request) *propagation.PropagationContext {
+	headers := map[string]string{
+		"traceparent": r.Header.Get("traceparent"),
+	}
+	ctx := r.Context()
+	ctx, prop, err := propagation.UnmarshalW3CTraceContext(ctx, headers)
+	if err != nil {
+		fmt.Println("Error unmarshaling header")
+		fmt.Println(err)
+	}
+	return prop
+}
 
 func main() {
 	beeline.Init(beeline.Config{
 		WriteKey: os.Getenv("HONEYCOMB_WRITE_KEY"),
 		Dataset: os.Getenv("HONEYCOMB_DATASET"),
 		ServiceName: "message-service",
-		TraceHTTPHeaderParserHook: func(ctx context.Context, r *http.Request) []trace.HTTPPropagator {
-			return []trace.HTTPPropagator{
-				propagation.W3CHTTPPropagator{},
-			}
-		},
     })
     defer beeline.Close()
 

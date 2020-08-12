@@ -13,9 +13,10 @@ import (
 
 	beeline "github.com/honeycombio/beeline-go"
 	"github.com/honeycombio/beeline-go/propagation"
+	"github.com/honeycombio/beeline-go/wrappers/config"
 	"github.com/honeycombio/beeline-go/wrappers/hnynethttp"
 
-	"go.opentelemetry.io/otel/plugin/httptrace"
+	"go.opentelemetry.io/otel/instrumentation/httptrace"
 )
 
 func main() {
@@ -52,7 +53,7 @@ func main() {
 	}
 
 	log.Println("Listening on ", ":8000")
-	log.Fatal(http.ListenAndServe(":8000", hnynethttp.WrapHandlerWithTraceParserHook(mux, traceHeaderParserHook)))
+	log.Fatal(http.ListenAndServe(":8000", hnynethttp.WrapHandlerWithConfig(mux, config.HTTPIncomingConfig{HTTPParserHook: traceHeaderParserHook})))
 }
 
 func propagateTraceHook(r *http.Request, prop *propagation.PropagationContext) map[string]string {
@@ -66,7 +67,7 @@ func getYear(ctx context.Context) (int, context.Context) {
 	ctx, req = httptrace.W3C(ctx, req)
 	httptrace.Inject(ctx, req)
 	client := &http.Client{
-		Transport: hnynethttp.WrapRoundTripper(http.DefaultTransport, propagateTraceHook),
+		Transport: hnynethttp.WrapRoundTripperWithConfig(http.DefaultTransport, config.HTTPOutgoingConfig{HTTPPropagationHook: propagateTraceHook}),
 		Timeout:   time.Second * 5,
 	}
 	res, err := client.Do(req)
