@@ -1,14 +1,14 @@
 package main
 
 import (
-	"math/rand"
 	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
 	"time"
 
-	"go.opentelemetry.io/otel/api/trace"
 	"go.opentelemetry.io/otel/api/global"
+	"go.opentelemetry.io/otel/api/trace"
 	"go.opentelemetry.io/otel/exporters/otlp"
 	"go.opentelemetry.io/otel/instrumentation/httptrace"
 
@@ -52,6 +52,5 @@ func main() {
 		fmt.Fprintf(w, "%d", years[rand.Intn(len(years))])
 	})
 
-	log.Fatal(http.ListenAndServe(":6000", mux))
+	log.Fatal(http.ListenAndServe(":6001", mux))
 }
-
