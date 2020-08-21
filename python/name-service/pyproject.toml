@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "name-service"
+version = "0.1.0"
+description = ""
+authors = ["Douglas Soo <dsoo@alum.mit.edu>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+honeycomb-beeline = { path = "/Users/doug/src/github.com/honeycombio/beeline-python" }
+flask = "^1.1.2"
+python-dotenv = "^0.14.0"
+requests = "^2.24.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+autopep8 = "^1.5.4"
