@@ -7,8 +7,7 @@ authors = ["Douglas Soo <dsoo@alum.mit.edu>"]
 [tool.poetry.dependencies]
 python = "^3.8"
 werkzeug = "^1.0.1"
-honeycomb-beeline = { path = "/Users/doug/src/github.com/honeycombio/beeline-python" }
-
+honeycomb-beeline = "^2.12.2"
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
 

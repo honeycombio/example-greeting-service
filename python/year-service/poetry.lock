@@ -87,21 +87,15 @@ bcrypt = ["bcrypt"]
 
 [[package]]
 category = "main"
-description = ""
-develop = true
+description = "Honeycomb library for easy instrumentation"
 name = "honeycomb-beeline"
 optional = false
 python-versions = ">=2.7"
-version = "2.13.0-dev0"
+version = "2.12.2"
 
 [package.dependencies]
 libhoney = ">=1.7.0"
-wrapt = "^1.12.1"
-
-[package.source]
-reference = ""
-type = "directory"
-url = "/Users/doug/src/github.com/honeycombio/beeline-python"
+wrapt = ">=1.12.1,<2.0.0"
 
 [[package]]
 category = "main"
@@ -300,7 +294,7 @@ python-versions = "*"
 version = "1.12.1"
 
 [metadata]
-content-hash = "7287620063248024702d51396d5caa02c4091dd432aef23e9db72fa10ce847a5"
+content-hash = "fba171605245638e068c9044445fcb54e003490aef5da07fc8862943dd73abb9"
 lock-version = "1.0"
 python-versions = "^3.8"
 
@@ -336,7 +330,10 @@ django = [
     {file = "Django-3.1-py3-none-any.whl", hash = "sha256:1a63f5bb6ff4d7c42f62a519edc2adbb37f9b78068a5a862beff858b68e3dc8b"},
     {file = "Django-3.1.tar.gz", hash = "sha256:2d390268a13c655c97e0e2ede9d117007996db692c1bb93eabebd4fb7ea7012b"},
 ]
-honeycomb-beeline = []
+honeycomb-beeline = [
+    {file = "honeycomb-beeline-2.12.2.tar.gz", hash = "sha256:57a1fb98eccd209c64b333d12ae18cbe5b2e2f673b984f9917523b92e110599a"},
+    {file = "honeycomb_beeline-2.12.2-py2.py3-none-any.whl", hash = "sha256:64777cadfbe20bbd5a17ef6c581a81d6f30179eec2884f0e29ef2d504e41b9ab"},
+]
 idna = [
     {file = "idna-2.10-py2.py3-none-any.whl", hash = "sha256:b97d804b1e9b523befed77c48dacec60e6dcb0b5391d57af6a65a312a90648c0"},
     {file = "idna-2.10.tar.gz", hash = "sha256:b307872f855b18632ce0c21c5e45be78c0ea7ae4c15c828c20788b26921eb3f6"},
