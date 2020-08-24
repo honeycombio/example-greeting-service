@@ -34,6 +34,10 @@ this. These services are stupid!
 
 All of these statements are true!
 
+### Running
+
+There is a `Tiltfile` to run these services on a local host using https://tilt.dev/ - after installing Tilt, running `tilt up` should spin up all of the services.
+
 ### Tips
 
 For go services, use the go modules file to replace our beeline (and optionally the opentelemetry-sdk) with a copy on your local machine, so you can test in-progress changes:

@@ -62,18 +62,18 @@ def launch_ruby_name_service(auto_init=True):
 
 
 # Launch one of each of these types of services. Go services init by default
-# launch_go_frontend()
-launch_python_frontend()
+launch_go_frontend()
+# launch_python_frontend()
 
-# launch_go_message_service()
-launch_python_message_service()
+launch_go_message_service()
+# launch_python_message_service()
 
-# launch_go_name_service()
-launch_python_name_service()
+launch_go_name_service()
+# launch_python_name_service()
 # launch_ruby_name_service()
 
-# launch_go_year_service()
-launch_python_year_service()
+launch_go_year_service()
+# launch_python_year_service()
 
 ###
 # Notes
