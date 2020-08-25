@@ -8,11 +8,11 @@ so messages.
 
 The system is composed of several services, each with a specific responsibility:
 
-* frontend - This service acts as an API aggregation layer. It depends on the
-             name service and the message service.
-* name-service - This service returns a random name. It depends on the year service.
-* year-service - This service returns a random year.
-* message-service - This service returns a random message from a list.
+- frontend - This service acts as an API aggregation layer. It depends on the
+  name service and the message service.
+- name-service - This service returns a random name. It depends on the year service.
+- year-service - This service returns a random year.
+- message-service - This service returns a random message from a list.
 
 Each service can be written in any language, and they should use a combination
 of instrumentation techniques. Some will be instrumented with a Honeycomb
@@ -24,20 +24,23 @@ OpenTelemetry.
 Each service reads it's configuration from the environment. Specific environment
 variables:
 
-* HONEYCOMB_WRITE_KEY - Your honeycomb API key
-* HONEYCOMB_DATASET - The name of the dataset you want to write to
+- HONEYCOMB_WRITE_KEY - Your honeycomb API key
+- HONEYCOMB_DATASET - The name of the dataset you want to write to
 
 ### Caveats
 
 Port and host names hardcoded. We should use docker-compose or something for
-this. These services are stupid! 
+this. These services are stupid!
 
 All of these statements are true!
+
+### Running
+
+There is a `Tiltfile` to run these services on a local host using https://tilt.dev/ - after installing Tilt, running `tilt up` should spin up all of the services.
 
 ### Tips
 
 For go services, use the go modules file to replace our beeline (and optionally the opentelemetry-sdk) with a copy on your local machine, so you can test in-progress changes:
-
 
 ```
 module main
@@ -55,4 +58,10 @@ Or in Ruby, modify the gemfile:
 source "https://rubygems.org"
 
 gem "honeycomb-beeline", path: "/home/paul/projects/beeline-ruby"
+```
+
+In Python, modify pyproject.toml:
+
+```
+honeycomb-beeline = { path = "/Users/doug/src/github.com/honeycombio/beeline-python" }
 ```

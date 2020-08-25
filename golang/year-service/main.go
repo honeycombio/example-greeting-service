@@ -59,6 +59,6 @@ func main() {
 		fmt.Fprintf(w, "%d", years[rand.Intn(len(years))])
 	})
 
-	log.Fatal(http.ListenAndServe(":6000", mux))
+	log.Fatal(http.ListenAndServe(":6001", mux))
 }
 

@@ -35,7 +35,7 @@ get '/name' do
 end
 
 def get_year
-  year_service_connection = Faraday.new("http://localhost:6000")
+  year_service_connection = Faraday.new("http://localhost:6001")
   year_service_response = year_service_connection.get("/year") do |request|
   end
   year_service_response.body.to_i
