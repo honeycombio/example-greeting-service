@@ -1,25 +1,33 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"math/rand"
 	"net/http"
+	"os"
 	"time"
 
-	"go.opentelemetry.io/otel/api/global"
-	"go.opentelemetry.io/otel/api/trace"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/trace"
 	"go.opentelemetry.io/otel/exporters/otlp"
-	"go.opentelemetry.io/otel/instrumentation/httptrace"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/httptrace/otelhttptrace"
 
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 )
 
 func main() {
+	ctx := context.Background()
 	years := []int{2015, 2016, 2017, 2018, 2019, 2020}
 	exp, err := otlp.NewExporter(
-		otlp.WithAddress("localhost:9090"),
-		otlp.WithInsecure(),
+		ctx,
+		otlp.WithInsecure(),  // comment this out when sending to a TLS endpoint
+		otlp.WithAddress(os.Getenv("HONEYCOMB_OTLP_ADDRESS")),
+		otlp.WithHeaders(map[string]string{
+			"x-honeycomb-team": os.Getenv("HONEYCOMB_WRITE_KEY"),
+			"x-honeycomb-dataset": "test-otlp",
+		}),
 	)
 	if err != nil {
 		log.Fatal(err)
@@ -28,17 +36,15 @@ func main() {
 	config := sdktrace.Config{
 		DefaultSampler: sdktrace.AlwaysSample(),
 	}
-	tp, err := sdktrace.NewProvider(sdktrace.WithConfig(config), sdktrace.WithSyncer(exp))
-	if err != nil {
-		log.Fatal(err)
-	}
-	global.SetTraceProvider(tp)
+	tp := sdktrace.NewTracerProvider(sdktrace.WithConfig(config), sdktrace.WithSyncer(exp))
+	otel.SetTracerProvider(tp)
 
-	tracer := global.Tracer("greeting-service/year-service")
+	tracer := otel.Tracer("greeting-service/year-service")
+
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/year", func(w http.ResponseWriter, r *http.Request) {
-		attrs, _, spanCtx := httptrace.Extract(r.Context(), r)
+		attrs, _, spanCtx := otelhttptrace.Extract(r.Context(), r)
 		_, span := tracer.Start(
 			trace.ContextWithRemoteSpanContext(r.Context(), spanCtx),
 			"year-service",
