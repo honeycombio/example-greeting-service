@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"crypto/x509"
 	"fmt"
 	"log"
 	"math/rand"
@@ -9,10 +10,12 @@ import (
 	"os"
 	"time"
 
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/trace"
-	"go.opentelemetry.io/otel/exporters/otlp"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/httptrace/otelhttptrace"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/exporters/otlp"
+	"go.opentelemetry.io/otel/trace"
+
+	"google.golang.org/grpc/credentials"
 
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 )
@@ -20,14 +23,22 @@ import (
 func main() {
 	ctx := context.Background()
 	years := []int{2015, 2016, 2017, 2018, 2019, 2020}
+
+	certPool, err := x509.SystemCertPool()
+	if err != nil {
+		panic(err)
+	}
+	creds := credentials.NewClientTLSFromCert(certPool, "")
+
 	exp, err := otlp.NewExporter(
 		ctx,
-		otlp.WithInsecure(),  // comment this out when sending to a TLS endpoint
+		//otlp.WithInsecure(),  // comment this out when sending to a TLS endpoint
 		otlp.WithAddress(os.Getenv("HONEYCOMB_OTLP_ADDRESS")),
 		otlp.WithHeaders(map[string]string{
-			"x-honeycomb-team": os.Getenv("HONEYCOMB_WRITE_KEY"),
+			"x-honeycomb-team":    os.Getenv("HONEYCOMB_WRITE_KEY"),
 			"x-honeycomb-dataset": "test-otlp",
 		}),
+		otlp.WithTLSCredentials(creds),
 	)
 	if err != nil {
 		log.Fatal(err)
@@ -40,7 +51,6 @@ func main() {
 	otel.SetTracerProvider(tp)
 
 	tracer := otel.Tracer("greeting-service/year-service")
-
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/year", func(w http.ResponseWriter, r *http.Request) {
