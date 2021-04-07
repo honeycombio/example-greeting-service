@@ -9,6 +9,7 @@ import (
 	"time"
 
 	beeline "github.com/honeycombio/beeline-go"
+	"github.com/honeycombio/beeline-go/wrappers/config"
 	"github.com/honeycombio/beeline-go/wrappers/hnynethttp"
 	"github.com/honeycombio/beeline-go/propagation"
 )
@@ -46,5 +47,11 @@ func main() {
 		fmt.Fprintf(w, messages[rand.Intn(len(messages))])
 	})
 
-	log.Fatal(http.ListenAndServe(":9000", hnynethttp.WrapHandler(mux)))
+	log.Fatal(
+		http.ListenAndServe(
+			":9000",
+			hnynethttp.WrapHandlerWithConfig(
+				mux,
+				config.HTTPIncomingConfig{
+					HTTPParserHook: traceParserHook,})))
 }
