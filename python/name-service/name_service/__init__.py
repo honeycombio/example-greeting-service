@@ -4,6 +4,7 @@ from flask import Flask
 import beeline
 import os
 import random
+import beeline.propagation.w3c as w3c
 from beeline.middleware.flask import HoneyMiddleware
 from beeline.patch import requests
 import requests
@@ -31,6 +32,8 @@ beeline.init(
     dataset=os.environ.get("HONEYCOMB_DATASET"),
     service_name='python-greeting-service-name',
     debug=True,
+    http_trace_parser_hook=w3c.http_trace_parser_hook,
+    http_trace_propagation_hook=w3c.http_trace_propagation_hook
 )
 HoneyMiddleware(app, db_events=True)
 
