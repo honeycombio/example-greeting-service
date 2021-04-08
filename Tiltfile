@@ -55,6 +55,9 @@ def launch_python_year_service(auto_init=True):
     cmd = "cd python/year-service && poetry install --no-root && poetry run yearservice/manage.py runserver 127.0.0.1:6001"
     local_resource("py-year", "", auto_init=auto_init, serve_cmd=cmd)
 
+def launch_ruby_frontend(auto_init=True):
+    cmd = "cd ruby/frontend && rackup ./frontend.ru"
+    local_resource("rb-frontend", "", auto_init=auto_init, serve_cmd=cmd)
 
 def launch_ruby_name_service(auto_init=True):
     cmd = "cd ruby/name-service && ruby name.rb"
@@ -64,6 +67,7 @@ def launch_ruby_name_service(auto_init=True):
 # Launch one of each of these types of services. Go services init by default
 launch_go_frontend()
 # launch_python_frontend()
+# launch_ruby_frontend()
 
 launch_go_message_service()
 # launch_python_message_service()
