@@ -1,16 +1,17 @@
 require 'sinatra'
 require 'honeycomb-beeline'
+require 'honeycomb/propagation/w3c'
 require 'faraday'
 
 Honeycomb.configure do |config|
   config.write_key = ENV['HONEYCOMB_WRITE_KEY']
   config.dataset = ENV['HONEYCOMB_DATASET']
-  config.service_name = "ruby-greeting-service-name"
-  config.trace_http_header_propagation_hook do |request|
-
+  config.service_name = "name-service-rb"
+  config.http_trace_parser_hook do |env|
+    Honeycomb::W3CPropagation::UnmarshalTraceContext.parse_rack_env(env)
   end
-  config.trace_http_header_parser_hook do |request|
-    ["foo", "bar"]
+  config.http_trace_propagation_hook do |env, context|
+    Honeycomb::W3CPropagation::MarshalTraceContext.parse_faraday_env(env, context)
   end
   #config.client = Libhoney::LogClient.new
 end
