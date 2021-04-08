@@ -47,8 +47,15 @@ func main() {
 	})
 
 	traceHeaderParserHook := func(r *http.Request) *propagation.PropagationContext {
-		prop, _ := propagation.UnmarshalAmazonTraceContext(r.Header.Get("X-Amzn-Trace-Id"))
-		fmt.Println(prop)
+		headers := map[string]string{
+			"traceparent": r.Header.Get("traceparent"),
+		}
+		ctx := r.Context()
+		ctx, prop, err := propagation.UnmarshalW3CTraceContext(ctx, headers)
+		if err != nil {
+			fmt.Println("Error unmarshaling header")
+			fmt.Println(err)
+		}
 		return prop
 	}
 
