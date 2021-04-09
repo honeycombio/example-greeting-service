@@ -10,6 +10,8 @@ sourceCompatibility = '11'
 
 repositories {
 	mavenCentral()
+	// path to local .jar file
+	flatDir {	dirs System.getenv("BEESTRO_PATH") }
 }
 
 dependencies {
@@ -23,6 +25,8 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+
+	implementation 'io.honeycomb:honeycomb-opentelemetry-java:1.0-SNAPSHOT'
 }
 
 test {
