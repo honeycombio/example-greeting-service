@@ -4,6 +4,7 @@ from werkzeug.routing import Map, Rule
 from werkzeug.wrappers import Request, Response
 from http.client import HTTPException
 
+import beeline
 from beeline.patch import urllib
 import urllib
 
@@ -28,10 +29,12 @@ class Greeting(object):
         except HTTPException as e:
             return e
 
+    @beeline.traced(name="name retrieval")
     def get_name(self):
         with urllib.request.urlopen('http://localhost:8000/name') as f:
             return f.read().decode('utf-8')
 
+    @beeline.traced(name="message retrieval")
     def get_message(self):
         with urllib.request.urlopen('http://localhost:9000/message') as f:
             return f.read().decode('utf-8')

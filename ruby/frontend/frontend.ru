@@ -66,17 +66,21 @@ end
 
 class NameClient
   def self.get_name
-    Faraday.new("http://localhost:8000")
-           .get("/name")
-           .body
+    Honeycomb.start_span(name: "name retrieval") do |_span|
+      Faraday.new("http://localhost:8000")
+            .get("/name")
+            .body
+    end
   end
 end
 
 class MessageClient
   def self.get_message
-    Faraday.new("http://localhost:9000")
-           .get("/message")
-           .body
+    Honeycomb.start_span(name: "message retrieval") do |_span|
+      Faraday.new("http://localhost:9000")
+            .get("/message")
+            .body
+    end
   end
 end
 
