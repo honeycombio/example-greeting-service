@@ -1,15 +1,15 @@
 package main
 
 import (
-	"math/rand"
-	"os"
 	"fmt"
 	"log"
+	"math/rand"
 	"net/http"
+	"os"
 	"time"
 
-	"go.opentelemetry.io/otel/api/trace"
 	"go.opentelemetry.io/otel/api/global"
+	"go.opentelemetry.io/otel/api/trace"
 	"go.opentelemetry.io/otel/instrumentation/httptrace"
 
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
@@ -24,7 +24,7 @@ func main() {
 			APIKey: os.Getenv("HONEYCOMB_WRITE_KEY"),
 		},
 		honeycomb.TargetingDataset(os.Getenv("HONEYCOMB_DATASET")),
-		honeycomb.WithServiceName("year-service"),
+		honeycomb.WithServiceName("year-service-golang"),
 	)
 	if err != nil {
 		log.Fatal(err)
@@ -61,4 +61,3 @@ func main() {
 
 	log.Fatal(http.ListenAndServe(":6001", mux))
 }
-

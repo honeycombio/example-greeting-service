@@ -13,6 +13,6 @@ class YearappConfig(AppConfig):
         beeline.init(
             writekey=os.environ.get("HONEYCOMB_WRITE_KEY"),
             dataset=os.environ.get("HONEYCOMB_DATASET"),
-            service_name='python-greeting-service-year',
+            service_name='year-service-python',
             debug=True,
         )

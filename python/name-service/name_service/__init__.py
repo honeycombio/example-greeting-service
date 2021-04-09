@@ -30,7 +30,7 @@ beeline.init(
     writekey=os.environ.get("HONEYCOMB_WRITE_KEY"),
     # The name of your app is a good choice to start with
     dataset=os.environ.get("HONEYCOMB_DATASET"),
-    service_name='python-greeting-service-name',
+    service_name='name-service-python',
     debug=True,
     http_trace_parser_hook=w3c.http_trace_parser_hook,
     http_trace_propagation_hook=w3c.http_trace_propagation_hook
