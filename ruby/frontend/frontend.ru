@@ -2,17 +2,8 @@
 
 # SPDX-License-Identifier: Apache-2.0
 
-require 'bundler/inline'
-
-gemfile(true) do
-  source 'https://rubygems.org'
-
-  gem 'rails'
-  gem 'honeycomb-beeline'
-  gem 'faraday'
-end
-
 require 'action_controller/railtie'
+require 'honeycomb-beeline'
 require 'honeycomb/propagation/w3c'
 require 'faraday'
 

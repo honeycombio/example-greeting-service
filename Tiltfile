@@ -69,9 +69,9 @@ def launch_java_year_service(auto_init=True):
 
 
 # Launch one of each of these types of services. Go services init by default
-launch_go_frontend()
+# launch_go_frontend()
 # launch_python_frontend()
-# launch_ruby_frontend()
+launch_ruby_frontend()
 
 launch_go_message_service()
 # launch_python_message_service()
