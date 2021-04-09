@@ -10,7 +10,7 @@ beeline.init(
     writekey=os.environ.get("HONEYCOMB_WRITE_KEY"),
     # The name of your app is a good choice to start with
     dataset=os.environ.get("HONEYCOMB_DATASET"),
-    service_name='python-greeting-service-message',
+    service_name='message-service-python',
     debug=True,
 )
 

@@ -9,9 +9,9 @@ import (
 	"time"
 
 	beeline "github.com/honeycombio/beeline-go"
+	"github.com/honeycombio/beeline-go/propagation"
 	"github.com/honeycombio/beeline-go/wrappers/config"
 	"github.com/honeycombio/beeline-go/wrappers/hnynethttp"
-	"github.com/honeycombio/beeline-go/propagation"
 )
 
 func traceParserHook(r *http.Request) *propagation.PropagationContext {
@@ -29,11 +29,11 @@ func traceParserHook(r *http.Request) *propagation.PropagationContext {
 
 func main() {
 	beeline.Init(beeline.Config{
-		WriteKey: os.Getenv("HONEYCOMB_WRITE_KEY"),
-		Dataset: os.Getenv("HONEYCOMB_DATASET"),
-		ServiceName: "message-service",
-    })
-    defer beeline.Close()
+		WriteKey:    os.Getenv("HONEYCOMB_WRITE_KEY"),
+		Dataset:     os.Getenv("HONEYCOMB_DATASET"),
+		ServiceName: "message-service-golang",
+	})
+	defer beeline.Close()
 
 	messages := []string{
 		"how are you?", "how are you doing?", "what's good?", "what's up?", "how do you do?",
@@ -53,5 +53,5 @@ func main() {
 			hnynethttp.WrapHandlerWithConfig(
 				mux,
 				config.HTTPIncomingConfig{
-					HTTPParserHook: traceParserHook,})))
+					HTTPParserHook: traceParserHook})))
 }
