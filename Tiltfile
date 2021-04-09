@@ -63,21 +63,26 @@ def launch_ruby_name_service(auto_init=True):
     cmd = "cd ruby/name-service && ruby name.rb"
     local_resource("rb-name", "", auto_init=auto_init, serve_cmd=cmd)
 
+def launch_java_year_service(auto_init=True):
+    cmd = "cd java/year-service && gradle bootRun"
+    local_resource("☕️-year", "", auto_init=auto_init, serve_cmd=cmd)
+
 
 # Launch one of each of these types of services. Go services init by default
-launch_go_frontend()
+# launch_go_frontend()
 # launch_python_frontend()
-# launch_ruby_frontend()
+launch_ruby_frontend()
 
 launch_go_message_service()
 # launch_python_message_service()
 
-launch_go_name_service()
-# launch_python_name_service()
+# launch_go_name_service()
+launch_python_name_service()
 # launch_ruby_name_service()
 
-launch_go_year_service()
+# launch_go_year_service()
 # launch_python_year_service()
+launch_java_year_service()
 
 ###
 # Notes
