@@ -1,13 +1,14 @@
 __version__ = '0.1.0'
 
-from flask import Flask
-import beeline
 import os
 import random
+
+import beeline
 import beeline.propagation.w3c as w3c
-from beeline.middleware.flask import HoneyMiddleware
-from beeline.patch import requests
 import requests
+from beeline.middleware.flask import HoneyMiddleware
+from beeline.patch.requests import *
+from flask import Flask
 
 names_by_year = {
     2015: ['sophia', 'jackson', 'emma', 'aiden', 'olivia', 'liam', 'ava', 'lucas', 'mia', 'noah'],
@@ -19,6 +20,7 @@ names_by_year = {
 }
 
 
+@beeline.traced(name="✨ call /year ✨")
 def get_year():
     r = requests.get('http://localhost:6001/year')
     return int(r.text)
@@ -41,5 +43,6 @@ HoneyMiddleware(app, db_events=True)
 @app.route('/name')
 def get_name():
     year = get_year()
-    names = names_by_year[year]
+    with beeline.tracer(name="📖 look up name based on year ✨"):
+        names = names_by_year[year]
     return random.choice(names)

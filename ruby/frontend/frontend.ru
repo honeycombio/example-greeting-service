@@ -49,25 +49,32 @@ end
 
 class GreetingsController < ActionController::Base
   def index
+    Honeycomb.add_field('name', '/greeting') # why doesn't this overwrite the event name?
     name = NameClient.get_name
     message = MessageClient.get_message
-    render plain: "Hello #{name}, #{message}"
+    Honeycomb.start_span(name: "🎨 render message ✨") do |span|
+      render plain: "Hello #{name}, #{message}"
+    end
   end
 end
 
 class NameClient
   def self.get_name
-    Faraday.new("http://localhost:8000")
-           .get("/name")
-           .body
+    Honeycomb.start_span(name: "✨ call /name ✨") do |_span|
+      Faraday.new("http://localhost:8000")
+            .get("/name")
+            .body
+    end
   end
 end
 
 class MessageClient
   def self.get_message
-    Faraday.new("http://localhost:9000")
-           .get("/message")
-           .body
+    Honeycomb.start_span(name: "✨ call /message ✨") do |_span|
+      Faraday.new("http://localhost:9000")
+            .get("/message")
+            .body
+    end
   end
 end
 
