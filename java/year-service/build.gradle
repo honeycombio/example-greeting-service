@@ -10,6 +10,9 @@ sourceCompatibility = '11'
 
 repositories {
 	mavenCentral()
+
+	// this is only needed for local dev on the beestro
+	flatDir {	dirs System.getenv("SDK_PATH") }
 }
 
 dependencies {
@@ -23,6 +26,10 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+
+	// this is gonna get a different name eventually
+	implementation 'io.honeycomb:sdk-1.0-SNAPSHOT'
+
 }
 
 test {
