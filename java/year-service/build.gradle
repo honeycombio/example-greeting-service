@@ -28,3 +28,13 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
+
+task setEnvVars(type:Exec) { 
+	environment 'OTEL_RESOURCE_ATTRIBUTES', 'service.name=year-service-java' 
+	environment 'OTEL_TRACES_EXPORTER', 'otlp' 
+	environment 'OTEL_METRICS_EXPORTER', 'none' 
+	environment 'OTEL_TRACES_EXPORTER', 'otlp' 
+	environment 'OTEL_EXPORTER_OTLP_ENDPOINT', 'https://api.honeycomb.io:443' 
+	environment 'OTEL_EXPORTER_OTLP_HEADERS', 'x-honeycomb-team=${HONEYCOMB_API_KEY},x-honeycomb-dataset=${HONEYCOMB_DATASET}' 
+	environment 'JAVA_TOOL_OPTIONS', '-javaagent:${AGENT_PATH}' 
+	}
