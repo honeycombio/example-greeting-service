@@ -47,8 +47,7 @@ func main() {
 	mux.HandleFunc("/year", func(w http.ResponseWriter, r *http.Request) {
 		attrs, _, spanCtx := httptrace.Extract(r.Context(), r)
 		_, span := tracer.Start(
-			trace.ContextWithRemoteSpanContext(r.Context(), spanCtx),
-			"year-service",
+			trace.ContextWithRemoteSpanContext(r.Context(), spanCtx), "/year",
 			trace.WithAttributes(attrs...),
 		)
 		defer span.End()

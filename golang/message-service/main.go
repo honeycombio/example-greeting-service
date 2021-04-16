@@ -42,6 +42,9 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/message", func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+		ctx, span := beeline.StartSpan(ctx, "📖 look up message ✨")
+		defer span.Send()
 		rand.Seed(time.Now().UnixNano())
 		time.Sleep(time.Duration(rand.Intn(5)) * time.Millisecond)
 		fmt.Fprintf(w, messages[rand.Intn(len(messages))])

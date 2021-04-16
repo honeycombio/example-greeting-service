@@ -76,7 +76,7 @@ launch_ruby_frontend()
 launch_go_message_service()
 # launch_python_message_service()
 
-# launch_go_name_service()
+# launch_go_name_service() # doesn't recognize Java autoinstr
 launch_python_name_service()
 # launch_ruby_name_service()
 

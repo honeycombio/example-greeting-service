@@ -70,6 +70,8 @@ func propagateTraceHook(r *http.Request, prop *propagation.PropagationContext) m
 }
 
 func getYear(ctx context.Context) (int, context.Context) {
+	ctx, span := beeline.StartSpan(ctx, "✨ call /year ✨")
+	defer span.Send()
 	req, _ := http.NewRequest("GET", "http://localhost:6001/year", nil)
 	ctx, req = httptrace.W3C(ctx, req)
 	httptrace.Inject(ctx, req)
