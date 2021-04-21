@@ -10,6 +10,9 @@ sourceCompatibility = '11'
 
 repositories {
 	mavenCentral()
+
+	// this is only needed for local dev on the honey-flavored OTel SDK
+	flatDir {	dirs System.getenv("SDK_DIR") }
 }
 
 dependencies {
@@ -23,6 +26,9 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+
+	// this is gonna get a different name eventually
+	implementation 'io.honeycomb:sdk-1.0-SNAPSHOT'
 }
 
 test {
@@ -30,11 +36,6 @@ test {
 }
 
 task setEnvVars(type:Exec) { 
-	environment 'OTEL_RESOURCE_ATTRIBUTES', 'service.name=year-service-java' 
-	environment 'OTEL_TRACES_EXPORTER', 'otlp' 
-	environment 'OTEL_METRICS_EXPORTER', 'none' 
-	environment 'OTEL_TRACES_EXPORTER', 'otlp' 
-	environment 'OTEL_EXPORTER_OTLP_ENDPOINT', 'https://api.honeycomb.io:443' 
-	environment 'OTEL_EXPORTER_OTLP_HEADERS', 'x-honeycomb-team=${HONEYCOMB_API_KEY},x-honeycomb-dataset=${HONEYCOMB_DATASET}' 
-	environment 'JAVA_TOOL_OPTIONS', '-javaagent:${AGENT_PATH}' 
+	environment 'SERVICE_NAME', 'year-service-java' 
+	environment 'JAVA_TOOL_OPTIONS', '-javaagent:${AGENT_PATH}'
 	}

@@ -14,16 +14,11 @@ public class YearController {
 	private static final String[] YEARS = new String[]{"2015", "2016", "2017", "2018", "2019", "2020"};
 	private static final Random generator = new Random();
 
-	@RequestMapping("/year")
+	@RequestMapping("/")
 	public String index() {
-		Span span = Span.current();
-
-		// import statement stays the same for both vanilla OTel and honey OTel
-		span.setAttribute("import", "import io.opentelemetry.api.trace.Span;");
-
-		int rnd = generator.nextInt(YEARS.length);
-		String year = YEARS[rnd];
-		span.setAttribute("year", year);
-		return year;
+			// access the current context and add a custom attribute
+			Span span = Span.current();
+			span.setAttribute("custom_field", "important value");
+			return "hello world";
 	}
 }
