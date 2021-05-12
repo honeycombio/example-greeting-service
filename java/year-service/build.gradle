@@ -24,3 +24,9 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
+
+task setEnvVars(type:Exec) { 
+	// expects AGENT_PATH to point to OpenTelemetry Java agent .jar file
+	// works for vanilla OpenTelemetry agent or Honeycomb OpenTelemetry agent distro
+	environment 'JAVA_TOOL_OPTIONS', '-javaagent:${AGENT_PATH}'
+	}
