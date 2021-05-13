@@ -24,7 +24,7 @@ func main() {
 			APIKey: os.Getenv("HONEYCOMB_API_KEY"),
 		},
 		honeycomb.TargetingDataset(os.Getenv("HONEYCOMB_DATASET")),
-		honeycomb.WithServiceName("year-service-golang"),
+		honeycomb.WithServiceName("year-go"),
 	)
 	if err != nil {
 		log.Fatal(err)

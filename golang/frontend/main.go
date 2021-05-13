@@ -29,7 +29,7 @@ func main() {
 			APIKey: os.Getenv("HONEYCOMB_API_KEY"),
 		},
 		honeycomb.TargetingDataset(os.Getenv("HONEYCOMB_DATASET")),
-		honeycomb.WithServiceName("frontend-golang"),
+		honeycomb.WithServiceName("frontend-go"),
 	)
 	if err != nil {
 		log.Fatal(err)

@@ -6,7 +6,7 @@ require 'faraday'
 Honeycomb.configure do |config|
   config.write_key = ENV['HONEYCOMB_API_KEY']
   config.dataset = ENV['HONEYCOMB_DATASET']
-  config.service_name = "name-service-rb"
+  config.service_name = ENV['SERVICE_NAME'] || "name-ruby"
   config.http_trace_parser_hook do |env|
     Honeycomb::W3CPropagation::UnmarshalTraceContext.parse_rack_env(env)
   end

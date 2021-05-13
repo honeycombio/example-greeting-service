@@ -23,7 +23,7 @@ func main() {
 	beeline.Init(beeline.Config{
 		WriteKey:    os.Getenv("HONEYCOMB_API_KEY"),
 		Dataset:     os.Getenv("HONEYCOMB_DATASET"),
-		ServiceName: "name-service-golang",
+		ServiceName: "name-go",
 	})
 	defer beeline.Close()
 
