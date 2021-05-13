@@ -26,7 +26,7 @@ const (
 func main() {
 	exp, err := honeycomb.NewExporter(
 		honeycomb.Config{
-			APIKey: os.Getenv("HONEYCOMB_WRITE_KEY"),
+			APIKey: os.Getenv("HONEYCOMB_API_KEY"),
 		},
 		honeycomb.TargetingDataset(os.Getenv("HONEYCOMB_DATASET")),
 		honeycomb.WithServiceName("frontend-golang"),

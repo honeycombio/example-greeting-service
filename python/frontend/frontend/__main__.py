@@ -8,7 +8,7 @@ import beeline.propagation.w3c as w3c
 
 beeline.init(
     # Get this via https://ui.honeycomb.io/account after signing up for Honeycomb
-    writekey=os.environ.get("HONEYCOMB_WRITE_KEY"),
+    writekey=os.environ.get("HONEYCOMB_API_KEY"),
     # The name of your app is a good choice to start with
     dataset=os.environ.get("HONEYCOMB_DATASET"),
     service_name='frontend-python',

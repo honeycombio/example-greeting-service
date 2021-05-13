@@ -24,7 +24,7 @@ OpenTelemetry.
 Each service reads it's configuration from the environment. Specific environment
 variables:
 
-- HONEYCOMB_WRITE_KEY - Your honeycomb API key
+- HONEYCOMB_API_KEY - Your honeycomb API key
 - HONEYCOMB_DATASET - The name of the dataset you want to write to
 
 ### Caveats

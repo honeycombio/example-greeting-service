@@ -4,7 +4,7 @@ require 'honeycomb/propagation/w3c'
 require 'faraday'
 
 Honeycomb.configure do |config|
-  config.write_key = ENV['HONEYCOMB_WRITE_KEY']
+  config.write_key = ENV['HONEYCOMB_API_KEY']
   config.dataset = ENV['HONEYCOMB_DATASET']
   config.service_name = "name-service-rb"
   config.http_trace_parser_hook do |env|

@@ -1,13 +1,13 @@
 package main
 
 import (
+	"crypto/tls"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"time"
-	"crypto/tls"
 
 	beeline "github.com/honeycombio/beeline-go"
 	"github.com/honeycombio/beeline-go/propagation"
@@ -17,11 +17,11 @@ import (
 
 func main() {
 	beeline.Init(beeline.Config{
-		WriteKey: os.Getenv("HONEYCOMB_WRITE_KEY"),
-		Dataset: os.Getenv("HONEYCOMB_DATASET"),
+		WriteKey:    os.Getenv("HONEYCOMB_API_KEY"),
+		Dataset:     os.Getenv("HONEYCOMB_DATASET"),
 		ServiceName: "name-service-golang",
-    })
-    defer beeline.Close()
+	})
+	defer beeline.Close()
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/test", func(w http.ResponseWriter, r *http.Request) {
