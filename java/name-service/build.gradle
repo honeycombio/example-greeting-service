@@ -10,13 +10,15 @@ sourceCompatibility = '11'
 
 repositories {
 	mavenCentral()
-	// mavenLocal()
+	mavenLocal()
+	// path to local .jar file
 	flatDir { dirs "libs"}
 }
 
 dependencies {
-  implementation('io.opentelemetry:opentelemetry-api:1.0.1')
-	implementation('io.opentelemetry:opentelemetry-extension-annotations:1.0.1')
+	implementation('io.opentelemetry:opentelemetry-api:1.0.1')
+	implementation('io.opentelemetry:opentelemetry-extension-annotations:1.0.0')
+	implementation("io.grpc:grpc-netty-shaded:1.34.1")
 
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
