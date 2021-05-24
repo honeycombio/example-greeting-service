@@ -71,16 +71,16 @@ func main() {
 func getName(ctx context.Context) string {
 	tracer := global.Tracer("greeting-service/frontend")
 	var getNameSpan trace.Span
-  ctx, getNameSpan = tracer.Start(ctx, "✨ call /name ✨")
-  defer getNameSpan.End()
+	ctx, getNameSpan = tracer.Start(ctx, "✨ call /name ✨")
+	defer getNameSpan.End()
 	return makeRequest(ctx, nameServiceUrl)
 }
 
 func getMessage(ctx context.Context) string {
 	tracer := global.Tracer("greeting-service/frontend")
 	var getMessageSpan trace.Span
-  ctx, getMessageSpan = tracer.Start(ctx, "✨ call /message ✨")
-  defer getMessageSpan.End()
+	ctx, getMessageSpan = tracer.Start(ctx, "✨ call /message ✨")
+	defer getMessageSpan.End()
 	return makeRequest(ctx, messageServiceUrl)
 }
 
