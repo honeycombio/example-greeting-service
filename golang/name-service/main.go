@@ -19,10 +19,16 @@ import (
 	"go.opentelemetry.io/otel/instrumentation/httptrace"
 )
 
+var (
+	apiKey         = os.Getenv("HONEYCOMB_API_KEY")
+	dataset        = os.Getenv("HONEYCOMB_DATASET")
+	yearServiceUrl = os.Getenv("YEAR_ENDPOINT") + "/year"
+)
+
 func main() {
 	beeline.Init(beeline.Config{
-		WriteKey:    os.Getenv("HONEYCOMB_API_KEY"),
-		Dataset:     os.Getenv("HONEYCOMB_DATASET"),
+		WriteKey:    apiKey,
+		Dataset:     dataset,
 		ServiceName: "name-go",
 	})
 	defer beeline.Close()
@@ -72,7 +78,7 @@ func propagateTraceHook(r *http.Request, prop *propagation.PropagationContext) m
 func getYear(ctx context.Context) (int, context.Context) {
 	ctx, span := beeline.StartSpan(ctx, "✨ call /year ✨")
 	defer span.Send()
-	req, _ := http.NewRequest("GET", "http://localhost:6001/year", nil)
+	req, _ := http.NewRequest("GET", yearServiceUrl, nil)
 	ctx, req = httptrace.W3C(ctx, req)
 	httptrace.Inject(ctx, req)
 	client := &http.Client{
