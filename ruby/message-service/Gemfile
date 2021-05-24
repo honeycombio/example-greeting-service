@@ -1,0 +1,6 @@
+source 'https://rubygems.org'
+
+gem 'rails'
+gem 'puma'
+gem 'honeycomb-beeline'
+gem 'faraday'

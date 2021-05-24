@@ -18,6 +18,7 @@ end
 
 use Honeycomb::Sinatra::Middleware, client: Honeycomb.client
 
+set :bind, '0.0.0.0'
 set :port, 8000
 
 names_by_year = {
@@ -36,7 +37,7 @@ get '/name' do
 end
 
 def get_year
-  year_service_connection = Faraday.new("http://localhost:6001")
+  year_service_connection = Faraday.new(ENV["YEAR_ENDPOINT"] || "http://localhost:6001")
   year_service_response = year_service_connection.get("/year") do |request|
   end
   year_service_response.body.to_i
