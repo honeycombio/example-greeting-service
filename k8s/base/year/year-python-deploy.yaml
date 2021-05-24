@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: year-python
+  labels:
+    app: year
+    language: python
+spec:
+  selector:
+    matchLabels:
+      app: year
+      language: python
+  template:
+    metadata:
+      labels:
+        app: year
+        language: python
+    spec:
+      containers:
+      - name: year-python
+        image: hnyexample/year-python
+        ports:
+        - containerPort: 6001
+        env:
+        - name: HONEYCOMB_API_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: hny-config
+              key: api_key
+        - name: HONEYCOMB_DATASET
+          valueFrom:
+            configMapKeyRef:
+              name: hny-config
+              key: dataset
+        - name: SERVICE_NAME
+          value: year-python

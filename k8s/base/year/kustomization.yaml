@@ -1,0 +1,5 @@
+resources:
+- year-lb.yaml
+- year-go-deploy.yaml
+- year-java-deploy.yaml
+- year-python-deploy.yaml

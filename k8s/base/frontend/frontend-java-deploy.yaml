@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-java
+  labels:
+    app: frontend
+    language: java
+spec:
+  selector:
+    matchLabels:
+      app: frontend
+      language: java
+  template:
+    metadata:
+      labels:
+        app: frontend
+        language: java
+    spec:
+      containers:
+      - name: frontend-java
+        image: hnyexample/frontend-java
+        ports:
+        - containerPort: 7000
+        env:
+          - name: HONEYCOMB_API_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: hny-config
+                key: api_key
+          - name: HONEYCOMB_DATASET
+            valueFrom:
+              configMapKeyRef:
+                name: hny-config
+                key: dataset
+          - name: SERVICE_NAME
+            value: frontend-java
+          - name: NAME_ENDPOINT
+            value: http://name
+          - name: MESSAGE_ENDPOINT
+            value: http://message

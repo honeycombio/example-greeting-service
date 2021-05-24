@@ -1,0 +1,10 @@
+namespace: greeting-demo
+bases:
+- ../../base/frontend
+- ../../base/message
+- ../../base/name
+- ../../base/year
+- ../../base/collector
+resources:
+- namespace.yaml
+- hny-configmap.yaml

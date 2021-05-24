@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: message-python
+  labels:
+    app: message
+    language: python
+spec:
+  selector:
+    matchLabels:
+      app: message
+      language: python
+  template:
+    metadata:
+      labels:
+        app: message
+        language: python
+    spec:
+      containers:
+      - name: message-python
+        image: hnyexample/message-python
+        ports:
+        - containerPort: 9000
+        env:
+        - name: HONEYCOMB_API_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: hny-config
+              key: api_key
+        - name: HONEYCOMB_DATASET
+          valueFrom:
+            configMapKeyRef:
+              name: hny-config
+              key: dataset
+        - name: SERVICE_NAME
+          value: message-python

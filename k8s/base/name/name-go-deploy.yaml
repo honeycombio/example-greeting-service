@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: name-go
+  labels:
+    app: name
+    language: go
+spec:
+  selector:
+    matchLabels:
+      app: name
+      language: go
+  template:
+    metadata:
+      labels:
+        app: name
+        language: go
+    spec:
+      containers:
+      - name: name-go
+        image: hnyexample/name-go
+        ports:
+        - containerPort: 8000
+        env:
+        - name: HONEYCOMB_API_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: hny-config
+              key: api_key
+        - name: HONEYCOMB_DATASET
+          valueFrom:
+            configMapKeyRef:
+              name: hny-config
+              key: dataset
+        - name: SERVICE_NAME
+          value: name-go
+        - name: YEAR_ENDPOINT
+          value: http://year

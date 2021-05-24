@@ -1,0 +1,6 @@
+resources:
+- frontend-lb.yaml
+- frontend-go-deploy.yaml
+- frontend-java-deploy.yaml
+- frontend-python-deploy.yaml
+- frontend-ruby-deploy.yaml

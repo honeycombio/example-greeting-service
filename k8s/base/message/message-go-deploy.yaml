@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: message-go
+  labels:
+    app: message
+    language: go
+spec:
+  selector:
+    matchLabels:
+      app: message
+      language: go
+  template:
+    metadata:
+      labels:
+        app: message
+        language: go
+    spec:
+      containers:
+      - name: message-go
+        image: hnyexample/message-go
+        ports:
+        - containerPort: 9000
+        env:
+        - name: HONEYCOMB_API_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: hny-config
+              key: api_key
+        - name: HONEYCOMB_DATASET
+          valueFrom:
+            configMapKeyRef:
+              name: hny-config
+              key: dataset
+        - name: SERVICE_NAME
+          value: message-go

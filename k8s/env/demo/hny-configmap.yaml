@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: hny-config
+data:
+  api_key: "YOUR KEY"
+  dataset: "YOUR DATASET"

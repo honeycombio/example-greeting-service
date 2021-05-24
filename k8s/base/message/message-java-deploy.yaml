@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: message-java
+  labels:
+    app: message
+    language: java
+spec:
+  selector:
+    matchLabels:
+      app: message
+      language: java
+  template:
+    metadata:
+      labels:
+        app: message
+        language: java
+    spec:
+      containers:
+      - name: message-java
+        image: hnyexample/message-java
+        ports:
+        - containerPort: 9000
+        env:
+        - name: HONEYCOMB_API_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: hny-config
+              key: api_key
+        - name: HONEYCOMB_DATASET
+          valueFrom:
+            configMapKeyRef:
+              name: hny-config
+              key: dataset
+        - name: SERVICE_NAME
+          value: message-java

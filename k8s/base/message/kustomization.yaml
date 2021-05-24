@@ -1,0 +1,6 @@
+resources:
+- message-lb.yaml
+- message-go-deploy.yaml
+- message-java-deploy.yaml
+- message-python-deploy.yaml
+- message-ruby-deploy.yaml

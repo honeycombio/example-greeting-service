@@ -1,0 +1,6 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: greeting-demo
+  labels:
+    discovery.solo.io/function_discovery: enabled

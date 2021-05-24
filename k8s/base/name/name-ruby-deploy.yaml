@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: name-ruby
+  labels:
+    app: name
+    language: ruby
+spec:
+  selector:
+    matchLabels:
+      app: name
+      language: ruby
+  template:
+    metadata:
+      labels:
+        app: name
+        language: ruby
+    spec:
+      containers:
+      - name: name-ruby
+        image: hnyexample/name-ruby
+        ports:
+        - containerPort: 8000
+        env:
+        - name: HONEYCOMB_API_KEY
+          valueFrom:
+            configMapKeyRef:
+              name: hny-config
+              key: api_key
+        - name: HONEYCOMB_DATASET
+          valueFrom:
+            configMapKeyRef:
+              name: hny-config
+              key: dataset
+        - name: SERVICE_NAME
+          value: name-ruby
+        - name: YEAR_ENDPOINT
+          value: http://year

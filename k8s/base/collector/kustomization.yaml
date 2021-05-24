@@ -1,0 +1,3 @@
+resources:
+- collector-lb.yaml
+- collector-deploy.yaml

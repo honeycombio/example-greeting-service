@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-go
+  labels:
+    app: frontend
+    language: go
+spec:
+  selector:
+    matchLabels:
+      app: frontend
+      language: go
+  template:
+    metadata:
+      labels:
+        app: frontend
+        language: go
+    spec:
+      containers:
+      - name: frontend-go
+        image: hnyexample/frontend-go
+        ports:
+        - containerPort: 7000
+        env:
+          - name: HONEYCOMB_API_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: hny-config
+                key: api_key
+          - name: HONEYCOMB_DATASET
+            valueFrom:
+              configMapKeyRef:
+                name: hny-config
+                key: dataset
+          - name: SERVICE_NAME
+            value: frontend-go
+          - name: NAME_ENDPOINT
+            value: http://name
+          - name: MESSAGE_ENDPOINT
+            value: http://message

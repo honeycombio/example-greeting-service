@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-ruby
+  labels:
+    app: frontend
+    language: ruby
+spec:
+  selector:
+    matchLabels:
+      app: frontend
+      language: ruby
+  template:
+    metadata:
+      labels:
+        app: frontend
+        language: ruby
+    spec:
+      containers:
+      - name: frontend-ruby
+        image: hnyexample/frontend-ruby
+        ports:
+        - containerPort: 7000
+        env:
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            value: "http://collector:55681"
+          - name: SERVICE_NAME
+            value: frontend-ruby
+          - name: NAME_ENDPOINT
+            value: http://name
+          - name: MESSAGE_ENDPOINT
+            value: http://message
