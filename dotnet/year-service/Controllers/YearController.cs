@@ -7,8 +7,7 @@ namespace year_service.Controllers
     [ApiController]
     public class YearController : ControllerBase
     {
-        private static readonly int[] Years = new[]
-        {
+        private static readonly int[] Years = {
             2015, 2016, 2017, 2018, 2019, 2020
         };
 
