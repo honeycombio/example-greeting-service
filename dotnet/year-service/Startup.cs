@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -12,6 +13,9 @@ namespace year_service
 {
     public class Startup
     {
+        private const string ActivitySourceName = "honeycomb.examples.year-service-dotnet";
+        public static readonly ActivitySource ActivitySource = new(ActivitySourceName);
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -28,9 +32,10 @@ namespace year_service
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "year_service", Version = "v1"});
             });
 
-            services.AddOpenTelemetryTracing((builder => builder
+            services.AddOpenTelemetryTracing(builder => builder
                 .SetResourceBuilder(ResourceBuilder.CreateDefault()
                     .AddService(this.Configuration.GetValue<string>("Otlp:ServiceName")))
+                .AddSource(ActivitySourceName)
                 .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation()
                 .AddOtlpExporter(options =>
@@ -39,7 +44,7 @@ namespace year_service
                     var apiKey = Configuration.GetValue<string>("Otlp:ApiKey");
                     var dataset = Configuration.GetValue<string>("Otlp:Dataset");
                     options.Headers = $"x-honeycomb-team={apiKey},x-honeycomb-dataset={dataset}";
-                })));
+                }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
