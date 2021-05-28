@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,12 +17,10 @@ namespace year_service.Controllers
         [HttpGet]
         public async Task<int> GetAsync()
         {
-            using (Activity activity = Startup.ActivitySource.StartActivity("DetermineYear"))
-            {
-                activity?.SetTag("banana", 1);
-                var year = await DetermineYear();
-                return year;
-            }
+            using var activity = Startup.ActivitySource.StartActivity("DetermineYear");
+            activity?.SetTag("banana", 1);
+            var year = await DetermineYear();
+            return year;
         }
 
         private static async Task<int> DetermineYear()
