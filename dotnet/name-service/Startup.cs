@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -12,6 +13,9 @@ namespace name_service
 {
     public class Startup
     {
+        private const string ActivitySourceName = "honeycomb.examples.name-service-dotnet";
+        public static readonly ActivitySource ActivitySource = new(ActivitySourceName);
+        
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -32,6 +36,7 @@ namespace name_service
             services.AddOpenTelemetryTracing((builder => builder
                 .SetResourceBuilder(ResourceBuilder.CreateDefault()
                     .AddService(this.Configuration.GetValue<string>("Otlp:ServiceName")))
+                .AddSource(ActivitySourceName)
                 .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation()
                 .AddOtlpExporter(options =>

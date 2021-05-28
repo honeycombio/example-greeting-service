@@ -13,22 +13,35 @@ namespace year_service.Controllers
             2015, 2016, 2017, 2018, 2019, 2020
         };
 
-
         [HttpGet]
         public async Task<int> GetAsync()
         {
             using var activity = Startup.ActivitySource.StartActivity("DetermineYear");
-            activity?.SetTag("banana", 1);
+            activity?.SetTag("banana", 1).AddBaggage("orange", "1");
             var year = await DetermineYear();
             return year;
         }
 
         private static async Task<int> DetermineYear()
         {
-            await Task.Delay(50);
+            await SleepAwhile();
             var rng = new Random();
             var i = rng.Next(0, 5);
             return Years[i];
+        }
+
+        private static async Task SleepAwhile()
+        {
+            using var activity = Startup.ActivitySource.StartActivity("Sleep");
+            if (activity?.Baggage != null)
+                foreach (var (key, value) in activity.Baggage)
+                {
+                    Console.WriteLine("Baggage inside Sleep activity");
+                    Console.WriteLine($"{key}:{value}");
+                }
+
+            activity?.SetTag("banana", 2);
+            await Task.Delay(50);
         }
     }
 }
