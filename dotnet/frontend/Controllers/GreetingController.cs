@@ -32,7 +32,7 @@ namespace frontend.Controllers
 
         private static async Task<string> GetNameAsync(HttpClient client)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost:5001/name");
+            var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost:8000/name");
             var response = await client.SendAsync(request);
             if (!response.IsSuccessStatusCode) return "OH NO!";
             return await response.Content.ReadAsStringAsync();
