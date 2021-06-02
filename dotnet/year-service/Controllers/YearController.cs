@@ -17,7 +17,7 @@ namespace year_service.Controllers
         public async Task<int> GetAsync()
         {
             using var activity = Startup.ActivitySource.StartActivity("DetermineYear");
-            activity?.SetTag("banana", 1).AddBaggage("orange", "1");
+            activity?.SetTag("banana", 1);
             var year = await DetermineYear();
             return year;
         }
@@ -33,13 +33,6 @@ namespace year_service.Controllers
         private static async Task SleepAwhile()
         {
             using var activity = Startup.ActivitySource.StartActivity("Sleep");
-            if (activity?.Baggage != null)
-                foreach (var (key, value) in activity.Baggage)
-                {
-                    Console.WriteLine("Baggage inside Sleep activity");
-                    Console.WriteLine($"{key}:{value}");
-                }
-
             activity?.SetTag("banana", 2);
             await Task.Delay(50);
         }

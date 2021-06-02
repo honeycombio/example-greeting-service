@@ -32,7 +32,6 @@ namespace name_service.Controllers
         public async Task<string> GetAsync()
         {
             using var activity = Startup.ActivitySource.StartActivity("FetchYear");
-            activity?.AddBaggage("named-banana", "1");
             var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost:5000/api/year");
             var client = _clientFactory.CreateClient();
             var response = await client.SendAsync(request);

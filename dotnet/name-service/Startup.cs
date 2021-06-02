@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -37,7 +38,30 @@ namespace name_service
                 .SetResourceBuilder(ResourceBuilder.CreateDefault()
                     .AddService(this.Configuration.GetValue<string>("Otlp:ServiceName")))
                 .AddSource(ActivitySourceName)
-                .AddAspNetCoreInstrumentation()
+                .AddAspNetCoreInstrumentation(options => options.Enrich = (activity, eventName, rawObject) =>
+                {
+                    switch (eventName)
+                    {
+                        case "OnStartActivity":
+                        {
+                            if (rawObject is HttpRequest httpRequest)
+                            {
+                                activity.SetTag("requestProtocol", httpRequest.Protocol);
+                            }
+
+                            break;
+                        }
+                        case "OnStopActivity":
+                        {
+                            if (rawObject is HttpResponse httpResponse)
+                            {
+                                activity.SetTag("responseLength", httpResponse.ContentLength); // doesn't seem to work
+                            }
+
+                            break;
+                        }
+                    }
+                })
                 .AddHttpClientInstrumentation()
                 .AddOtlpExporter(options =>
                 {
