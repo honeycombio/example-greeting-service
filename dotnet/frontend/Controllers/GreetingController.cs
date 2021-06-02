@@ -40,7 +40,7 @@ namespace frontend.Controllers
 
         private static async Task<string> GetMessage(HttpClient client)
         {
-            var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost:5002/message");
+            var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost:9000/message");
             var response = await client.SendAsync(request);
             if (!response.IsSuccessStatusCode) return "OH NO!";
             return await response.Content.ReadAsStringAsync();
