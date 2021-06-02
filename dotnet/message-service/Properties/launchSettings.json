@@ -20,7 +20,7 @@
     "message_service": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
-      "applicationUrl": "http://localhost:5002",
+      "applicationUrl": "http://localhost:9000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
