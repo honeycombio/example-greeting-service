@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +32,8 @@ namespace name_service.Controllers
         [HttpGet]
         public async Task<string> GetAsync()
         {
-            using var activity = Startup.ActivitySource.StartActivity("FetchYear");
+            var current = Activity.Current;
+            current?.AddTag("apple", 1);
             var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost:5000/api/year");
             var client = _clientFactory.CreateClient();
             var response = await client.SendAsync(request);
