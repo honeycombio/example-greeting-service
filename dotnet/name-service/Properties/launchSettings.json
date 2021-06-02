@@ -20,7 +20,7 @@
     "name_service": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
-      "applicationUrl": "http://localhost:5001",
+      "applicationUrl": "http://localhost:8000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
