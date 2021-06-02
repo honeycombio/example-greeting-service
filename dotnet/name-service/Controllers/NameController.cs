@@ -36,7 +36,7 @@ namespace name_service.Controllers
             current?.AddTag("apple", 1);
             current?.AddBaggage("avocado", "12");
 
-            var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost:5000/year");
+            var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost:6001/year");
             var client = _clientFactory.CreateClient();
             var response = await client.SendAsync(request);
             if (!response.IsSuccessStatusCode) return "OH NO!";
