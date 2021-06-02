@@ -67,22 +67,54 @@ def launch_java_year_service(auto_init=True):
     cmd = "cd java/year-service && gradle bootRun"
     local_resource("☕️-year", "", auto_init=auto_init, serve_cmd=cmd)
 
+def launch_dotnet_svc(name, dirname="", flags="", auto_init=True):
+    '''
+    Starts a single .NET service.
+
+    Parameters:
+    name: used to display the name of the process in the tilt tab
+    dirname: (optional) directory name in which to run `go run main.go` defaults to 'name'
+    flags: (optional) any additional flags to add to the command line
+    '''
+
+    cmd = "cd {} && dotnet run".format(
+        dirname if dirname else name,
+        flags if flags else ""
+    )
+    print("About to start {} with command {}".format(name, cmd))
+    local_resource(name, "", auto_init=auto_init, serve_cmd=cmd)
+
+def launch_dotnet_frontend(auto_init=True):
+    launch_dotnet_svc(".NET-frontend", dirname="dotnet/frontend", auto_init=auto_init)
+
+def launch_dotnet_message_service(auto_init=True):
+    launch_dotnet_svc(".NET-message", dirname="dotnet/message-service", auto_init=auto_init)
+
+def launch_dotnet_name_service(auto_init=True):
+    launch_dotnet_svc(".NET-name", dirname="dotnet/name-service", auto_init=auto_init)
+
+def launch_dotnet_year_service(auto_init=True):
+    launch_dotnet_svc(".NET-year", dirname="dotnet/year-service", auto_init=auto_init)
 
 # Launch one of each of these types of services. Go services init by default
-# launch_go_frontend()
+launch_go_frontend()
 # launch_python_frontend()
-launch_ruby_frontend()
+# launch_ruby_frontend()
+# launch_dotnet_frontend()
 
 launch_go_message_service()
 # launch_python_message_service()
+# launch_dotnet_message_service()
 
-# launch_go_name_service() # doesn't recognize Java autoinstr
-launch_python_name_service()
+launch_go_name_service()
+# launch_python_name_service()
 # launch_ruby_name_service()
+# launch_dotnet_name_service()
 
-# launch_go_year_service()
+launch_go_year_service()
 # launch_python_year_service()
-launch_java_year_service()
+# launch_java_year_service()
+# launch_dotnet_year_service()
 
 ###
 # Notes
