@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace year_service.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class YearController : ControllerBase
     {

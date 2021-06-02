@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace name_service.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class NameController : ControllerBase
     {
@@ -34,7 +34,9 @@ namespace name_service.Controllers
         {
             var current = Activity.Current;
             current?.AddTag("apple", 1);
-            var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost:5000/api/year");
+            current?.AddBaggage("avocado", "12");
+
+            var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost:5000/year");
             var client = _clientFactory.CreateClient();
             var response = await client.SendAsync(request);
             if (!response.IsSuccessStatusCode) return "OH NO!";

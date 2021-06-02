@@ -36,6 +36,7 @@ namespace year_service
                 .SetResourceBuilder(ResourceBuilder.CreateDefault()
                     .AddService(this.Configuration.GetValue<string>("Otlp:ServiceName")))
                 .AddSource(ActivitySourceName)
+                .AddProcessor(new BaggageActivityProcessor())
                 .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation()
                 .AddOtlpExporter(options =>
