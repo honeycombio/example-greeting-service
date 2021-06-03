@@ -1,0 +1,14 @@
+version: "2.4"
+
+services:
+  collector:
+    image: otel/opentelemetry-collector-dev:latest
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    environment:
+      - HONEYCOMB_API_KEY
+      - HONEYCOMB_DATASET
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "127.0.0.1:55680:55680"
+      - "127.0.0.1:55681:55681"
