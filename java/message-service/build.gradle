@@ -8,22 +8,50 @@ group = 'io.honeycomb.examples'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
+ext {
+    otelVersion = '1.0.1'
+		beestroVersion = '0.3.0'
+}
+
+configurations {
+    agent
+}
+
 repositories {
 	mavenCentral()
-	mavenLocal()
-	// path to local .jar file
+	// mavenLocal()
 	flatDir { dirs "libs"}
 }
 
 dependencies {
-	implementation('io.opentelemetry:opentelemetry-api:1.0.1')
-	implementation('io.opentelemetry:opentelemetry-extension-annotations:1.0.0')
-	implementation('nl.basjes.parse.useragent:yauaa:4.3')
+  implementation("io.opentelemetry:opentelemetry-api:${otelVersion}")
+	implementation("io.opentelemetry:opentelemetry-extension-annotations:${otelVersion}")
+
+	agent "io.honeycomb:honeycomb-opentelemetry-javaagent:${beestroVersion}:all"
 
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
+}
+
+task copyAgentJar(type: Copy) {
+    from configurations.agent {
+			include '**/honeycomb-opentelemetry-javaagent*.jar'
+		}
+    into "agent"
+    rename { fileName -> "honey-javaagent.jar" }
+}
+
+compileJava.dependsOn copyAgentJar
+bootRun.dependsOn copyAgentJar
+
+bootRun.doFirst {
+	jvmArgs("-javaagent:agent/honey-javaagent.jar")
+}
+
+clean.doFirst {
+    delete "agent"
 }
 
 test {
