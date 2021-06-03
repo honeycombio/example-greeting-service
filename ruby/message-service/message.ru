@@ -47,14 +47,18 @@ class MessageApp < Rails::Application
   end
 end
 
+
 class MessagesController < ActionController::Base
+  MESSAGES = [
+    "how are you?", "how are you doing?", "what's good?", "what's up?", "how do you do?",
+    "sup?", "good day to you", "how are things?", "howzit?", "woohoo",
+  ]
+
   def index
     Honeycomb.add_field('name', '/message') # why doesn't this overwrite the event name?
+    message = ""
     Honeycomb.start_span(name: "🗓 get-a-year ✨") do |span|
-      message = [
-        "how are you?", "how are you doing?", "what's good?", "what's up?", "how do you do?",
-        "sup?", "good day to you", "how are things?", "howzit?", "woohoo",
-      ].sample
+      message = MESSAGES.sample
     end
     render plain: message
   end
