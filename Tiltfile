@@ -63,9 +63,35 @@ def launch_ruby_name_service(auto_init=True):
     cmd = "cd ruby/name-service && ruby name.rb"
     local_resource("rb-name", "", auto_init=auto_init, serve_cmd=cmd)
 
+def launch_java_svc(name, dirname="", flags="", auto_init=True):
+    '''
+    Starts a single Java service.
+
+    Parameters:
+    name: used to display the name of the process in the tilt tab
+    dirname: (optional) directory name in which to run `go run main.go` defaults to 'name'
+    flags: (optional) any additional flags to add to the command line
+    '''
+
+    env = {'SERVICE_NAME': name}
+    cmd = "cd {} && gradle bootRun".format(
+        dirname if dirname else name,
+        flags if flags else ""
+    )
+    print("About to start {} with command {}".format(name, cmd))
+    local_resource(name, "", auto_init=auto_init, serve_cmd=cmd, serve_env=env)
+
+def launch_java_frontend(auto_init=True):
+    launch_java_svc("java-frontend", dirname="java/frontend", auto_init=auto_init)
+
+def launch_java_message_service(auto_init=True):
+    launch_java_svc("java-message", dirname="java/message-service", auto_init=auto_init)
+
+def launch_java_name_service(auto_init=True):
+    launch_java_svc("java-name", dirname="java/name-service", auto_init=auto_init)
+
 def launch_java_year_service(auto_init=True):
-    cmd = "cd java/year-service && gradle bootRun"
-    local_resource("☕️-year", "", auto_init=auto_init, serve_cmd=cmd)
+    launch_java_svc("java-year", dirname="java/year-service", auto_init=auto_init)
 
 def launch_dotnet_svc(name, dirname="", flags="", auto_init=True):
     '''
@@ -100,15 +126,19 @@ def launch_dotnet_year_service(auto_init=True):
 launch_go_frontend()
 # launch_python_frontend()
 # launch_ruby_frontend()
+# launch_java_frontend()
 # launch_dotnet_frontend()
 
 launch_go_message_service()
 # launch_python_message_service()
+# launch_ruby_message_service()
+# launch_java_message_service()
 # launch_dotnet_message_service()
 
 launch_go_name_service()
 # launch_python_name_service()
 # launch_ruby_name_service()
+# launch_java_name_service()
 # launch_dotnet_name_service()
 
 launch_go_year_service()
