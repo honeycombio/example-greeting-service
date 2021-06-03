@@ -21,11 +21,8 @@ public class YearService {
 	private Tracer tracer;
 
   private String year_endpoint() {
-    String yearEndpointFromEnv = System.getenv("YEAR_ENDPOINT");
-    System.out.println("YEAR_ENDPOINT: " + yearEndpointFromEnv);
-    return yearEndpointFromEnv.isEmpty()
-      ? "http://localhost:6001/year"
-      : yearEndpointFromEnv + "/year";
+    String yearEndpointFromEnv = System.getenv().getOrDefault("YEAR_ENDPOINT", "http://localhost:6001");
+    return yearEndpointFromEnv + "/year";
   }
 
   @WithSpan

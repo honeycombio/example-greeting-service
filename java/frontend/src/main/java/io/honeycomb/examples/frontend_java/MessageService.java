@@ -20,10 +20,8 @@ public class MessageService {
 	private Tracer tracer;
 
   private String message_endpoint() {
-    String messageEndpointFromEnv = System.getenv("MESSAGE_ENDPOINT");
-    return messageEndpointFromEnv.isEmpty()
-      ? "http://localhost:9000/message"
-      : messageEndpointFromEnv + "/message";
+    String messageEndpointFromEnv = System.getenv().getOrDefault("MESSAGE_ENDPOINT", "http://localhost:9000");
+    return messageEndpointFromEnv + "/message";
   }
 
   @WithSpan

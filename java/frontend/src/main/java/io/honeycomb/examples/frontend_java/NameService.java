@@ -20,10 +20,8 @@ public class NameService {
 	private Tracer tracer;
 
   private String name_endpoint() {
-    String nameEndpointFromEnv = System.getenv("NAME_ENDPOINT");
-    return nameEndpointFromEnv.isEmpty()
-      ? "http://localhost:8000/name"
-      : nameEndpointFromEnv + "/name";
+    String nameEndpointFromEnv = System.getenv().getOrDefault("NAME_ENDPOINT", "http://localhost:8000");
+    return nameEndpointFromEnv + "/name";
   }
   @WithSpan
   public String getName() throws URISyntaxException, IOException, InterruptedException {
