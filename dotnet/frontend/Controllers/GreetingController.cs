@@ -21,7 +21,6 @@ namespace frontend.Controllers
         {
             var current = Activity.Current;
             current?.AddTag("apple", 1);
-            current?.AddBaggage("avocado", "12");
 
             var httpClient = _clientFactory.CreateClient();
             var name = await GetNameAsync(httpClient);

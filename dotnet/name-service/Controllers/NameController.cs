@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using OpenTelemetry;
 
 namespace name_service.Controllers
 {
@@ -34,7 +35,7 @@ namespace name_service.Controllers
         {
             var current = Activity.Current;
             current?.AddTag("apple", 1);
-            current?.AddBaggage("avocado", "12");
+            Baggage.Current.SetBaggage("avocado", "12");
 
             var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost:6001/year");
             var client = _clientFactory.CreateClient();

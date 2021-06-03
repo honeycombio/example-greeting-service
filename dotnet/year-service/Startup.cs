@@ -2,10 +2,12 @@ using System;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
@@ -36,8 +38,16 @@ namespace year_service
                 .SetResourceBuilder(ResourceBuilder.CreateDefault()
                     .AddService(this.Configuration.GetValue<string>("Otlp:ServiceName")))
                 .AddSource(ActivitySourceName)
-                .AddAspNetCoreInstrumentation()
+                .AddAspNetCoreInstrumentation(options => options.Enrich = (activity, eventName, _) =>
+                {
+                    if (eventName == "OnStartActivity")
+                        foreach (var (key, value) in Baggage.Current)
+                        {
+                            activity.SetTag(key, value);
+                        }
+                })
                 .AddHttpClientInstrumentation()
+                .AddProcessor(new BaggageSpanProcessor())
                 .AddOtlpExporter(options =>
                 {
                     options.Endpoint = new Uri(Configuration.GetValue<string>("Otlp:Endpoint"));
