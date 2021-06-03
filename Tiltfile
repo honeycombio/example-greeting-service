@@ -21,47 +21,69 @@ def launch_go_svc(name, dirname="", flags="", auto_init=True):
 
 
 def launch_go_frontend(auto_init=True):
-    launch_go_svc("go-frontend", dirname="golang/frontend")
+    launch_go_svc("frontend-go", dirname="golang/frontend")
 
 
 def launch_go_message_service(auto_init=True):
-    launch_go_svc("go-message", dirname="golang/message-service")
+    launch_go_svc("message-go", dirname="golang/message-service")
 
 
 def launch_go_name_service(auto_init=True):
-    launch_go_svc("go-name", dirname="golang/name-service")
+    launch_go_svc("name-go", dirname="golang/name-service")
 
 
 def launch_go_year_service(auto_init=True):
-    launch_go_svc("go-year", dirname="golang/year-service")
+    launch_go_svc("year-go", dirname="golang/year-service")
 
 
 def launch_python_frontend(auto_init=True):
     cmd = "cd python/frontend && poetry install --no-root && poetry run python -m frontend"
-    local_resource("py-frontend", "", auto_init=auto_init, serve_cmd=cmd)
+    local_resource("frontend-py", "", auto_init=auto_init, serve_cmd=cmd)
 
 
 def launch_python_message_service(auto_init=True):
     cmd = "cd python/message-service && poetry install --no-root && poetry run python -m message_service"
-    local_resource("py-message", "", auto_init=auto_init, serve_cmd=cmd)
+    local_resource("message-py", "", auto_init=auto_init, serve_cmd=cmd)
 
 
 def launch_python_name_service(auto_init=True):
     cmd = "cd python/name-service && poetry install --no-root && poetry run flask run"
-    local_resource("py-name", "", auto_init=auto_init, serve_cmd=cmd)
+    local_resource("name-py", "", auto_init=auto_init, serve_cmd=cmd)
 
 
 def launch_python_year_service(auto_init=True):
     cmd = "cd python/year-service && poetry install --no-root && poetry run yearservice/manage.py runserver 127.0.0.1:6001"
-    local_resource("py-year", "", auto_init=auto_init, serve_cmd=cmd)
+    local_resource("year-py", "", auto_init=auto_init, serve_cmd=cmd)
+
+def launch_ruby_svc(name, dirname, run_cmd, auto_init=True):
+    '''
+    Starts a single Ruby service.
+
+    Parameters:
+    name: used to display the name of the process in the tilt tab
+    dirname: (optional) directory name in which to run `go run main.go` defaults to 'name'
+    flags: (optional) any additional flags to add to the command line
+    '''
+
+    env = {
+        'SERVICE_NAME': name,
+        'BUNDLE_BIN': "./.direnv/bin",
+        'GEM_HOME': "./.direnv/ruby",
+        'OTEL_EXPORTER_OTLP_ENDPOINT': "http://localhost:55681",
+    }
+    setup_cmd = "cd {} && bundle install".format(dirname)
+    serve_cmd = "cd {} && bundle exec {}".format(dirname,run_cmd)
+    print("About to start {} with command {}".format(name, serve_cmd))
+    local_resource(name, setup_cmd, env=env, auto_init=auto_init, serve_cmd=serve_cmd, serve_env=env)
 
 def launch_ruby_frontend(auto_init=True):
-    cmd = "cd ruby/frontend && rackup ./frontend.ru"
-    local_resource("rb-frontend", "", auto_init=auto_init, serve_cmd=cmd)
+    launch_ruby_svc("frontend-rb", "ruby/frontend", "rackup ./frontend.ru", auto_init=auto_init)
+
+def launch_ruby_message_service(auto_init=True):
+    launch_ruby_svc("message-rb", "ruby/message-service", "rackup message.ru --server puma", auto_init=auto_init)
 
 def launch_ruby_name_service(auto_init=True):
-    cmd = "cd ruby/name-service && ruby name.rb"
-    local_resource("rb-name", "", auto_init=auto_init, serve_cmd=cmd)
+    launch_ruby_svc("name-rb", "ruby/name-service", "ruby name.rb", auto_init=auto_init)
 
 def launch_java_svc(name, dirname="", flags="", auto_init=True):
     '''
@@ -82,16 +104,16 @@ def launch_java_svc(name, dirname="", flags="", auto_init=True):
     local_resource(name, "", auto_init=auto_init, serve_cmd=cmd, serve_env=env)
 
 def launch_java_frontend(auto_init=True):
-    launch_java_svc("java-frontend", dirname="java/frontend", auto_init=auto_init)
+    launch_java_svc("frontend-java", dirname="java/frontend", auto_init=auto_init)
 
 def launch_java_message_service(auto_init=True):
-    launch_java_svc("java-message", dirname="java/message-service", auto_init=auto_init)
+    launch_java_svc("message-java", dirname="java/message-service", auto_init=auto_init)
 
 def launch_java_name_service(auto_init=True):
-    launch_java_svc("java-name", dirname="java/name-service", auto_init=auto_init)
+    launch_java_svc("name-java", dirname="java/name-service", auto_init=auto_init)
 
 def launch_java_year_service(auto_init=True):
-    launch_java_svc("java-year", dirname="java/year-service", auto_init=auto_init)
+    launch_java_svc("year-java", dirname="java/year-service", auto_init=auto_init)
 
 def launch_dotnet_svc(name, dirname="", flags="", auto_init=True):
     '''
@@ -111,16 +133,16 @@ def launch_dotnet_svc(name, dirname="", flags="", auto_init=True):
     local_resource(name, "", auto_init=auto_init, serve_cmd=cmd)
 
 def launch_dotnet_frontend(auto_init=True):
-    launch_dotnet_svc(".NET-frontend", dirname="dotnet/frontend", auto_init=auto_init)
+    launch_dotnet_svc("frontend-dotnet", dirname="dotnet/frontend", auto_init=auto_init)
 
 def launch_dotnet_message_service(auto_init=True):
-    launch_dotnet_svc(".NET-message", dirname="dotnet/message-service", auto_init=auto_init)
+    launch_dotnet_svc("message-dotnet", dirname="dotnet/message-service", auto_init=auto_init)
 
 def launch_dotnet_name_service(auto_init=True):
-    launch_dotnet_svc(".NET-name", dirname="dotnet/name-service", auto_init=auto_init)
+    launch_dotnet_svc("name-dotnet", dirname="dotnet/name-service", auto_init=auto_init)
 
 def launch_dotnet_year_service(auto_init=True):
-    launch_dotnet_svc(".NET-year", dirname="dotnet/year-service", auto_init=auto_init)
+    launch_dotnet_svc("year-dotnet", dirname="dotnet/year-service", auto_init=auto_init)
 
 # Launch one of each of these types of services. Go services init by default
 launch_go_frontend()
