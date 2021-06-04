@@ -35,7 +35,6 @@ namespace name_service.Controllers
         {
             var current = Activity.Current;
             current?.AddTag("apple", 1);
-            Baggage.Current.SetBaggage("avocado", "12");
 
             var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost:6001/year");
             var client = _clientFactory.CreateClient();
@@ -44,6 +43,13 @@ namespace name_service.Controllers
             var yearString = await response.Content.ReadAsStringAsync();
             var year = int.Parse(yearString);
 
+            return PickName(year);
+        }
+
+        private static string PickName(int year)
+        {
+            Baggage.Current.SetBaggage("baggy", "1");
+            using var activity = Startup.ActivitySource.StartActivity("PickName");
             var rng = new Random();
             var i = rng.Next(0, 9);
             return NamesByYear[year][i];

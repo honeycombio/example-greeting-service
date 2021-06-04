@@ -38,6 +38,7 @@ namespace name_service
                 .SetResourceBuilder(ResourceBuilder.CreateDefault()
                     .AddService(this.Configuration.GetValue<string>("Otlp:ServiceName")))
                 .AddSource(ActivitySourceName)
+                .AddProcessor(new BaggageSpanProcessor())
                 .AddAspNetCoreInstrumentation(options => options.Enrich = (activity, eventName, rawObject) =>
                 {
                     switch (eventName)

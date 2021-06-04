@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using OpenTelemetry;
 
 namespace frontend.Controllers
 {
@@ -21,6 +22,7 @@ namespace frontend.Controllers
         {
             var current = Activity.Current;
             current?.AddTag("apple", 1);
+            Baggage.Current.SetBaggage("avocado", "12");
 
             var httpClient = _clientFactory.CreateClient();
             var name = await GetNameAsync(httpClient);
