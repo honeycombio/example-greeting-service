@@ -3,35 +3,30 @@
 # SPDX-License-Identifier: Apache-2.0
 
 require 'action_controller/railtie'
-require 'honeycomb-beeline'
-require 'honeycomb/propagation/w3c'
+require 'opentelemetry/sdk'
 require 'faraday'
 
-Honeycomb.configure do |config|
-  config.write_key = ENV['HONEYCOMB_WRITE_KEY']
-  config.dataset = ENV['HONEYCOMB_DATASET']
-  config.service_name = "frontend-rails"
-
-  config.http_trace_parser_hook do |env|
-    Honeycomb::W3CPropagation::UnmarshalTraceContext.parse_rack_env(env)
+require 'opentelemetry/sdk'
+require 'opentelemetry/exporter/otlp'
+require 'opentelemetry/instrumentation/all'
+begin
+  OpenTelemetry::SDK.configure do |c|
+    c.service_name = ENV['SERVICE_NAME'] || "frontend-ruby"
+    c.use_all()
+    c.add_span_processor(
+      OpenTelemetry::SDK::Trace::Export::BatchSpanProcessor.new(
+        OpenTelemetry::Exporter::OTLP::Exporter.new()
+      )
+    )
   end
-  config.http_trace_propagation_hook do |env, context|
-    Honeycomb::W3CPropagation::MarshalTraceContext.parse_faraday_env(env, context)
-  end
-
-  config.notification_events = %w[
-    sql.active_record
-    render_template.action_view
-    render_partial.action_view
-    render_collection.action_view
-    process_action.action_controller
-    send_file.action_controller
-    send_data.action_controller
-    deliver.action_mailer
-  ].freeze
+rescue OpenTelemetry::SDK::ConfigurationError => e
+  puts "What now?"
+  puts e.inspect
 end
 
-# YearApp is a minimal Rails application inspired by the Rails
+Tracer = OpenTelemetry.tracer_provider.tracer('frontend-internal')
+
+# Frontend is a minimal Rails application inspired by the Rails
 # bug report template for action controller.
 # The configuration is compatible with Rails 6.0
 class FrontendGreetingApp < Rails::Application
@@ -49,10 +44,9 @@ end
 
 class GreetingsController < ActionController::Base
   def index
-    Honeycomb.add_field('name', '/greeting') # why doesn't this overwrite the event name?
     name = NameClient.get_name
     message = MessageClient.get_message
-    Honeycomb.start_span(name: "🎨 render message ✨") do |span|
+    Tracer.in_span("🎨 render message ✨") do |span|
       render plain: "Hello #{name}, #{message}"
     end
   end
@@ -60,8 +54,8 @@ end
 
 class NameClient
   def self.get_name
-    Honeycomb.start_span(name: "✨ call /name ✨") do |_span|
-      Faraday.new("http://localhost:8000")
+    Tracer.in_span("✨ call /name ✨") do |_span|
+      Faraday.new(ENV["NAME_ENDPOINT"] || "http://localhost:8000")
             .get("/name")
             .body
     end
@@ -70,8 +64,8 @@ end
 
 class MessageClient
   def self.get_message
-    Honeycomb.start_span(name: "✨ call /message ✨") do |_span|
-      Faraday.new("http://localhost:9000")
+    Tracer.in_span("✨ call /message ✨") do |_span|
+      Faraday.new(ENV["MESSAGE_ENDPOINT"] || "http://localhost:9000")
             .get("/message")
             .body
     end

@@ -1,0 +1,27 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:55680
+      http:
+        endpoint: 0.0.0.0:55681
+
+processors:
+  batch:
+
+exporters:
+  logging:
+    loglevel: debug
+  otlp/hny:
+    endpoint: api.honeycomb.io:443
+    headers:
+      # use environment variables to set the values for these headers
+      "x-honeycomb-team": "${HONEYCOMB_API_KEY}"
+      "x-honeycomb-dataset": "${HONEYCOMB_DATASET}"
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlp/hny, logging]

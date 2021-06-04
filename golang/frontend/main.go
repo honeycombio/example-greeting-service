@@ -26,10 +26,10 @@ const (
 func main() {
 	exp, err := honeycomb.NewExporter(
 		honeycomb.Config{
-			APIKey: os.Getenv("HONEYCOMB_WRITE_KEY"),
+			APIKey: os.Getenv("HONEYCOMB_API_KEY"),
 		},
 		honeycomb.TargetingDataset(os.Getenv("HONEYCOMB_DATASET")),
-		honeycomb.WithServiceName("frontend-golang"),
+		honeycomb.WithServiceName("frontend-go"),
 	)
 	if err != nil {
 		log.Fatal(err)
@@ -71,16 +71,16 @@ func main() {
 func getName(ctx context.Context) string {
 	tracer := global.Tracer("greeting-service/frontend")
 	var getNameSpan trace.Span
-  ctx, getNameSpan = tracer.Start(ctx, "✨ call /name ✨")
-  defer getNameSpan.End()
+	ctx, getNameSpan = tracer.Start(ctx, "✨ call /name ✨")
+	defer getNameSpan.End()
 	return makeRequest(ctx, nameServiceUrl)
 }
 
 func getMessage(ctx context.Context) string {
 	tracer := global.Tracer("greeting-service/frontend")
 	var getMessageSpan trace.Span
-  ctx, getMessageSpan = tracer.Start(ctx, "✨ call /message ✨")
-  defer getMessageSpan.End()
+	ctx, getMessageSpan = tracer.Start(ctx, "✨ call /message ✨")
+	defer getMessageSpan.End()
 	return makeRequest(ctx, messageServiceUrl)
 }
 

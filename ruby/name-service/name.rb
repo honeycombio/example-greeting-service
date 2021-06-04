@@ -4,9 +4,9 @@ require 'honeycomb/propagation/w3c'
 require 'faraday'
 
 Honeycomb.configure do |config|
-  config.write_key = ENV['HONEYCOMB_WRITE_KEY']
+  config.write_key = ENV['HONEYCOMB_API_KEY']
   config.dataset = ENV['HONEYCOMB_DATASET']
-  config.service_name = "name-service-rb"
+  config.service_name = ENV['SERVICE_NAME'] || "name-ruby"
   config.http_trace_parser_hook do |env|
     Honeycomb::W3CPropagation::UnmarshalTraceContext.parse_rack_env(env)
   end
@@ -18,6 +18,7 @@ end
 
 use Honeycomb::Sinatra::Middleware, client: Honeycomb.client
 
+set :bind, '0.0.0.0'
 set :port, 8000
 
 names_by_year = {
@@ -36,7 +37,7 @@ get '/name' do
 end
 
 def get_year
-  year_service_connection = Faraday.new("http://localhost:6001")
+  year_service_connection = Faraday.new(ENV["YEAR_ENDPOINT"] || "http://localhost:6001")
   year_service_response = year_service_connection.get("/year") do |request|
   end
   year_service_response.body.to_i

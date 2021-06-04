@@ -11,7 +11,7 @@ class YearappConfig(AppConfig):
         # If you use uwsgi, gunicorn, celery, or other pre-fork models, see the section below on pre-fork
         # models and do not initialize here.
         beeline.init(
-            writekey=os.environ.get("HONEYCOMB_WRITE_KEY"),
+            writekey=os.environ.get("HONEYCOMB_API_KEY"),
             dataset=os.environ.get("HONEYCOMB_DATASET"),
             service_name='year-service-python',
             debug=True,

@@ -21,10 +21,10 @@ func main() {
 	years := []int{2015, 2016, 2017, 2018, 2019, 2020}
 	exp, err := honeycomb.NewExporter(
 		honeycomb.Config{
-			APIKey: os.Getenv("HONEYCOMB_WRITE_KEY"),
+			APIKey: os.Getenv("HONEYCOMB_API_KEY"),
 		},
 		honeycomb.TargetingDataset(os.Getenv("HONEYCOMB_DATASET")),
-		honeycomb.WithServiceName("year-service-golang"),
+		honeycomb.WithServiceName("year-go"),
 	)
 	if err != nil {
 		log.Fatal(err)
