@@ -19,10 +19,11 @@ names_by_year = {
     2020: ['olivia', 'noah', 'emma', 'liam', 'ava', 'elijah', 'isabella', 'oliver', 'sophia', 'lucas']
 }
 
+YEAR_ENDPOINT = os.environ.get('YEAR_ENDPOINT', 'http://localhost:6001') + '/year'
 
 @beeline.traced(name="✨ call /year ✨")
 def get_year():
-    r = requests.get('http://localhost:6001/year')
+    r = requests.get(YEAR_ENDPOINT)
     return int(r.text)
 
 

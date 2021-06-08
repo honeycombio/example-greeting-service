@@ -1,5 +1,7 @@
 __version__ = '0.1.0'
 
+import os
+
 from werkzeug.routing import Map, Rule
 from werkzeug.wrappers import Request, Response
 from http.client import HTTPException
@@ -9,7 +11,8 @@ import urllib
 
 
 class Greeting(object):
-
+    NAME_ENDPOINT = os.environ.get('NAME_ENDPOINT', 'http://localhost:8000') + '/name'
+    MESSAGE_ENDPOINT = os.environ.get('MESSAGE_ENDPOINT', 'http://localhost:9000') + '/message'
     def __init__(self):
         self.url_map = Map([
             Rule('/greeting', endpoint='greeting'),
@@ -29,11 +32,11 @@ class Greeting(object):
             return e
 
     def get_name(self):
-        with urllib.request.urlopen('http://localhost:8000/name') as f:
+        with urllib.request.urlopen(self.NAME_ENDPOINT) as f:
             return f.read().decode('utf-8')
 
     def get_message(self):
-        with urllib.request.urlopen('http://localhost:9000/message') as f:
+        with urllib.request.urlopen(self.MESSAGE_ENDPOINT) as f:
             return f.read().decode('utf-8')
 
     def wsgi_app(self, environ, start_response):
