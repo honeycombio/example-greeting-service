@@ -19,4 +19,4 @@ beeline.init(
 
 
 app = HoneyWSGIMiddleware(create_app())
-run_simple('127.0.0.1', 7000, app, use_debugger=True, use_reloader=True)
+run_simple('0.0.0.0', 7000, app, use_debugger=True, use_reloader=True)

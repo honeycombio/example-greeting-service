@@ -34,4 +34,4 @@ def message():
 
 app = HoneyWSGIMiddleware(app)
 
-run(app=app, host='127.0.0.1', port=9000)
+run(app=app, host='0.0.0.0', port=9000)
