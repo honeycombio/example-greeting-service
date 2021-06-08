@@ -36,7 +36,7 @@ end
 # The configuration is compatible with Rails 6.0
 class MessageApp < Rails::Application
   config.root = __dir__
-  config.hosts << 'example.org'
+  config.hosts << 'message'
   secrets.secret_key_base = 'secret_key_base'
   config.eager_load = false
   config.logger = Logger.new($stdout)
