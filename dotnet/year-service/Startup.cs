@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -13,8 +12,8 @@ namespace year_service
 {
     public class Startup
     {
-        private const string ActivitySourceName = "honeycomb.examples.year-service-dotnet";
-        public static readonly ActivitySource ActivitySource = new(ActivitySourceName);
+        public const string ActivitySourceName = "honeycomb.examples.year-service-dotnet";
+        // public static readonly ActivitySource ActivitySource = new(ActivitySourceName);
 
         public Startup(IConfiguration configuration)
         {
