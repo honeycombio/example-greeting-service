@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using OpenTelemetry.Trace;
 
 namespace year_service.Controllers
 {
@@ -8,6 +9,8 @@ namespace year_service.Controllers
     [ApiController]
     public class YearController : ControllerBase
     {
+        private readonly Tracer _tracer = TracerProvider.Default.GetTracer(Startup.ActivitySourceName);
+
         private static readonly int[] Years =
         {
             2015, 2016, 2017, 2018, 2019, 2020
@@ -16,13 +19,15 @@ namespace year_service.Controllers
         [HttpGet]
         public async Task<int> GetAsync()
         {
-            using var activity = Startup.ActivitySource.StartActivity("DetermineYear");
-            activity?.SetTag("banana", 1);
+            // using var activity = Startup.ActivitySource.StartActivity("DetermineYear");
+            // activity?.SetTag("banana", 1);
+            using var parentSpan = _tracer.StartActiveSpan("DetermineYear");
+            parentSpan.SetAttribute("papaya", 1);
             var year = await DetermineYear();
             return year;
         }
 
-        private static async Task<int> DetermineYear()
+        private async Task<int> DetermineYear()
         {
             await SleepAwhile();
             var rng = new Random();
@@ -30,10 +35,12 @@ namespace year_service.Controllers
             return Years[i];
         }
 
-        private static async Task SleepAwhile()
+        private async Task SleepAwhile()
         {
-            using var activity = Startup.ActivitySource.StartActivity("Sleep");
-            activity?.SetTag("banana", 2);
+            // using var activity = Startup.ActivitySource.StartActivity("Sleep");
+            // activity?.SetTag("banana", 2);
+            using var childSpan = _tracer.StartActiveSpan("Sleep");
+            childSpan.SetAttribute("papaya", 2);
             await Task.Delay(50);
         }
     }
