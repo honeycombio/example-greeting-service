@@ -35,34 +35,46 @@ namespace year_service
 
             // TODO: how to dispose?
             
-            var tracerProvider = Sdk.CreateTracerProviderBuilder()
-                .SetResourceBuilder(ResourceBuilder.CreateDefault()
-                    .AddService(this.Configuration.GetValue<string>("Otlp:ServiceName")))
-                .AddAspNetCoreInstrumentation()
-                .AddHttpClientInstrumentation()
-                .AddSource(ActivitySourceName)
-                .AddOtlpExporter(options =>
-                {
-                    options.Endpoint = new Uri(Configuration.GetValue<string>("Otlp:Endpoint"));
-                    var apiKey = Configuration.GetValue<string>("Otlp:ApiKey");
-                    var dataset = Configuration.GetValue<string>("Otlp:Dataset");
-                    options.Headers = $"x-honeycomb-team={apiKey},x-honeycomb-dataset={dataset}";
-                })
-                .Build();
-
-            // services.AddOpenTelemetryTracing(builder => builder
+            // var tracerProvider = Sdk.CreateTracerProviderBuilder()
             //     .SetResourceBuilder(ResourceBuilder.CreateDefault()
             //         .AddService(this.Configuration.GetValue<string>("Otlp:ServiceName")))
-            //     .AddSource(ActivitySourceName)
             //     .AddAspNetCoreInstrumentation()
             //     .AddHttpClientInstrumentation()
+            //     .AddSource(ActivitySourceName)
             //     .AddOtlpExporter(options =>
             //     {
             //         options.Endpoint = new Uri(Configuration.GetValue<string>("Otlp:Endpoint"));
             //         var apiKey = Configuration.GetValue<string>("Otlp:ApiKey");
             //         var dataset = Configuration.GetValue<string>("Otlp:Dataset");
             //         options.Headers = $"x-honeycomb-team={apiKey},x-honeycomb-dataset={dataset}";
-            //     }));
+            //     })
+            //     .Build();
+            
+            var serviceName = Configuration.GetValue<string>("Otlp:ServiceName");
+            var endpoint = Configuration.GetValue<string>("Otlp:Endpoint");
+            var apiKey = Configuration.GetValue<string>("Otlp:ApiKey");
+            var dataset = Configuration.GetValue<string>("Otlp:Dataset");
+            var honeycombBuilder = new HoneycombBuilder(serviceName, dataset, apiKey, endpoint);
+
+            services.AddOpenTelemetryTracing(honeycombBuilder.Register);
+        }
+
+        private void Lol(TracerProviderBuilder builder)
+        {
+            var serviceName = Configuration.GetValue<string>("Otlp:ServiceName");
+            builder.SetResourceBuilder(ResourceBuilder.CreateDefault()
+                    .AddService(serviceName))
+                .AddSource(ActivitySourceName)
+                .AddAspNetCoreInstrumentation()
+                .AddHttpClientInstrumentation()
+                .AddOtlpExporter(options =>
+                {
+                    var endpoint = Configuration.GetValue<string>("Otlp:Endpoint");
+                    options.Endpoint = new Uri(endpoint);
+                    var apiKey = Configuration.GetValue<string>("Otlp:ApiKey");
+                    var dataset = Configuration.GetValue<string>("Otlp:Dataset");
+                    options.Headers = $"x-honeycomb-team={apiKey},x-honeycomb-dataset={dataset}";
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
