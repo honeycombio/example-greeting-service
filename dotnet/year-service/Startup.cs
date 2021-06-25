@@ -47,14 +47,7 @@ namespace year_service
             // services.AddHoneycombOpenTemeletry(); // defualt to using env vars
             services.AddHoneycombOpenTemeletry(builder => // provide options in-line
             {
-                builder.WithServiceName(Configuration.GetValue<string>("Otlp:ServiceName"));
-                builder.WithAPIKey(Configuration.GetValue<string>("Otlp:ApiKey"));
-                builder.WithDataset(Configuration.GetValue<string>("Otlp:Dataset"));
-                builder.WithEndpoint(Configuration.GetValue<string>("Otlp:Endpoint"));
-                builder.WithSources(new string[] {ActivitySourceName});
-
-                // TODO: auto bind config values to automate ^^
-                // TODO: hide .Build(), we should only use in the sdk, not here
+                builder.WithSources(ActivitySourceName);
             });
         }
 
