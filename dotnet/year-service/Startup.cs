@@ -1,4 +1,3 @@
-using System;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,8 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
+using Honeycomb.OpenTelemetry;
 
 namespace year_service
 {
@@ -32,19 +30,32 @@ namespace year_service
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "year_service", Version = "v1"});
             });
 
-            services.AddOpenTelemetryTracing(builder => builder
-                .SetResourceBuilder(ResourceBuilder.CreateDefault()
-                    .AddService(this.Configuration.GetValue<string>("Otlp:ServiceName")))
-                .AddSource(ActivitySourceName)
-                .AddAspNetCoreInstrumentation()
-                .AddHttpClientInstrumentation()
-                .AddOtlpExporter(options =>
-                {
-                    options.Endpoint = new Uri(Configuration.GetValue<string>("Otlp:Endpoint"));
-                    var apiKey = Configuration.GetValue<string>("Otlp:ApiKey");
-                    var dataset = Configuration.GetValue<string>("Otlp:Dataset");
-                    options.Headers = $"x-honeycomb-team={apiKey},x-honeycomb-dataset={dataset}";
-                }));
+            // services.AddOpenTelemetryTracing(builder => builder
+            //     .SetResourceBuilder(ResourceBuilder.CreateDefault()
+            //         .AddService(this.Configuration.GetValue<string>("Otlp:ServiceName")))
+            //     .AddSource(ActivitySourceName)
+            //     .AddAspNetCoreInstrumentation()
+            //     .AddHttpClientInstrumentation()
+            //     .AddOtlpExporter(options =>
+            //     {
+            //         options.Endpoint = new Uri(Configuration.GetValue<string>("Otlp:Endpoint"));
+            //         var apiKey = Configuration.GetValue<string>("Otlp:ApiKey");
+            //         var dataset = Configuration.GetValue<string>("Otlp:Dataset");
+            //         options.Headers = $"x-honeycomb-team={apiKey},x-honeycomb-dataset={dataset}";
+            //     }));
+
+            // services.AddHoneycombOpenTemeletry(); // defualt to using env vars
+            services.AddHoneycombOpenTemeletry(builder => // provide options in-line
+            {
+                builder.WithServiceName(Configuration.GetValue<string>("Otlp:ServiceName"));
+                builder.WithAPIKey(Configuration.GetValue<string>("Otlp:ApiKey"));
+                builder.WithDataset(Configuration.GetValue<string>("Otlp:Dataset"));
+                builder.WithEndpoint(Configuration.GetValue<string>("Otlp:Endpoint"));
+                builder.WithSources(new string[] {ActivitySourceName});
+
+                // TODO: auto bind config values to automate ^^
+                // TODO: hide .Build(), we should only use in the sdk, not here
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
