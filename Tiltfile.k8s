@@ -1,0 +1,45 @@
+# prints show up in the Tiltfile log so you know what's been run
+print("hello my friends")
+
+###
+# Kubernetes
+###
+
+local_resource("💥",
+    "kubectl delete --all --kustomize k8s/env/demo",
+    auto_init=False,
+    trigger_mode=TRIGGER_MODE_MANUAL)
+
+local_resource("🪄",
+    "kubectl apply --kustomize k8s/env/demo",
+    auto_init=False,
+    trigger_mode=TRIGGER_MODE_MANUAL)
+
+k8s_yaml(kustomize('./k8s/env/demo'))
+
+k8s_resource(new_name="k8s namespace", objects=["greeting-demo:namespace"])
+k8s_resource(new_name="hny config", objects=["hny-config:configmap"], resource_deps=["k8s namespace"])
+k8s_resource(new_name="collector config", objects=["collector-config:configmap"], resource_deps=["k8s namespace"])
+
+
+# Wire up tilt to know which images to rebuild when their sources are updated.
+docker_build('hnyexample/frontend-go', './golang/frontend')
+docker_build('hnyexample/message-go', './golang/message-service')
+docker_build('hnyexample/name-go', './golang/name-service')
+docker_build('hnyexample/year-go', './golang/year-service')
+
+docker_build('hnyexample/frontend-ruby', './ruby/frontend')
+docker_build('hnyexample/message-ruby', './ruby/message-service')
+docker_build('hnyexample/name-ruby', './ruby/name-service')
+
+docker_build('hnyexample/frontend-java', './java/frontend', )
+docker_build('hnyexample/name-java', './java/name-service')
+docker_build('hnyexample/message-java', './java/message-service')
+docker_build('hnyexample/year-java', './java/year-service')
+
+docker_build('hnyexample/name-dotnet', './dotnet/name-service')
+
+docker_build('hnyexample/frontend-python', './python/frontend')
+docker_build('hnyexample/message-python', './python/message-service')
+docker_build('hnyexample/name-python', './python/name-service')
+docker_build('hnyexample/year-python', './python/year-service')
