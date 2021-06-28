@@ -6,4 +6,4 @@ RUN bundle install
 COPY frontend.ru /myapp
 
 EXPOSE 7000
-CMD [ "rackup", "frontend.ru", "--server", "puma", "--host", "0.0.0.0"]
+CMD [ "bundle", "exec", "rackup", "frontend.ru", "--server", "puma", "--host", "0.0.0.0"]
