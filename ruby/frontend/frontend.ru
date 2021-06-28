@@ -38,10 +38,10 @@ end
 
 class GreetingsController < ActionController::Base
   def index
-    name = NameClient.get_name
-    message = MessageClient.get_message
+    @name = NameClient.get_name
+    @message = MessageClient.get_message
     Tracer.in_span("🎨 render message ✨") do |span|
-      render plain: "Hello #{name}, #{message}"
+      render inline: "Hello <%= @name %>, <%= @message %>"
     end
   end
 end
