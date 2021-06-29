@@ -57,7 +57,7 @@ class MessagesController < ActionController::Base
   def index
     Honeycomb.add_field('name', '/message') # why doesn't this overwrite the event name?
     message = ""
-    Honeycomb.start_span(name: "🗓 get-a-year ✨") do |span|
+    Honeycomb.start_span(name: "📖 look up message ✨") do |span|
       message = MESSAGES.sample
     end
     render plain: message
