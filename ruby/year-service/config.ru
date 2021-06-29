@@ -20,8 +20,10 @@ class App < Grape::API
   format :txt
 
   get "/year" do
-    sleep rand(0..0.005)
-    (2015..2020).to_a.sample
+    Honeycomb.start_span(name: "🗓 get-a-year ✨") do
+      sleep rand(0..0.005)
+      (2015..2020).to_a.sample
+    end
   end
 end
 
