@@ -20,6 +20,8 @@ defmodule Message do
   ]
 
   get "/message" do
+    :otel_propagator.text_map_extract(conn.req_headers)
+
     Tracer.with_span "/message" do
       Tracer.set_attributes(
         "http.method": conn.method,

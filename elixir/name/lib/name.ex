@@ -31,7 +31,8 @@ defmodule Name do
   defp year do
     Tracer.with_span "✨ call /year ✨" do
       endpoint = System.get_env("YEAR_ENDPOINT", "http://localhost:6001")
-      HTTPoison.get!("#{endpoint}/year").body |> String.to_integer()
+      headers = :otel_propagator.text_map_inject([])
+      HTTPoison.get!("#{endpoint}/year", headers).body |> String.to_integer()
     end
   end
 end

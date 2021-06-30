@@ -1,9 +1,8 @@
 import Config
 
-config :opentelemetry, :resource,
-  service: [
-    name: "message-elixir"
-  ]
+config :opentelemetry, :resource, service: [name: "message-elixir"]
+
+config :opentelemetry, :propagators, :otel_propagator_http_w3c
 
 config :opentelemetry,
   processors: [
