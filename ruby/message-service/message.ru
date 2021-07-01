@@ -37,6 +37,7 @@ end
 class MessageApp < Rails::Application
   config.root = __dir__
   config.hosts << 'message'
+  config.hosts << 'gateway'
   secrets.secret_key_base = 'secret_key_base'
   config.eager_load = false
   config.logger = Logger.new($stdout)

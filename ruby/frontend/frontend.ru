@@ -25,7 +25,8 @@ Tracer = OpenTelemetry.tracer_provider.tracer('frontend-internal')
 # The configuration is compatible with Rails 6.0
 class FrontendGreetingApp < Rails::Application
   config.root = __dir__
-  config.hosts << 'example.org'
+  config.hosts << 'frontend'
+  config.hosts << 'gateway'
   secrets.secret_key_base = 'secret_key_base'
   config.eager_load = false
   config.logger = Logger.new($stdout)
