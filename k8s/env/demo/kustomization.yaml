@@ -1,10 +1,11 @@
-namespace: greeting-demo
+namespace: greetings
 bases:
 - ../../base/frontend
 - ../../base/message
 - ../../base/name
 - ../../base/year
 - ../../base/collector
+- ../../base/gateway
 resources:
 - namespace.yaml
 - hny-configmap.yaml
