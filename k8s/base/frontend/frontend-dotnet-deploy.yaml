@@ -1,46 +1,45 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend-ruby
+  name: frontend-dotnet
   labels:
     app: frontend
-    language: ruby
+    language: dotnet
 spec:
   selector:
     matchLabels:
       app: frontend
-      language: ruby
+      language: dotnet
   template:
     metadata:
       labels:
         app: frontend
-        language: ruby
+        language: dotnet
     spec:
       containers:
-      - name: frontend-ruby
-        image: hnyexample/frontend-ruby
+      - name: frontend-dotnet
+        image: hnyexample/frontend-dotnet
         ports:
         - containerPort: 7000
         env:
           - name: OTEL_EXPORTER_OTLP_ENDPOINT
-            value: "http://collector:55681"
+            value: "http://collector:55680"
           - name: SERVICE_NAME
-            value: frontend-ruby
+            value: frontend-dotnet
           - name: NAME_ENDPOINT
             value: http://gateway
           - name: MESSAGE_ENDPOINT
             value: http://gateway
 
-
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend-ruby
+  name: frontend-dotnet
 spec:
   selector:
     app: frontend
-    language: ruby
+    language: dotnet
   ports:
     - port: 7000
       targetPort: 7000

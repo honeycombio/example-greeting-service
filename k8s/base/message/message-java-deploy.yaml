@@ -34,3 +34,19 @@ spec:
               key: dataset
         - name: SERVICE_NAME
           value: message-java
+        - name: OTEL_METRICS_EXPORTER
+          value: none
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: message-java
+spec:
+  selector:
+    app: message
+    language: java
+  ports:
+    - protocol: TCP
+      port: 9000
+      targetPort: 9000

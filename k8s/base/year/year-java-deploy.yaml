@@ -31,3 +31,19 @@ spec:
               key: dataset
         - name: SERVICE_NAME
           value: year-java
+        - name: OTEL_METRICS_EXPORTER
+          value: none
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: year-java
+spec:
+  selector:
+    app: year
+    language: java
+  ports:
+    - protocol: TCP
+      port: 6001
+      targetPort: 6001

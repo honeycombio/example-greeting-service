@@ -35,4 +35,20 @@ spec:
         - name: SERVICE_NAME
           value: name-java
         - name: YEAR_ENDPOINT
-          value: http://year
+          value: http://gateway
+        - name: OTEL_METRICS_EXPORTER
+          value: none
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: name-java
+spec:
+  selector:
+    app: name
+    language: java
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000

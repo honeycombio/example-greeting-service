@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: message-ruby
+  name: year-ruby
   labels:
-    app: message
+    app: year
     language: ruby
 spec:
   selector:
     matchLabels:
-      app: message
+      app: year
       language: ruby
   template:
     metadata:
       labels:
-        app: message
+        app: year
         language: ruby
     spec:
       containers:
-      - name: message-ruby
-        image: hnyexample/message-ruby
+      - name: year-ruby
+        image: hnyexample/year-ruby
         ports:
-        - containerPort: 9000
+        - containerPort: 6001
         env:
         - name: HONEYCOMB_API_KEY
           valueFrom:
@@ -33,19 +33,18 @@ spec:
               name: hny-config
               key: dataset
         - name: SERVICE_NAME
-          value: message-ruby
-
+          value: year-ruby
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: message-ruby
+  name: year-ruby
 spec:
   selector:
-    app: message
+    app: year
     language: ruby
   ports:
     - protocol: TCP
-      port: 9000
-      targetPort: 9000
+      port: 6001
+      targetPort: 6001

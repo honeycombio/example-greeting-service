@@ -35,4 +35,18 @@ spec:
         - name: SERVICE_NAME
           value: name-python
         - name: YEAR_ENDPOINT
-          value: http://year
+          value: http://gateway
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: name-python
+spec:
+  selector:
+    app: name
+    language: python
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000

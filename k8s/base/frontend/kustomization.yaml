@@ -1,5 +1,5 @@
 resources:
-- frontend-lb.yaml
+- frontend-dotnet-deploy.yaml
 - frontend-go-deploy.yaml
 - frontend-java-deploy.yaml
 - frontend-python-deploy.yaml

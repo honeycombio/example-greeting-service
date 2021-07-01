@@ -1,5 +1,5 @@
 resources:
-- name-lb.yaml
+- name-dotnet-deploy.yaml
 - name-go-deploy.yaml
 - name-java-deploy.yaml
 - name-python-deploy.yaml

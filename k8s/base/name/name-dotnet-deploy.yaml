@@ -1,39 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: name-ruby
+  name: name-dotnet
   labels:
     app: name
-    language: ruby
+    language: dotnet
 spec:
   selector:
     matchLabels:
       app: name
-      language: ruby
+      language: dotnet
   template:
     metadata:
       labels:
         app: name
-        language: ruby
+        language: dotnet
     spec:
       containers:
-      - name: name-ruby
-        image: hnyexample/name-ruby
+      - name: name-dotnet
+        image: hnyexample/name-dotnet
         ports:
         - containerPort: 8000
         env:
-        - name: HONEYCOMB_API_KEY
-          valueFrom:
-            configMapKeyRef:
-              name: hny-config
-              key: api_key
-        - name: HONEYCOMB_DATASET
-          valueFrom:
-            configMapKeyRef:
-              name: hny-config
-              key: dataset
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://collector:55680"
         - name: SERVICE_NAME
-          value: name-ruby
+          value: name-dotnet
         - name: YEAR_ENDPOINT
           value: http://gateway
 
@@ -41,11 +33,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: name-ruby
+  name: name-dotnet
 spec:
   selector:
     app: name
-    language: ruby
+    language: dotnet
   ports:
     - protocol: TCP
       port: 8000

@@ -34,3 +34,17 @@ spec:
               key: dataset
         - name: SERVICE_NAME
           value: year-go
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: year-go
+spec:
+  selector:
+    app: year
+    language: go
+  ports:
+    - protocol: TCP
+      port: 6001
+      targetPort: 6001

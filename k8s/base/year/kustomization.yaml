@@ -1,5 +1,6 @@
 resources:
-- year-lb.yaml
+- year-dotnet-deploy.yaml
 - year-go-deploy.yaml
 - year-java-deploy.yaml
 - year-python-deploy.yaml
+- year-ruby-deploy.yaml

@@ -34,3 +34,17 @@ spec:
               key: dataset
         - name: SERVICE_NAME
           value: year-python
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: year-python
+spec:
+  selector:
+    app: year
+    language: python
+  ports:
+    - protocol: TCP
+      port: 6001
+      targetPort: 6001

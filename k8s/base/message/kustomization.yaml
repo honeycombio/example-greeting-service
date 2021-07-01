@@ -1,5 +1,5 @@
 resources:
-- message-lb.yaml
+- message-dotnet-deploy.yaml
 - message-go-deploy.yaml
 - message-java-deploy.yaml
 - message-python-deploy.yaml

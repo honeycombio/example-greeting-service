@@ -34,3 +34,17 @@ spec:
               key: dataset
         - name: SERVICE_NAME
           value: message-python
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: message-python
+spec:
+  selector:
+    app: message
+    language: python
+  ports:
+    - protocol: TCP
+      port: 9000
+      targetPort: 9000

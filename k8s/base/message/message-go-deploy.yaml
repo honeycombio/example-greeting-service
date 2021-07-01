@@ -34,3 +34,17 @@ spec:
               key: dataset
         - name: SERVICE_NAME
           value: message-go
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: message-go
+spec:
+  selector:
+    app: message
+    language: go
+  ports:
+    - protocol: TCP
+      port: 9000
+      targetPort: 9000
