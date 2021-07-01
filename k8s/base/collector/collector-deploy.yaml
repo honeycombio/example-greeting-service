@@ -56,7 +56,7 @@ data:
           http:
     exporters:
       logging:
-        loglevel: debug
+        loglevel: info
       otlp/hny:
         endpoint: "${HONEYCOMB_API_ENDPOINT}"
         headers:
