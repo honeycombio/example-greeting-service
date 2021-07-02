@@ -4,7 +4,7 @@ ENV CGO_ENABLED=0
 COPY . .
 RUN go build -o /out/message-service .
 
-FROM scratch AS bin
+FROM alpine AS bin
 WORKDIR /app
 COPY --from=build /out/message-service /app/
 CMD ["/app/message-service"]

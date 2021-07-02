@@ -5,7 +5,7 @@ COPY . .
 RUN go get
 RUN go build -o /out/frontend .
 
-FROM scratch AS bin
+FROM alpine AS bin
 WORKDIR /app
 COPY --from=build /out/frontend /app/
 CMD ["/app/frontend"]

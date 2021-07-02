@@ -4,7 +4,7 @@ ENV CGO_ENABLED=0
 COPY . .
 RUN go build -o /out/year-service ./main.go
 
-FROM scratch AS bin
+FROM alpine AS bin
 WORKDIR /app
 COPY --from=build /out/year-service /app/
 CMD ["/app/year-service"]
