@@ -31,14 +31,20 @@ names_by_year = {
 }
 
 get '/name' do
-  year = get_year
-  names = names_by_year[year]
-  names[rand(names.length)]
+  Honeycomb.start_span(name: "📖 look up name based on year ✨") do |span|
+    year = get_year
+    span.add_field("app.year", year)
+    name = names_by_year.fetch(year, ["OH NO!"]).sample
+    span.add_field("app.username", name)
+    name
+  end
 end
 
 def get_year
-  year_service_connection = Faraday.new(ENV["YEAR_ENDPOINT"] || "http://localhost:6001")
-  year_service_response = year_service_connection.get("/year") do |request|
+  Honeycomb.start_span(name: "✨ call /year ✨") do |span|
+    response = Faraday.new(ENV["YEAR_ENDPOINT"] || "http://localhost:6001").get("/year")
+    year = response.body.to_i
+    span.add_field("app.year", year)
+    year
   end
-  year_service_response.body.to_i
 end
