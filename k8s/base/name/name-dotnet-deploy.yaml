@@ -22,10 +22,8 @@ spec:
         ports:
         - containerPort: 8000
         env:
-        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        - name: Otlp__Endpoint
           value: "http://collector:55680"
-        - name: SERVICE_NAME
-          value: name-dotnet
         - name: YEAR_ENDPOINT
           value: http://gateway
 

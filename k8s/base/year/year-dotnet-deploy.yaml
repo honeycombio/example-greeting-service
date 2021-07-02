@@ -22,18 +22,8 @@ spec:
         ports:
         - containerPort: 6001
         env:
-        - name: HONEYCOMB_API_KEY
-          valueFrom:
-            configMapKeyRef:
-              name: hny-config
-              key: api_key
-        - name: HONEYCOMB_DATASET
-          valueFrom:
-            configMapKeyRef:
-              name: hny-config
-              key: dataset
-        - name: SERVICE_NAME
-          value: year-dotnet
+        - name: Otlp__Endpoint
+          value: "http://collector:55680"
 
 ---
 apiVersion: v1

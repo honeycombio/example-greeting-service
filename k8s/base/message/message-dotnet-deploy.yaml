@@ -22,9 +22,7 @@ spec:
         ports:
         - containerPort: 9000
         env:
-        - name: SERVICE_NAME
-          value: message-dotnet
-        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+        - name: Otlp__Endpoint
           value: "http://collector:55680"
 
 ---
