@@ -12,6 +12,7 @@ COPY ./otel_ngx_module.so /usr/lib/nginx/modules
 # ADD https://github.com/open-telemetry/opentelemetry-cpp-contrib/releases/download/1.0.0/otel_ngx_module-ubuntu-20.10-stable.so /usr/lib/nginx/modules
 
 # Configs
+COPY ./index.html /usr/share/nginx/html/index.html
 COPY ./otel-conf.toml /etc/otel-conf.toml
 COPY ./nginx.conf /etc/nginx/nginx.conf
 COPY ./proxies.conf /etc/nginx/sites-enabled/default
