@@ -31,7 +31,16 @@ config :opentelemetry, :processors,
   otel_batch_processor: %{
     exporter: {
       :opentelemetry_exporter,
-      %{endpoints: [{:http, "localhost", 55681, []}]}
+      %{
+        endpoints: [
+          {
+            :http,
+            System.get_env("OTEL_COLLECTOR_HOST", "localhost"),
+            System.get_env("OTEL_COLLECTOR_PORT", "55681") |> String.to_integer(),
+            []
+          }
+        ]
+      }
     }
   }
 
