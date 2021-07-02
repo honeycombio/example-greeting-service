@@ -4,14 +4,17 @@ metadata:
   name: year-java
   labels:
     app: year
+    language: java
 spec:
   selector:
     matchLabels:
       app: year
+      language: java
   template:
     metadata:
       labels:
         app: year
+        language: java
     spec:
       containers:
       - name: year-java
