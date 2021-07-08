@@ -86,6 +86,9 @@ def launch_ruby_message_service(auto_init=True):
 def launch_ruby_name_service(auto_init=True):
     launch_ruby_svc("name-rb", "ruby/name-service", "ruby name.rb", auto_init=auto_init)
 
+def launch_ruby_year_service(auto_init=True):
+    launch_ruby_svc("year-rb", "ruby/year-service", "rackup --port 6001", auto_init=auto_init)
+
 def launch_java_svc(name, dirname="", flags="", auto_init=True):
     '''
     Starts a single Java service.
@@ -166,6 +169,7 @@ launch_go_name_service()
 
 launch_go_year_service()
 # launch_python_year_service()
+# launch_ruby_year_service()
 # launch_java_year_service()
 # launch_dotnet_year_service()
 
