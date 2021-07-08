@@ -18,17 +18,19 @@ import (
 	"github.com/honeycombio/opentelemetry-exporter-go/honeycomb"
 )
 
-const (
-	nameServiceUrl    = "http://localhost:8000/name"
-	messageServiceUrl = "http://localhost:9000/message"
+var (
+	apiKey            = os.Getenv("HONEYCOMB_API_KEY")
+	dataset           = os.Getenv("HONEYCOMB_DATASET")
+	nameServiceUrl    = os.Getenv("NAME_ENDPOINT") + "/name"
+	messageServiceUrl = os.Getenv("MESSAGE_ENDPOINT") + "/message"
 )
 
 func main() {
 	exp, err := honeycomb.NewExporter(
 		honeycomb.Config{
-			APIKey: os.Getenv("HONEYCOMB_API_KEY"),
+			APIKey: apiKey,
 		},
-		honeycomb.TargetingDataset(os.Getenv("HONEYCOMB_DATASET")),
+		honeycomb.TargetingDataset(dataset),
 		honeycomb.WithServiceName("frontend-go"),
 	)
 	if err != nil {
