@@ -13,8 +13,8 @@ namespace frontend
 {
   public class Startup
   {
-    private const string ActivitySourceName = "honeycomb.examples.frontend-dotnet";
-    public static readonly ActivitySource ActivitySource = new(ActivitySourceName);
+    // private const string ActivitySourceName = "honeycomb.examples.frontend-dotnet";
+    // public static readonly ActivitySource ActivitySource = new(ActivitySourceName);
 
     public Startup(IConfiguration configuration)
     {

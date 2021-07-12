@@ -12,8 +12,8 @@ namespace message_service
 {
   public class Startup
   {
-    private const string ActivitySourceName = "honeycomb.examples.message-service-dotnet";
-    public static readonly ActivitySource ActivitySource = new(ActivitySourceName);
+    // private const string ActivitySourceName = "honeycomb.examples.message-service-dotnet";
+    // public static readonly ActivitySource ActivitySource = new(ActivitySourceName);
 
     public Startup(IConfiguration configuration)
     {
