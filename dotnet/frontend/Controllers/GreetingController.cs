@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using OpenTelemetry.Trace;
 
 namespace frontend.Controllers
 {
@@ -10,24 +11,26 @@ namespace frontend.Controllers
     public class GreetingController : ControllerBase
     {
         private readonly IHttpClientFactory _clientFactory;
+        private readonly Tracer _tracer;
 
-        public GreetingController(IHttpClientFactory clientFactory)
+        public GreetingController(IHttpClientFactory clientFactory, Tracer tracer)
         {
             _clientFactory = clientFactory;
+            _tracer = tracer;
         }
 
         [HttpGet]
         public async Task<string> GetAsync()
         {
-            var current = Activity.Current;
-            current?.AddTag("apple", 1);
-            current?.AddBaggage("avocado", "12");
+            using (var span = _tracer.StartActiveSpan("Preparing Greeting"))
+            {
+                span.SetAttribute("testAttribute", "Greeting");
+                var httpClient = _clientFactory.CreateClient();
+                var name = await GetNameAsync(httpClient);
+                var message = await GetMessage(httpClient);
 
-            var httpClient = _clientFactory.CreateClient();
-            var name = await GetNameAsync(httpClient);
-            var message = await GetMessage(httpClient);
-
-            return $"Hello {name}, {message}";
+                return $"Hello {name}, {message}";
+            }
         }
 
         private static async Task<string> GetNameAsync(HttpClient client)
