@@ -24,7 +24,9 @@ namespace frontend.Controllers
         {
             using (var span = _tracer.StartActiveSpan("Preparing Greeting"))
             {
+
                 span.SetAttribute("testAttribute", "Greeting");
+                Baggage.Current.SetBaggage("testBaggage", "Greetings");
                 var httpClient = _clientFactory.CreateClient();
                 var name = await GetNameAsync(httpClient);
                 var message = await GetMessage(httpClient);

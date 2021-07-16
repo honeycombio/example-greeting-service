@@ -38,6 +38,7 @@ namespace name_service.Controllers
             using (var span = _tracer.StartActiveSpan("Get Year and Return Random Name"))
             {
                 span.SetAttribute("testAttribute", "Name");
+                Baggage.Current.SetBaggage("baggy", "1");
                 var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost:6001/year");
                 var client = _clientFactory.CreateClient();
                 var response = await client.SendAsync(request);
