@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OpenTelemetry.Trace;
+using OpenTelemetry;
 
 namespace name_service.Controllers
 {
