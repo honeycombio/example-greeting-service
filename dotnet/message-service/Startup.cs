@@ -10,9 +10,10 @@ using Honeycomb.OpenTelemetry;
 
 namespace message_service
 {
+    using StackExchange.Redis;
+
     public class Startup
     {
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -26,10 +27,13 @@ namespace message_service
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "message_service", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = "message_service", Version = "v1"});
             });
 
             services.UseHoneycomb(Configuration);
+
+            var multiplexer = ConnectionMultiplexer.Connect("localhost");
+            services.AddSingleton<IConnectionMultiplexer>(multiplexer);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

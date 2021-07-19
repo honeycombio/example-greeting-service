@@ -5,20 +5,25 @@ using OpenTelemetry.Trace;
 
 namespace message_service.Controllers
 {
+    using StackExchange.Redis;
+
     [Route("[controller]")]
     [ApiController]
     public class MessageController : ControllerBase
     {
         private static readonly string[] Messages =
         {
-            "how are you?", "how are you doing?", "what's good?", "what's up?", "how do you do?",
-            "sup?", "good day to you", "how are things?", "howzit?", "woohoo",
+            "how are you?", "how are you doing?", "what's good?", "what's up?", "how do you do?", "sup?",
+            "good day to you", "how are things?", "howzit?", "woohoo",
         };
 
         private readonly Tracer _tracer;
-        public MessageController(Tracer tracer)
+        private readonly IConnectionMultiplexer _redisConnection;
+
+        public MessageController(Tracer tracer, IConnectionMultiplexer redisConnection)
         {
             _tracer = tracer;
+            _redisConnection = redisConnection;
         }
 
         [HttpGet]
@@ -32,12 +37,15 @@ namespace message_service.Controllers
             }
         }
 
-        private static async Task<string> DetermineMessage()
+        private async Task<string> DetermineMessage()
         {
-            await SleepAwhile();
+            IDatabase db = _redisConnection.GetDatabase();
             var rng = new Random();
             var i = rng.Next(0, 9);
-            return Messages[i];
+            db.StringSet("message", Messages[i]);
+
+            await SleepAwhile();
+            return db.StringGet("message");
         }
 
         private static async Task SleepAwhile()
