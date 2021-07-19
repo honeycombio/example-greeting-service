@@ -4,8 +4,6 @@ using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using OpenTelemetry.Trace;
-using OpenTelemetry;
 
 namespace name_service.Controllers
 {
@@ -14,12 +12,10 @@ namespace name_service.Controllers
     public class NameController : ControllerBase
     {
         private readonly IHttpClientFactory _clientFactory;
-        private readonly Tracer _tracer;
 
-        public NameController(IHttpClientFactory clientFactory, Tracer tracer)
+        public NameController(IHttpClientFactory clientFactory)
         {
             _clientFactory = clientFactory;
-            _tracer = tracer;
         }
 
         private static readonly Dictionary<int, string[]> NamesByYear = new()
@@ -36,21 +32,20 @@ namespace name_service.Controllers
         [HttpGet]
         public async Task<string> GetAsync()
         {
-            using (var span = _tracer.StartActiveSpan("Get Year and Return Random Name"))
-            {
-                span.SetAttribute("testAttribute", "Name");
-                Baggage.Current.SetBaggage("baggy", "1");
-                var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost:6001/year");
-                var client = _clientFactory.CreateClient();
-                var response = await client.SendAsync(request);
-                if (!response.IsSuccessStatusCode) return "OH NO!";
-                var yearString = await response.Content.ReadAsStringAsync();
-                var year = int.Parse(yearString);
+            var current = Activity.Current;
+            current?.AddTag("apple", 1);
+            current?.AddBaggage("avocado", "12");
 
-                var rng = new Random();
-                var i = rng.Next(0, 9);
-                return NamesByYear[year][i];
-            }
+            var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost:6001/year");
+            var client = _clientFactory.CreateClient();
+            var response = await client.SendAsync(request);
+            if (!response.IsSuccessStatusCode) return "OH NO!";
+            var yearString = await response.Content.ReadAsStringAsync();
+            var year = int.Parse(yearString);
+
+            var rng = new Random();
+            var i = rng.Next(0, 9);
+            return NamesByYear[year][i];
         }
     }
 }
