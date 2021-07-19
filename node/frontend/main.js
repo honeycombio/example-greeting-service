@@ -21,6 +21,8 @@ const messageUrl = 'https://jsonplaceholder.typicode.com/todos/1';
 // App
 const app = express();
 app.get('/greeting', async (req, res) => {
+  beeline.addContext({ name: 'Greetings' });
+  beeline.addTraceContext({ name: 'Greetings' });
   const name = await getName(nameUrl);
   const message = await getMessage(messageUrl);
   res.send(`Hello ${name}, ${message}`);
@@ -32,8 +34,9 @@ const getName = (url) =>
       return data.json();
     })
     .then((json) => {
-      console.log(json);
-      return JSON.stringify(json);
+      console.log(json.username);
+      beeline.addTraceContext({ user_name: json.username });
+      return JSON.stringify(json.username);
     })
     .catch((err) => console.error('Problem getting name'));
 
@@ -43,8 +46,9 @@ const getMessage = (url) =>
       return data.json();
     })
     .then((json) => {
-      console.log(json);
-      return JSON.stringify(json);
+      console.log(json.title);
+      beeline.addTraceContext({ user_message: json.title });
+      return JSON.stringify(json.title);
     })
     .catch((err) => console.error('Problem getting message'));
 
