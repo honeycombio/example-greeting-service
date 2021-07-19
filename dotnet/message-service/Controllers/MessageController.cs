@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using OpenTelemetry.Trace;
 
 namespace message_service.Controllers
 {
@@ -13,12 +14,22 @@ namespace message_service.Controllers
             "how are you?", "how are you doing?", "what's good?", "what's up?", "how do you do?",
             "sup?", "good day to you", "how are things?", "howzit?", "woohoo",
         };
-        
+
+        private readonly Tracer _tracer;
+        public MessageController(Tracer tracer)
+        {
+            _tracer = tracer;
+        }
+
         [HttpGet]
         public async Task<string> GetAsync()
         {
-            var message = await DetermineMessage();
-            return message;
+            using var span = _tracer.StartActiveSpan("Getting Message");
+            {
+                span.SetAttribute("testAttribute", "Message");
+                var message = await DetermineMessage();
+                return message;
+            }
         }
 
         private static async Task<string> DetermineMessage()

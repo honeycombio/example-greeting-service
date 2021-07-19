@@ -16,7 +16,7 @@ namespace name_service
     {
         private const string ActivitySourceName = "honeycomb.examples.name-service-dotnet";
         public static readonly ActivitySource ActivitySource = new(ActivitySourceName);
-        
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -30,7 +30,7 @@ namespace name_service
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo {Title = "name_service", Version = "v1"});
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "name_service", Version = "v1" });
             });
             services.AddHttpClient();
 
@@ -43,23 +43,23 @@ namespace name_service
                     switch (eventName)
                     {
                         case "OnStartActivity":
-                        {
-                            if (rawObject is HttpRequest httpRequest)
                             {
-                                activity.SetTag("requestProtocol", httpRequest.Protocol);
-                            }
+                                if (rawObject is HttpRequest httpRequest)
+                                {
+                                    activity.SetTag("requestProtocol", httpRequest.Protocol);
+                                }
 
-                            break;
-                        }
+                                break;
+                            }
                         case "OnStopActivity":
-                        {
-                            if (rawObject is HttpResponse httpResponse)
                             {
-                                activity.SetTag("responseLength", httpResponse.ContentLength); // doesn't seem to work
-                            }
+                                if (rawObject is HttpResponse httpResponse)
+                                {
+                                    activity.SetTag("responseLength", httpResponse.ContentLength); // doesn't seem to work
+                                }
 
-                            break;
-                        }
+                                break;
+                            }
                     }
                 })
                 .AddHttpClientInstrumentation()
