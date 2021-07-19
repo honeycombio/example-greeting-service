@@ -23,7 +23,7 @@ namespace frontend.Controllers
         [HttpGet]
         public async Task<string> GetAsync()
         {
-            using (var span = _tracer.StartActiveSpan("Preparing Greeting"))
+            using var span = _tracer.StartActiveSpan("Preparing Greeting");
             {
 
                 span.SetAttribute("testAttribute", "Greeting");

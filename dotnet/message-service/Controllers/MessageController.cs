@@ -24,7 +24,7 @@ namespace message_service.Controllers
         [HttpGet]
         public async Task<string> GetAsync()
         {
-            using (var span = _tracer.StartActiveSpan("Getting Message"))
+            using var span = _tracer.StartActiveSpan("Getting Message");
             {
                 span.SetAttribute("testAttribute", "Message");
                 var message = await DetermineMessage();
