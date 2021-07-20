@@ -21,8 +21,7 @@
     "@opentelemetry/resources": "0.22.0",
     "@opentelemetry/semantic-conventions": "0.22.0",
     "@opentelemetry/tracing": "0.22.0",
-    "express": "^4.17.1",
-    "honeycomb-beeline": "^2.7.3"
+    "express": "^4.17.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.12",
