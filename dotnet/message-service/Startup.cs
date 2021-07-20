@@ -1,18 +1,16 @@
-using System;
-using System.Diagnostics;
+using Honeycomb.OpenTelemetry;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Honeycomb.OpenTelemetry;
+using StackExchange.Redis;
 
 namespace message_service
 {
     public class Startup
     {
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -26,10 +24,13 @@ namespace message_service
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "message_service", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = "message_service", Version = "v1"});
             });
 
             services.UseHoneycomb(Configuration);
+
+            var multiplexer = ConnectionMultiplexer.Connect("localhost");
+            services.AddSingleton<IConnectionMultiplexer>(multiplexer);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
