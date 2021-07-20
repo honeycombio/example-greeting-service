@@ -1,0 +1,31 @@
+{
+  "name": "year-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "dev": "nodemon main.js",
+    "start": "node main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@grpc/grpc-js": "^1.3.6",
+    "@opentelemetry/api": "1.0.0",
+    "@opentelemetry/exporter-collector-grpc": "0.22.0",
+    "@opentelemetry/instrumentation": "0.22.0",
+    "@opentelemetry/instrumentation-express": "0.22.0",
+    "@opentelemetry/instrumentation-http": "0.22.0",
+    "@opentelemetry/node": "0.22.0",
+    "@opentelemetry/resources": "0.22.0",
+    "@opentelemetry/semantic-conventions": "0.22.0",
+    "@opentelemetry/tracing": "0.22.0",
+    "express": "^4.17.1",
+    "honeycomb-beeline": "^2.7.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12",
+    "prettier": "^2.3.2"
+  }
+}
