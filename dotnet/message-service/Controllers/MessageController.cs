@@ -39,7 +39,7 @@ namespace message_service.Controllers
 
         private async Task<string> DetermineMessage()
         {
-            IDatabase db = _redisConnection.GetDatabase();
+            var db = _redisConnection.GetDatabase();
             var rng = new Random();
             var i = rng.Next(0, 9);
             db.StringSet("message", Messages[i]);

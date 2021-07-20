@@ -1,17 +1,14 @@
-using System;
-using System.Diagnostics;
+using Honeycomb.OpenTelemetry;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Honeycomb.OpenTelemetry;
+using StackExchange.Redis;
 
 namespace message_service
 {
-    using StackExchange.Redis;
-
     public class Startup
     {
         public Startup(IConfiguration configuration)
