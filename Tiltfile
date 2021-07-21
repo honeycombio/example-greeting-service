@@ -148,18 +148,28 @@ def launch_dotnet_name_service(auto_init=True):
 def launch_dotnet_year_service(auto_init=True):
     launch_dotnet_svc("year-dotnet", dirname="dotnet/year-service", auto_init=auto_init)
 
+def launch_node_frontend(auto_init=True):
+  cmd = "cd frontend && npm install && npm start"
+  local_resource("frontend", "", auto_init=auto_init, serve_cmd=cmd)
+
+def launch_node_message_service(auto_init=True):
+  cmd = "cd message-service && npm install && npm start"
+  local_resource("message-service", "", auto_init=auto_init, serve_cmd=cmd)
+
 # Launch one of each of these types of services. Go services init by default
 launch_go_frontend()
 # launch_python_frontend()
 # launch_ruby_frontend()
 # launch_java_frontend()
 # launch_dotnet_frontend()
+# launch_node_frontend()
 
 launch_go_message_service()
 # launch_python_message_service()
 # launch_ruby_message_service()
 # launch_java_message_service()
 # launch_dotnet_message_service()
+# launch_node_message_service()
 
 launch_go_name_service()
 # launch_python_name_service()
