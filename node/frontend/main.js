@@ -13,12 +13,11 @@ const fetch = require('node-fetch');
 // Constants
 const PORT = 7000;
 const HOST = '0.0.0.0';
-const MESSAGE_ENDPOINT =
-  process.env.MESSAGE_ENDPOINT || 'http://localhost:9000';
+const MESSAGE_ENDPOINT = process.env.MESSAGE_ENDPOINT || 'localhost:9000';
 
 // TODO - swap out with new endpoints
 const nameUrl = 'https://jsonplaceholder.typicode.com/users/1';
-const messageUrl = `${MESSAGE_ENDPOINT}/message`;
+const messageUrl = `http://${MESSAGE_ENDPOINT}/message`;
 
 // App
 const app = express();
