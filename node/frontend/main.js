@@ -13,10 +13,12 @@ const fetch = require('node-fetch');
 // Constants
 const PORT = 7000;
 const HOST = '0.0.0.0';
+const MESSAGE_ENDPOINT =
+  process.env.MESSAGE_ENDPOINT || 'http://localhost:9000';
 
 // TODO - swap out with new endpoints
 const nameUrl = 'https://jsonplaceholder.typicode.com/users/1';
-const messageUrl = 'http://localhost:9000/message';
+const messageUrl = `${MESSAGE_ENDPOINT}/message`;
 
 // App
 const app = express();
@@ -38,7 +40,7 @@ const getName = (url) =>
       beeline.addTraceContext({ user_name: json.username });
       return JSON.stringify(json.username);
     })
-    .catch((err) => console.error('Problem getting name'));
+    .catch((err) => console.error(`Problem getting name: ${err}`));
 
 const getMessage = (url) =>
   fetch(url)
@@ -50,7 +52,7 @@ const getMessage = (url) =>
       beeline.addTraceContext({ user_message: text });
       return text;
     })
-    .catch((err) => console.error('Problem getting message'));
+    .catch((err) => console.error(`Problem getting message: ${err}`));
 
 app.listen(PORT, HOST);
 console.log(`Running node frontend service on http://${HOST}:${PORT}`);

@@ -1,0 +1,12 @@
+services:
+  frontend:
+    build: frontend
+    environment:
+      - MESSAGE_ENDPOINT=http://message:9000
+    ports:
+      - 7000:7000
+
+  message:
+    build: message-service
+    ports:
+      - 9000:9000
