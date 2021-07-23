@@ -148,13 +148,41 @@ def launch_dotnet_name_service(auto_init=True):
 def launch_dotnet_year_service(auto_init=True):
     launch_dotnet_svc("year-dotnet", dirname="dotnet/year-service", auto_init=auto_init)
 
+def launch_node_svc(name, dirname="", flags="", auto_init=True):
+    '''
+    Starts a single Node service.
+
+    Parameters:
+    name: used to display the name of the process in the tilt tab
+    dirname: (optional) directory name in which to run `npm start` defaults to 'name'
+    flags: (optional) any additional flags to add to the command line
+    '''
+    
+    apikey = os.environ.get('HONEYCOMB_API_KEY')
+    dataset = os.getenv('HONEYCOMB_DATASET')
+    env = {
+        'SERVICE_NAME': name,
+        'HONEYCOMB_API_KEY': apikey,
+        'HONEYCOMB_DATASET': dataset,
+    }
+
+    # TODO - env vars not getting set here. Add here or add to docker and pull in? Or use .env file?
+
+    cmd = "cd {} && npm install && npm start".format(
+        dirname if dirname else name,
+        flags if flags else ""
+    )
+    print("About to start {} with command {} with dataset {}".format(name, cmd, dataset))
+    local_resource(name, "", auto_init=auto_init, serve_cmd=cmd)
+
 def launch_node_frontend(auto_init=True):
-  cmd = "cd frontend && npm install && npm start"
-  local_resource("frontend", "", auto_init=auto_init, serve_cmd=cmd)
+  launch_node_svc("frontend-node", dirname="node/frontend", auto_init=auto_init)
 
 def launch_node_message_service(auto_init=True):
-  cmd = "cd message-service && npm install && npm start"
-  local_resource("message-service", "", auto_init=auto_init, serve_cmd=cmd)
+  launch_node_svc("message-node", dirname="node/message-service", auto_init=auto_init)
+
+def launch_node_year_service(auto_init=True):
+  launch_node_svc("year-node", dirname="node/year-service", auto_init=auto_init)
 
 # Launch one of each of these types of services. Go services init by default
 launch_go_frontend()
@@ -182,6 +210,7 @@ launch_go_year_service()
 # launch_ruby_year_service()
 # launch_java_year_service()
 # launch_dotnet_year_service()
+# launch_node_year_service()
 
 ###
 # Notes

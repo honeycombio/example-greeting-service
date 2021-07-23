@@ -1,10 +1,10 @@
 'use strict';
 const beeline = require('honeycomb-beeline')({
   // Get this via https://ui.honeycomb.io/account after signing up for Honeycomb
-  writeKey: '{APIKey}',
+  writeKey: `${process.env.HONEYCOMB_API_KEY}`,
   // The name of your app is a good choice to start with
-  dataset: '{dataset}',
-  serviceName: 'node-message-service',
+  dataset: `${process.env.HONEYCOMB_DATASET}`,
+  serviceName: `${process.env.SERVICE_NAME}` || 'node-message-service',
 });
 
 const express = require('express');

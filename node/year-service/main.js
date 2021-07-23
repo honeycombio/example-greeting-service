@@ -18,6 +18,11 @@ const express = require('express');
 const PORT = 6001;
 const HOST = '0.0.0.0';
 
+// Honeycomb
+const HONEYCOMB_API_KEY = process.env.HONEYCOMB_API_KEY || '';
+const HONEYCOMB_DATASET = process.env.HONEYCOMB_DATASET || '';
+const SERVICE_NAME = process.env.SERVICE_NAME || 'node-year-service';
+
 // App
 const app = express();
 app.get('/year', async (req, res) => {
@@ -37,13 +42,13 @@ function determineYear() {
 
 const provider = new NodeTracerProvider({
   resource: new Resource({
-    [ResourceAttributes.SERVICE_NAME]: 'node-otlp',
+    [ResourceAttributes.SERVICE_NAME]: `${SERVICE_NAME}`,
   }),
 });
 
 const metadata = new grpc.Metadata();
-metadata.set('x-honeycomb-team', '<YOUR-APIKEY>');
-metadata.set('x-honeycomb-dataset', '<YOUR-DATASET>');
+metadata.set('x-honeycomb-team', HONEYCOMB_API_KEY);
+metadata.set('x-honeycomb-dataset', HONEYCOMB_DATASET);
 
 provider.addSpanProcessor(
   new SimpleSpanProcessor(

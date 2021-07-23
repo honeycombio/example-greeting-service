@@ -1,12 +1,34 @@
 services:
+  collector:
+    extends:
+      file: ../docker-compose.yml
+      service: collector
+
   frontend:
     build: frontend
     environment:
+      - HONEYCOMB_API_KEY
+      - HONEYCOMB_DATASET
       - MESSAGE_ENDPOINT=message:9000
+      - SERVICE_NAME=node-frontend-service
     ports:
       - 7000:7000
 
   message:
     build: message-service
+    environment:
+      - HONEYCOMB_API_KEY
+      - HONEYCOMB_DATASET
+      - SERVICE_NAME=node-message-service
     ports:
       - 9000:9000
+
+  year:
+    build: year-service
+    environment:
+      - OTEL_COLLECTOR_HOST=collector
+      - HONEYCOMB_API_KEY
+      - HONEYCOMB_DATASET
+      - SERVICE_NAME=node-year-service
+    ports:
+      - 6001:6001
