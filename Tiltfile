@@ -158,12 +158,16 @@ def launch_node_svc(name, dirname="", flags="", auto_init=True):
     flags: (optional) any additional flags to add to the command line
     '''
     
-    apikey = os.environ.get('HONEYCOMB_API_KEY')
+    apikey = os.getenv('HONEYCOMB_API_KEY')
     dataset = os.getenv('HONEYCOMB_DATASET')
+    endpoint = os.getenv('HONEYCOMB_API')
+    otlpEndpoint = os.getenv('OTLP_ENDPOINT')
     env = {
         'SERVICE_NAME': name,
         'HONEYCOMB_API_KEY': apikey,
         'HONEYCOMB_DATASET': dataset,
+        'HONEYCOMB_API': endpoint,
+        'OTLP_ENDPOINT': otlpEndpoint,
     }
 
     cmd = "cd {} && npm install && npm start".format(

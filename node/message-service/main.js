@@ -5,6 +5,7 @@ const beeline = require('honeycomb-beeline')({
   // The name of your app is a good choice to start with
   dataset: `${process.env.HONEYCOMB_DATASET}`,
   serviceName: `${process.env.SERVICE_NAME}` || 'node-message-service',
+  apiHost: `${process.env.HONEYCOMB_API}` || 'https://api.honeycomb.io',
 });
 
 const express = require('express');
