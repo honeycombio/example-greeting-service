@@ -166,8 +166,6 @@ def launch_node_svc(name, dirname="", flags="", auto_init=True):
         'HONEYCOMB_DATASET': dataset,
     }
 
-    # TODO - env vars not getting set here. Add here or add to docker and pull in? Or use .env file?
-
     cmd = "cd {} && npm install && npm start".format(
         dirname if dirname else name,
         flags if flags else ""
