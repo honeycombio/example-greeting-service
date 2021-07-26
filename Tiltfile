@@ -173,7 +173,7 @@ def launch_node_svc(name, dirname="", flags="", auto_init=True):
         flags if flags else ""
     )
     print("About to start {} with command {} with dataset {}".format(name, cmd, dataset))
-    local_resource(name, "", auto_init=auto_init, serve_cmd=cmd)
+    local_resource(name, "", auto_init=auto_init, serve_cmd=cmd, serve_env=env)
 
 def launch_node_frontend(auto_init=True):
   launch_node_svc("frontend-node", dirname="node/frontend", auto_init=auto_init)
