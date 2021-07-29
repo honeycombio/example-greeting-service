@@ -1,0 +1,56 @@
+version: "2.4"
+
+x-common-env: &common-env
+  HONEYCOMB_API_KEY:
+  HONEYCOMB_DATASET:
+  OTEL_EXPORTER_OTLP_ENDPOINT:
+  OTEL_RESOURCE_ATTRIBUTES: app.running-in=docker
+  Honeycomb__ApiKey: ${HONEYCOMB_API_KEY}
+  Honeycomb__Dataset: ${HONEYCOMB_DATASET}
+  Honeycomb__Endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT}
+  Otlp__ApiKey: ${HONEYCOMB_API_KEY}
+  Otlp__Dataset: ${HONEYCOMB_DATASET}
+  Otlp__Endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT}
+  MESSAGE_ENDPOINT: message:9000
+  NAME_ENDPOINT: name:8000
+  YEAR_ENDPOINT: year:6001
+  REDIS_URL: redis
+
+services:
+  frontend:
+    build: ./frontend
+    image: hnyexample/frontend-dotnet
+    environment:
+      <<: *common-env
+    ports:
+      - 7000:7000
+
+  message:
+    build: ./message-service
+    image: hnyexample/message-dotnet
+    environment:
+      <<: *common-env
+    ports:
+      - 9000:9000
+
+  name:
+    build: ./name-service
+    image: hnyexample/name-dotnet
+    environment:
+      <<: *common-env
+    ports:
+      - 8000:8000
+
+  year:
+    build: ./year-service
+    image: hnyexample/year-dotnet
+    environment:
+      <<: *common-env
+    ports:
+      - 6001:6001
+
+  redis:
+    image: redis:latest
+    ports:
+      - "127.0.0.1:6379:6379"
+

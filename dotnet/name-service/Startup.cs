@@ -36,7 +36,9 @@ namespace name_service
 
             services.AddOpenTelemetryTracing((builder => builder
                 .SetResourceBuilder(ResourceBuilder.CreateDefault()
-                    .AddService(this.Configuration.GetValue<string>("Otlp:ServiceName")))
+                    .AddService(this.Configuration.GetValue<string>("Otlp:ServiceName"))
+                    .AddEnvironmentVariableDetector()
+                )
                 .AddSource(ActivitySourceName)
                 .AddAspNetCoreInstrumentation(options => options.Enrich = (activity, eventName, rawObject) =>
                 {

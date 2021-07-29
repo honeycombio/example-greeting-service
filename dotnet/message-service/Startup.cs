@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
+using System;
 
 namespace message_service
 {
@@ -29,7 +30,14 @@ namespace message_service
 
             services.UseHoneycomb(Configuration);
 
-            var multiplexer = ConnectionMultiplexer.Connect("localhost");
+            var redisConfigString = Environment.GetEnvironmentVariable("REDIS_URL");
+            if (redisConfigString == null)
+            {
+                redisConfigString = "localhost";
+            }
+            var redisOptions = ConfigurationOptions.Parse(redisConfigString);
+            redisOptions.AbortOnConnectFail = false; // allow for reconnects if redis is not available
+            var multiplexer = ConnectionMultiplexer.Connect(redisOptions);
             services.AddSingleton<IConnectionMultiplexer>(multiplexer);
         }
 

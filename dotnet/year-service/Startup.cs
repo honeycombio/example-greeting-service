@@ -34,7 +34,9 @@ namespace year_service
 
             services.AddOpenTelemetryTracing(builder => builder
                 .SetResourceBuilder(ResourceBuilder.CreateDefault()
-                    .AddService(this.Configuration.GetValue<string>("Otlp:ServiceName")))
+                    .AddService(this.Configuration.GetValue<string>("Otlp:ServiceName"))
+                    .AddEnvironmentVariableDetector()
+                )
                 .AddSource(ActivitySourceName)
                 .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation()
