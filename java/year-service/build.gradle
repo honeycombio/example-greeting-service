@@ -1,7 +1,7 @@
 plugins {
-	id 'org.springframework.boot' version '2.4.1'
-	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
-	id 'java'
+    id 'org.springframework.boot' version '2.4.1'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id 'java'
 }
 
 group = 'io.honeycomb.examples'
@@ -10,50 +10,24 @@ sourceCompatibility = '11'
 
 ext {
     otelVersion = '1.0.1'
-		beestroVersion = '0.3.0'
-}
-
-configurations {
-    agent
+    beestroVersion = '0.3.0'
 }
 
 repositories {
-	mavenCentral()
-	// mavenLocal()
-	flatDir { dirs "libs"}
+    mavenCentral()
+    mavenLocal()
+    flatDir { dirs "libs" }
 }
 
 dependencies {
-  implementation("io.opentelemetry:opentelemetry-api:${otelVersion}")
-	implementation("io.opentelemetry:opentelemetry-extension-annotations:${otelVersion}")
-
-	agent "io.honeycomb:honeycomb-opentelemetry-javaagent:${beestroVersion}:all"
-
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-	}
-}
-
-task copyAgentJar(type: Copy) {
-    from configurations.agent {
-			include '**/honeycomb-opentelemetry-javaagent*.jar'
-		}
-    into "agent"
-    rename { fileName -> "honey-javaagent.jar" }
-}
-
-compileJava.dependsOn copyAgentJar
-bootRun.dependsOn copyAgentJar
-
-bootRun.doFirst {
-	jvmArgs("-javaagent:agent/honey-javaagent.jar")
-}
-
-clean.doFirst {
-    delete "agent"
+    implementation("io.opentelemetry:opentelemetry-api:${otelVersion}")
+    implementation("io.honeycomb:honeycomb-opentelemetry-sdk:${beestroVersion}")
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
 }
 
 test {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
