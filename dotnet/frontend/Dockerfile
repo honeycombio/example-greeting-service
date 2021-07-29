@@ -19,6 +19,6 @@ WORKDIR /app
 COPY --from=build /app ./
 
 ENV ASPNETCORE_URLS=http://+:7000
-ENV ASPNETCORE_ENVIRONMENT=”development”
+ENV ASPNETCORE_ENVIRONMENT="development"
 EXPOSE 7000
 ENTRYPOINT ["dotnet", "frontend.dll"]

@@ -19,6 +19,6 @@ WORKDIR /app
 COPY --from=build /app ./
 
 ENV ASPNETCORE_URLS=http://+:8000
-ENV ASPNETCORE_ENVIRONMENT=”development”
+ENV ASPNETCORE_ENVIRONMENT="development"
 EXPOSE 8000
 ENTRYPOINT ["dotnet", "name-service.dll"]

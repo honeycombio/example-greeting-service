@@ -19,6 +19,6 @@ WORKDIR /app
 COPY --from=build /app ./
 
 ENV ASPNETCORE_URLS=http://+:6001
-ENV ASPNETCORE_ENVIRONMENT=”development”
+ENV ASPNETCORE_ENVIRONMENT="development"
 EXPOSE 6001
 ENTRYPOINT ["dotnet", "year-service.dll"]
