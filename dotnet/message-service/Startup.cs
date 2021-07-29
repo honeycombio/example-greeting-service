@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using StackExchange.Redis;
+using System;
 
 namespace message_service
 {
@@ -27,10 +28,15 @@ namespace message_service
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "message_service", Version = "v1"});
             });
 
-            services.UseHoneycomb(Configuration);
-
-            var multiplexer = ConnectionMultiplexer.Connect("localhost");
+            var redisConfig = Environment.GetEnvironmentVariable("REDIS_URL");
+            if (redisConfig == null)
+            {
+                redisConfig = "localhost";
+            }
+            var multiplexer = ConnectionMultiplexer.Connect(redisConfig);
             services.AddSingleton<IConnectionMultiplexer>(multiplexer);
+
+            services.UseHoneycomb(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

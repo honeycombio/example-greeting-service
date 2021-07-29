@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OpenTelemetry.Trace;
@@ -11,12 +10,6 @@ namespace message_service.Controllers
     [ApiController]
     public class MessageController : ControllerBase
     {
-        private static readonly string[] Messages =
-        {
-            "how are you?", "how are you doing?", "what's good?", "what's up?", "how do you do?", "sup?",
-            "good day to you", "how are things?", "howzit?", "woohoo",
-        };
-
         private readonly Tracer _tracer;
         private readonly IConnectionMultiplexer _redisConnection;
 
@@ -29,28 +22,26 @@ namespace message_service.Controllers
         [HttpGet]
         public async Task<string> GetAsync()
         {
-            using var span = _tracer.StartActiveSpan("Getting Message");
-            {
-                span.SetAttribute("testAttribute", "Message");
-                var message = await DetermineMessage();
-                return message;
-            }
+
+            var message = await DetermineMessage();
+            return message;
         }
 
         private async Task<string> DetermineMessage()
         {
-            var db = _redisConnection.GetDatabase();
-            var rng = new Random();
-            var i = rng.Next(0, 9);
-            db.StringSet("message", Messages[i]);
-
-            await SleepAwhile();
-            return db.StringGet("message");
-        }
-
-        private static async Task SleepAwhile()
-        {
-            await Task.Delay(50);
+            using var span = _tracer.StartActiveSpan("📖 look up message ✨");
+            {
+                var db = _redisConnection.GetDatabase();
+                var message = "generic hello";
+                var result = await db.SetRandomMemberAsync("messages");
+                if (result.IsNull) {
+                    span.AddEvent("message was empty from redis, using default");
+                } else {
+                    message = result.ToString();
+                }
+                span.SetAttribute("app.message", message);
+                return message;
+            }
         }
     }
 }
