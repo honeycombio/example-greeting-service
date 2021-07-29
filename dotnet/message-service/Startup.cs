@@ -28,6 +28,8 @@ namespace message_service
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "message_service", Version = "v1"});
             });
 
+            services.UseHoneycomb(Configuration);
+
             var redisConfig = Environment.GetEnvironmentVariable("REDIS_URL");
             if (redisConfig == null)
             {
@@ -35,8 +37,6 @@ namespace message_service
             }
             var multiplexer = ConnectionMultiplexer.Connect(redisConfig);
             services.AddSingleton<IConnectionMultiplexer>(multiplexer);
-
-            services.UseHoneycomb(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
