@@ -30,12 +30,14 @@ namespace message_service
 
             services.UseHoneycomb(Configuration);
 
-            var redisConfig = Environment.GetEnvironmentVariable("REDIS_URL");
-            if (redisConfig == null)
+            var redisConfigString = Environment.GetEnvironmentVariable("REDIS_URL");
+            if (redisConfigString == null)
             {
-                redisConfig = "localhost";
+                redisConfigString = "localhost";
             }
-            var multiplexer = ConnectionMultiplexer.Connect(redisConfig);
+            var redisOptions = ConfigurationOptions.Parse(redisConfigString);
+            redisOptions.AbortOnConnectFail = false; // allow for reconnects if redis is not available
+            var multiplexer = ConnectionMultiplexer.Connect(redisOptions);
             services.AddSingleton<IConnectionMultiplexer>(multiplexer);
         }
 
