@@ -20,6 +20,17 @@ services:
     ports:
       - 9000:9000
 
+  name:
+    build: name-service
+    environment:
+      - HONEYCOMB_API
+      - HONEYCOMB_API_KEY
+      - HONEYCOMB_DATASET
+      - SERVICE_NAME=node-name-service
+      - YEAR_ENDPOINT=year:6001
+    ports:
+      - 8000:8000
+
   year:
     build: year-service
     environment:
