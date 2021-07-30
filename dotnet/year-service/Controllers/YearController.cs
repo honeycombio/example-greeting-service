@@ -16,7 +16,7 @@ namespace year_service.Controllers
         [HttpGet]
         public async Task<int> GetAsync()
         {
-            using var activity = Startup.ActivitySource.StartActivity("DetermineYear");
+            using var activity = Startup.ActivitySource.StartActivity("🗓 get-a-year ✨");
             activity?.SetTag("banana", 1);
             var year = await DetermineYear();
             return year;
@@ -24,17 +24,9 @@ namespace year_service.Controllers
 
         private static async Task<int> DetermineYear()
         {
-            await SleepAwhile();
             var rng = new Random();
             var i = rng.Next(0, 5);
             return Years[i];
-        }
-
-        private static async Task SleepAwhile()
-        {
-            using var activity = Startup.ActivitySource.StartActivity("Sleep");
-            activity?.SetTag("banana", 2);
-            await Task.Delay(50);
         }
     }
 }
