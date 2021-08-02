@@ -24,6 +24,8 @@ namespace message_service.Controllers
         {
 
             var message = await DetermineMessage();
+            var currentSpan = Tracer.CurrentSpan;
+            currentSpan.SetAttribute("app.message", message);
             return message;
         }
 

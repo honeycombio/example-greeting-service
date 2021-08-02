@@ -47,16 +47,31 @@ namespace name_service.Controllers
             current?.AddTag("apple", 1);
             current?.AddBaggage("avocado", "12");
 
+            var year = await GetYear();
+
+            using var nameLookupActivity = Startup.ActivitySource.StartActivity("📖 look up name based on year ✨");
+            {
+                var name = "OH NO!";
+                if (year != 0) {
+                    var rng = new Random();
+                    var i = rng.Next(0, 9);
+                    name = NamesByYear[year][i];
+                }
+                nameLookupActivity?.AddTag("app.name", name);
+                nameLookupActivity?.AddBaggage("app.name", name);
+                return name;
+            }
+        }
+
+        private async Task<int> GetYear()
+        {
+            using var yearServiceCallActivity = Startup.ActivitySource.StartActivity("✨ call /year ✨");
             var request = new HttpRequestMessage(HttpMethod.Get, GetYearEndpoint());
             var client = _clientFactory.CreateClient();
             var response = await client.SendAsync(request);
-            if (!response.IsSuccessStatusCode) return "OH NO!";
+            if (!response.IsSuccessStatusCode) return 0;
             var yearString = await response.Content.ReadAsStringAsync();
-            var year = int.Parse(yearString);
-
-            var rng = new Random();
-            var i = rng.Next(0, 9);
-            return NamesByYear[year][i];
+            return int.Parse(yearString);
         }
     }
 }

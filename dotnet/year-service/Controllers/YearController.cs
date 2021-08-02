@@ -14,27 +14,19 @@ namespace year_service.Controllers
         };
 
         [HttpGet]
-        public async Task<int> GetAsync()
+        public int GetYear()
         {
-            using var activity = Startup.ActivitySource.StartActivity("DetermineYear");
+            using var activity = Startup.ActivitySource.StartActivity("🗓 get-a-year ✨");
             activity?.SetTag("banana", 1);
-            var year = await DetermineYear();
+            var year = DetermineYear();
             return year;
         }
 
-        private static async Task<int> DetermineYear()
+        private static int DetermineYear()
         {
-            await SleepAwhile();
             var rng = new Random();
-            var i = rng.Next(0, 5);
+            var i = rng.Next(Years.Length-1);
             return Years[i];
-        }
-
-        private static async Task SleepAwhile()
-        {
-            using var activity = Startup.ActivitySource.StartActivity("Sleep");
-            activity?.SetTag("banana", 2);
-            await Task.Delay(50);
         }
     }
 }
