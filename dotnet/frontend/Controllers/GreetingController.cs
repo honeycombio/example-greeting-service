@@ -56,6 +56,8 @@ namespace frontend.Controllers
 
                 using var renderSpan = _tracer.StartActiveSpan("🎨 render greeting ✨");
                 {
+                    renderSpan.SetAttribute("app.name", name);
+                    renderSpan.SetAttribute("app.message", message);
                     return $"Hello {name}, {message}";
                 }
             }
