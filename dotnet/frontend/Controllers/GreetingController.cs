@@ -54,7 +54,7 @@ namespace frontend.Controllers
                 var name = await GetNameAsync(httpClient);
                 var message = await GetMessageAsync(httpClient);
 
-                using var render_span = _tracer.StartActiveSpan("🎨 render greeting ✨");
+                using var renderSpan = _tracer.StartActiveSpan("🎨 render greeting ✨");
                 {
                     return $"Hello {name}, {message}";
                 }
