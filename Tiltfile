@@ -173,6 +173,9 @@ def launch_node_frontend(auto_init=True):
 def launch_node_message_service(auto_init=True):
   launch_node_svc("message-node", dirname="node/message-service", auto_init=auto_init)
 
+def launch_node_name_service(auto_init=True):
+  launch_node_svc("name-node", dirname="node/name-service", auto_init=auto_init)
+
 def launch_node_year_service(auto_init=True):
   launch_node_svc("year-node", dirname="node/year-service", auto_init=auto_init)
 
@@ -196,6 +199,7 @@ launch_go_name_service()
 # launch_ruby_name_service()
 # launch_java_name_service()
 # launch_dotnet_name_service()
+# launch_node_name_service()
 
 launch_go_year_service()
 # launch_python_year_service()

@@ -15,30 +15,36 @@ const fetch = require('node-fetch');
 const PORT = 7000;
 const HOST = '0.0.0.0';
 const MESSAGE_ENDPOINT = process.env.MESSAGE_ENDPOINT || 'localhost:9000';
+const NAME_ENDPOINT = process.env.NAME_ENDPOINT || 'localhost:8000';
 
-// TODO - swap out with new endpoints
-const nameUrl = 'https://jsonplaceholder.typicode.com/users/1';
+const nameUrl = `http://${NAME_ENDPOINT}/name`;
 const messageUrl = `http://${MESSAGE_ENDPOINT}/message`;
 
 // App
 const app = express();
 app.get('/greeting', async (req, res) => {
   beeline.addContext({ name: 'Greetings' });
+  const greetingSpan = beeline.startSpan({name: 'Preparing Greeting'});
   beeline.addTraceContext({ name: 'Greetings' });
+  beeline.finishSpan(greetingSpan);
+  const nameSpan = beeline.startSpan({name: '✨ call /name ✨'});
   const name = await getName(nameUrl);
+  beeline.finishSpan(nameSpan);
+  const messageSpan = beeline.startSpan({name: '✨ call /message ✨'});
   const message = await getMessage(messageUrl);
+  beeline.finishSpan(messageSpan);
   res.send(`Hello ${name}, ${message}`);
 });
 
 const getName = (url) =>
   fetch(url)
     .then((data) => {
-      return data.json();
+      return data.text();
     })
-    .then((json) => {
-      console.log(json.username);
-      beeline.addTraceContext({ user_name: json.username });
-      return JSON.stringify(json.username);
+    .then((text) => {
+      console.log(text);
+      beeline.addTraceContext({ user_name: text });
+      return text;
     })
     .catch((err) => console.error(`Problem getting name: ${err}`));
 
