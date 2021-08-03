@@ -21,10 +21,13 @@ const yearURL = `http://${YEAR_ENDPOINT}/year`;
 // App
 const app = express();
 app.get('/name', async (req, res) => {
-  const name = await determineName();
-  const promises = [name, getYear, determineName];
-  beeline.addContext({ name: 'Name' });
-  Promise.all(promises).then((results) => console.log(results));
+  beeline.addContext({someContext: 'year'})
+  const yearSpan = beeline.startSpan({name: '✨ call /year ✨'});
+  const year = await getYear(yearURL);
+  beeline.finishSpan(yearSpan);
+  const nameSpan = beeline.startSpan({name: 'look up name based on year'});
+  const name = determineName(year);
+  beeline.finishSpan(nameSpan);
   res.send(`${name}`);
 });
 
@@ -43,15 +46,13 @@ const names = new Map([
   [2020, ["olivia", "noah", "emma", "liam", "ava", "elijah", "isabella", "oliver", "sophia", "lucas"]],
 ]);
 
-const getYear = (url) =>
+const getYear = async (url) => 
   fetch(url)
     .then((data) => {
-      console.log(data);
-      console.log(data.text());
       return data.text();
     })
     .then((text) => {
-      console.log(text);
+      text = Number(text);
       beeline.addTraceContext({ year: text });
       return text;
     })
@@ -61,14 +62,9 @@ const getRandomNumber = (array) => {
   return array[Math.floor(Math.random() * array.length)];
 };
 
-const determineName = async () => {
-  const year = await getYear(yearURL);
-  // const year = 2020;
-  console.log(`year: ${year}`);
+const determineName = (year) => {
   console.log(typeof year);
   const namesInYear = names.get(year);
-  console.log(`namesInYear: ${namesInYear}`);
-  console.log(`getRandomNumber(namesInYear): ${getRandomNumber(namesInYear)}`);
   return getRandomNumber(namesInYear);
 }
 

@@ -5,6 +5,7 @@ services:
       - HONEYCOMB_API
       - HONEYCOMB_API_KEY
       - HONEYCOMB_DATASET
+      - NAME_ENDPOINT=name:8000
       - MESSAGE_ENDPOINT=message:9000
       - SERVICE_NAME=node-frontend-service
     ports:
