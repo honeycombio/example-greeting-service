@@ -1,6 +1,6 @@
 # greeting-service
 
-[![OSS Lifecycle](https://img.shields.io/osslifecycle/honeycombio/REPO)](https://github.com/honeycombio/home/blob/main/honeycomb-oss-lifecycle-and-practices.md)
+[![OSS Lifecycle](https://img.shields.io/osslifecycle/honeycombio/example-greeting-service)](https://github.com/honeycombio/home/blob/main/honeycomb-oss-lifecycle-and-practices.md)
 
 This is a ridiculously overengineered greeting service! It's sole purpose is to
 create a greeting, composed of a name and a message. The name will be one of
