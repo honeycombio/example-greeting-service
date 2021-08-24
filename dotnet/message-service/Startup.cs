@@ -31,10 +31,11 @@ namespace message_service
             services.UseHoneycomb(Configuration);
 
             var redisConfigString = Environment.GetEnvironmentVariable("REDIS_URL");
-            if (redisConfigString == null)
+            if (string.IsNullOrWhiteSpace(redisConfigString))
             {
                 redisConfigString = "localhost";
             }
+            
             var redisOptions = ConfigurationOptions.Parse(redisConfigString);
             redisOptions.AbortOnConnectFail = false; // allow for reconnects if redis is not available
             var multiplexer = ConnectionMultiplexer.Connect(redisOptions);
@@ -53,7 +54,7 @@ namespace message_service
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }

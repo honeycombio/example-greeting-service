@@ -13,23 +13,7 @@ namespace name_service.Controllers
     {
         private readonly IHttpClientFactory _clientFactory;
 
-        public NameController(IHttpClientFactory clientFactory)
-        {
-            _clientFactory = clientFactory;
-        }
-
-        private static string GetYearEndpoint()
-        {
-            var yearEndpoint = Environment.GetEnvironmentVariable("YEAR_ENDPOINT");
-            if (yearEndpoint == null)
-            {
-                return "http://localhost:6001/year";
-            } else {
-                return "http://" + yearEndpoint + "/year";
-            }
-        }
-
-        private static readonly Dictionary<int, string[]> NamesByYear = new()
+        private static readonly Dictionary<int, string[]> _namesByYear = new()
         {
             { 2015, new[] { "sophia", "jackson", "emma", "aiden", "olivia", "liam", "ava", "lucas", "mia", "noah" } },
             { 2016, new[] { "sophia", "jackson", "emma", "aiden", "olivia", "lucas", "ava", "liam", "mia", "noah" } },
@@ -39,6 +23,23 @@ namespace name_service.Controllers
             { 2020, new[] { "olivia", "noah", "emma", "liam", "ava", "elijah", "isabella", "oliver", "sophia", "lucas" } },
         };
 
+        public NameController(IHttpClientFactory clientFactory)
+        {
+            _clientFactory = clientFactory;
+        }
+
+        private static string GetYearEndpoint()
+        {
+            var yearEndpoint = Environment.GetEnvironmentVariable("YEAR_ENDPOINT");
+            if (string.IsNullOrWhiteSpace(yearEndpoint))
+            {
+                return "http://localhost:6001/year";
+            }
+            else
+            {
+                return $"http://{yearEndpoint}/year";
+            }
+        }
 
         [HttpGet]
         public async Task<string> GetAsync()
@@ -50,17 +51,16 @@ namespace name_service.Controllers
             var year = await GetYear();
 
             using var nameLookupActivity = Startup.ActivitySource.StartActivity("📖 look up name based on year ✨");
+            var name = "OH NO!";
+            if (year != 0)
             {
-                var name = "OH NO!";
-                if (year != 0) {
-                    var rng = new Random();
-                    var i = rng.Next(0, 9);
-                    name = NamesByYear[year][i];
-                }
-                nameLookupActivity?.AddTag("app.name", name);
-                nameLookupActivity?.AddBaggage("app.name", name);
-                return name;
+                var rng = new Random();
+                var i = rng.Next(0, 9);
+                name = _namesByYear[year][i];
             }
+            nameLookupActivity?.AddTag("app.name", name);
+            nameLookupActivity?.AddBaggage("app.name", name);
+            return name;
         }
 
         private async Task<int> GetYear()
