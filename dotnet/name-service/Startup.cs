@@ -33,7 +33,9 @@ namespace name_service
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "name_service", Version = "v1" });
             });
 
-            services.AddHttpClient();services.AddOpenTelemetryTracing((builder => builder
+            services.AddHttpClient();
+            services.AddOpenTelemetryTracing((builder => builder
+
                 .SetResourceBuilder(ResourceBuilder.CreateDefault()
                     .AddService(this.Configuration.GetValue<string>("Otlp:ServiceName"))
                     .AddEnvironmentVariableDetector()
