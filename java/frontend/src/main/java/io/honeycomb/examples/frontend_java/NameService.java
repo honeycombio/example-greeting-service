@@ -24,7 +24,7 @@ public class NameService {
     return nameEndpointFromEnv + "/name";
   }
   @WithSpan
-  public String getName() throws URISyntaxException, IOException, InterruptedException {
+  public String getName() throws URISyntaxException {
     URI name_uri = new URI(name_endpoint());
 
     HttpClient client = HttpClient.newHttpClient();
@@ -34,10 +34,10 @@ public class NameService {
       .build();
     HttpResponse<String> response = null;
     try {
-      Span name_service_call_span = tracer.spanBuilder("✨ call /name ✨").startSpan();
-      name_service_call_span.makeCurrent();
+      Span nameServiceCallSpan = tracer.spanBuilder("✨ call /name ✨").startSpan();
+      nameServiceCallSpan.makeCurrent();
       response = client.send(request, HttpResponse.BodyHandlers.ofString());
-      name_service_call_span.end();
+      nameServiceCallSpan.end();
     } catch (IOException | InterruptedException e) {
       e.printStackTrace();
     }

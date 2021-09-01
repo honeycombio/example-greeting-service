@@ -17,35 +17,35 @@ import io.opentelemetry.extension.annotations.WithSpan;
 
 @Component
 public class YearService {
-  @Autowired
-	private Tracer tracer;
+    @Autowired
+    private Tracer tracer;
 
-  private String year_endpoint() {
-    String yearEndpointFromEnv = System.getenv().getOrDefault("YEAR_ENDPOINT", "http://localhost:6001");
-    return yearEndpointFromEnv + "/year";
-  }
-
-  @WithSpan
-  public String getYear() throws URISyntaxException, IOException, InterruptedException {
-    URI year_uri = new URI(year_endpoint());
-
-    HttpClient client = HttpClient.newHttpClient();
-    HttpRequest request = HttpRequest.newBuilder()
-      .uri(year_uri)
-      .header("accept", "application/json")
-      .build();
-    HttpResponse<String> response = null;
-    Span year_service_call_span = tracer.spanBuilder("✨ call /year ✨").startSpan();
-    year_service_call_span.makeCurrent();
-    try {
-      response = client.send(request, HttpResponse.BodyHandlers.ofString());
-    } catch (IOException | InterruptedException e) {
-      e.printStackTrace();
-    } finally {
-      year_service_call_span.end();
+    private String year_endpoint() {
+        String yearEndpointFromEnv = System.getenv().getOrDefault("YEAR_ENDPOINT", "http://localhost:6001");
+        return yearEndpointFromEnv + "/year";
     }
-    return response == null
-      ? ""
-      : response.body();
-  }
+
+    @WithSpan
+    public String getYear() throws URISyntaxException {
+        URI yearUri = new URI(year_endpoint());
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(yearUri)
+            .header("accept", "application/json")
+            .build();
+        HttpResponse<String> response = null;
+        Span yearServiceCallSpan = tracer.spanBuilder("✨ call /year ✨").startSpan();
+        yearServiceCallSpan.makeCurrent();
+        try {
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            yearServiceCallSpan.end();
+        }
+        return response == null
+            ? ""
+            : response.body();
+    }
 }

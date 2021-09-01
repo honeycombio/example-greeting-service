@@ -99,7 +99,10 @@ def launch_java_svc(name, dirname="", flags="", auto_init=True):
     flags: (optional) any additional flags to add to the command line
     '''
 
-    env = {'SERVICE_NAME': name}
+    env = {
+        'SERVICE_NAME': name,
+        'OTEL_SERVICE_NAME': name
+    }
     cmd = "cd {} && gradle bootRun".format(
         dirname if dirname else name,
         flags if flags else ""

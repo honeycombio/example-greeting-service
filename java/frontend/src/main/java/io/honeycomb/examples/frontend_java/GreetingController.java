@@ -35,19 +35,9 @@ public class GreetingController {
 
 		String message = messageService.getMessage();
 
-		Span render_span = tracer.spanBuilder("🎨 render message ✨").startSpan();
+		Span span = tracer.spanBuilder("🎨 render message ✨").startSpan();
 		String greeting = String.format("Hello, %s, %s", name, message);
-		render_span.end();
+		span.end();
 		return greeting;
-	}
-
-	private void addTraceField(String key, String value) {
-		Span.current().setAttribute(key, value);
-
-		Baggage.current()
-			.toBuilder()
-			.put(key, value)
-			.build()
-			.makeCurrent();
 	}
 }

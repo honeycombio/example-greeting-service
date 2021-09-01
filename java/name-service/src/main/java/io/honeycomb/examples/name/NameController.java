@@ -19,8 +19,6 @@ public class NameController {
 
 	@RequestMapping("/name")
 	public String index() throws URISyntaxException, IOException, InterruptedException {
-		String name = nameService.getName();
-
-		return name;
+        return nameService.getName();
 	}
 }
