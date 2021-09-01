@@ -9,18 +9,13 @@
 # take precedence. Properties from matching EditorConfig sections are applied
 # in the order they were read, so properties in closer files take precedence.
 
-# top-most EditorConfig file
-root = true
+# Python files
+[*.py]
 
-[*]
+insert_final_newline = true
+trim_trailing_whitespace = true
+end_of_line = lf
+charset = utf-8
 
-#### Core EditorConfig Options ####
-
-# Indentation and spacing
-indent_size = 4
-indent_style = space
-tab_width = 4
-
-# New line preferences
-end_of_line = crlf
-insert_final_newline = false
+# https://www.python.org/dev/peps/pep-0008/#id19
+max_line_length = 79
