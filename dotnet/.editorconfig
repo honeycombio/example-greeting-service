@@ -1,24 +1,16 @@
 # EditorConfig is awesome: https://EditorConfig.org
 
-# top-most EditorConfig file
-root = true
+# When opening a file, EditorConfig plugins look for a file named .editorconfig
+# in the directory of the opened file and in every parent directory.
+# A search for .editorconfig files will stop if the root filepath is reached
+# or an EditorConfig file with root=true is found.
 
-[*]
-indent_style = space
+# EditorConfig files are read top to bottom and the most recent rules found
+# take precedence. Properties from matching EditorConfig sections are applied
+# in the order they were read, so properties in closer files take precedence.
 
 # C# files
 [*.cs]
-
-#### Core EditorConfig Options ####
-
-# Indentation and spacing
-indent_size = 4
-indent_style = space
-tab_width = 4
-
-# New line preferences
-end_of_line = crlf
-insert_final_newline = false
 
 #### .NET Coding Conventions ####
 
@@ -117,6 +109,9 @@ csharp_style_prefer_range_operator = true:suggestion
 csharp_style_throw_expression = true:suggestion
 csharp_style_unused_value_assignment_preference = discard_variable:suggestion
 csharp_style_unused_value_expression_statement_preference = discard_variable:silent
+
+# 'using' directive preferences
+csharp_using_directive_placement = inside_namespace:silent
 
 #### C# Formatting Rules ####
 
