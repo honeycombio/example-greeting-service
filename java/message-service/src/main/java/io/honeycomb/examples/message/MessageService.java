@@ -24,11 +24,11 @@ public class MessageService {
     }
 
     private String pickMessage() {
-        Span message_lookup_span = tracer.spanBuilder("📖 look up message ✨").startSpan();
-        message_lookup_span.makeCurrent();
+        Span messageLookupSpan = tracer.spanBuilder("📖 look up message ✨").startSpan();
+        messageLookupSpan.makeCurrent();
         int rnd = generator.nextInt(MESSAGES.length);
         String message = MESSAGES[rnd];
-        message_lookup_span.end();
+        messageLookupSpan.end();
         return message;
     }
 }
