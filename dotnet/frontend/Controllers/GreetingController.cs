@@ -1,9 +1,9 @@
+using Microsoft.AspNetCore.Mvc;
+using OpenTelemetry;
+using OpenTelemetry.Trace;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using OpenTelemetry.Trace;
-using OpenTelemetry;
 
 namespace frontend.Controllers
 {
@@ -84,7 +84,7 @@ namespace frontend.Controllers
             {
                 return "OH NO!";
             }
-            
+
             return await response.Content.ReadAsStringAsync();
         }
     }

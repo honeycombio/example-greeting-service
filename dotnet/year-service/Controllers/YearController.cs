@@ -1,5 +1,5 @@
-using System;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace year_service.Controllers
 {
@@ -24,7 +24,7 @@ namespace year_service.Controllers
         private static int DetermineYear()
         {
             var rng = new Random();
-            var i = rng.Next(_years.Length-1);
+            var i = rng.Next(_years.Length - 1);
             return _years[i];
         }
     }

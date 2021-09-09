@@ -25,7 +25,7 @@ namespace message_service
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo {Title = "message_service", Version = "v1"});
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "message_service", Version = "v1" });
             });
 
             services.UseHoneycomb(Configuration);
@@ -35,7 +35,7 @@ namespace message_service
             {
                 redisConfigString = "localhost";
             }
-            
+
             var redisOptions = ConfigurationOptions.Parse(redisConfigString);
             redisOptions.AbortOnConnectFail = false; // allow for reconnects if redis is not available
             var multiplexer = ConnectionMultiplexer.Connect(redisOptions);

@@ -1,6 +1,6 @@
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OpenTelemetry.Trace;
+using System.Threading.Tasks;
 
 namespace message_service.Controllers
 {
