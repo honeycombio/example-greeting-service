@@ -9,18 +9,7 @@
 # take precedence. Properties from matching EditorConfig sections are applied
 # in the order they were read, so properties in closer files take precedence.
 
-# top-most EditorConfig file
-root = true
+# Java files
+[*.java]
 
-[*]
-
-#### Core EditorConfig Options ####
-
-# Indentation and spacing
-indent_size = 4
-indent_style = space
-tab_width = 4
-
-# New line preferences
-end_of_line = crlf
-insert_final_newline = false
+# indent style and size match root level rules

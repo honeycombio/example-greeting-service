@@ -9,8 +9,7 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 ext {
-    otelVersion = '1.0.1'
-    beestroVersion = '0.3.0'
+    beestroVersion = '0.4.0'
 }
 
 configurations {
@@ -20,16 +19,12 @@ configurations {
 repositories {
     mavenCentral()
     mavenLocal()
-    // path to local .jar file
-    flatDir { dirs "libs" }
 }
 
 dependencies {
-    implementation("io.opentelemetry:opentelemetry-api:${otelVersion}")
-    implementation("io.opentelemetry:opentelemetry-extension-annotations:${otelVersion}")
-
     agent "io.honeycomb:honeycomb-opentelemetry-javaagent:${beestroVersion}:all"
 
+    implementation("io.honeycomb:honeycomb-opentelemetry-sdk:${beestroVersion}")
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'

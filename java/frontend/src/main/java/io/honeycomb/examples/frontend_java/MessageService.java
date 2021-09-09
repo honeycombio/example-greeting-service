@@ -25,7 +25,7 @@ public class MessageService {
   }
 
   @WithSpan
-  public String getMessage() throws URISyntaxException, IOException, InterruptedException {
+  public String getMessage() throws URISyntaxException {
     URI message_uri = new URI(message_endpoint());
 
     HttpClient client = HttpClient.newHttpClient();
@@ -35,10 +35,10 @@ public class MessageService {
         .build();
     HttpResponse<String> response = null;
     try {
-      Span message_service_call_span = tracer.spanBuilder("✨ call /message ✨").startSpan();
-      message_service_call_span.makeCurrent();
+      Span messageServiceCallSpan = tracer.spanBuilder("✨ call /message ✨").startSpan();
+      messageServiceCallSpan.makeCurrent();
       response = client.send(request, HttpResponse.BodyHandlers.ofString());
-      message_service_call_span.end();
+      messageServiceCallSpan.end();
     } catch (IOException | InterruptedException e) {
         e.printStackTrace();
 
