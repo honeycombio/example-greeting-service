@@ -1,6 +1,5 @@
-using System;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace year_service.Controllers
 {
@@ -8,7 +7,7 @@ namespace year_service.Controllers
     [ApiController]
     public class YearController : ControllerBase
     {
-        private static readonly int[] Years =
+        private static readonly int[] _years =
         {
             2015, 2016, 2017, 2018, 2019, 2020
         };
@@ -25,8 +24,8 @@ namespace year_service.Controllers
         private static int DetermineYear()
         {
             var rng = new Random();
-            var i = rng.Next(Years.Length-1);
-            return Years[i];
+            var i = rng.Next(_years.Length - 1);
+            return _years[i];
         }
     }
 }

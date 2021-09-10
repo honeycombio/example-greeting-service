@@ -1,5 +1,3 @@
-using System;
-using System.Diagnostics;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +7,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using System;
+using System.Diagnostics;
 
 namespace name_service
 {
@@ -32,9 +32,10 @@ namespace name_service
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "name_service", Version = "v1" });
             });
-            services.AddHttpClient();
 
+            services.AddHttpClient();
             services.AddOpenTelemetryTracing((builder => builder
+
                 .SetResourceBuilder(ResourceBuilder.CreateDefault()
                     .AddService(this.Configuration.GetValue<string>("Otlp:ServiceName"))
                     .AddEnvironmentVariableDetector()
@@ -86,7 +87,7 @@ namespace name_service
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }

@@ -1,6 +1,6 @@
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using OpenTelemetry.Trace;
+using System.Threading.Tasks;
 
 namespace message_service.Controllers
 {
@@ -22,7 +22,6 @@ namespace message_service.Controllers
         [HttpGet]
         public async Task<string> GetAsync()
         {
-
             var message = await DetermineMessage();
             var currentSpan = Tracer.CurrentSpan;
             currentSpan.SetAttribute("app.message", message);
@@ -32,18 +31,19 @@ namespace message_service.Controllers
         private async Task<string> DetermineMessage()
         {
             using var span = _tracer.StartActiveSpan("📖 look up message ✨");
+            var db = _redisConnection.GetDatabase();
+            var message = "generic hello";
+            var result = await db.SetRandomMemberAsync("messages");
+            if (result.IsNull)
             {
-                var db = _redisConnection.GetDatabase();
-                var message = "generic hello";
-                var result = await db.SetRandomMemberAsync("messages");
-                if (result.IsNull) {
-                    span.AddEvent("message was empty from redis, using default");
-                } else {
-                    message = result.ToString();
-                }
-                span.SetAttribute("app.message", message);
-                return message;
+                span.AddEvent("message was empty from redis, using default");
             }
+            else
+            {
+                message = result.ToString();
+            }
+            span.SetAttribute("app.message", message);
+            return message;
         }
     }
 }
