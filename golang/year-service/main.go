@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"math/rand"
@@ -8,55 +9,96 @@ import (
 	"os"
 	"time"
 
-	"go.opentelemetry.io/otel/api/global"
-	"go.opentelemetry.io/otel/api/trace"
-	"go.opentelemetry.io/otel/instrumentation/httptrace"
+	"google.golang.org/grpc/credentials"
 
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
+	"go.opentelemetry.io/otel/propagation"
+	"go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
-
-	"github.com/honeycombio/opentelemetry-exporter-go/honeycomb"
+	semconv "go.opentelemetry.io/otel/semconv/v1.7.0"
+	"go.opentelemetry.io/otel/trace"
 )
 
-func main() {
-	years := []int{2015, 2016, 2017, 2018, 2019, 2020}
-	exp, err := honeycomb.NewExporter(
-		honeycomb.Config{
-			APIKey: os.Getenv("HONEYCOMB_API_KEY"),
-		},
-		honeycomb.TargetingDataset(os.Getenv("HONEYCOMB_DATASET")),
-		honeycomb.WithServiceName("year-go"),
-	)
-	if err != nil {
-		log.Fatal(err)
+var (
+	tracer trace.Tracer
+)
+
+func newExporter(ctx context.Context) (*otlptrace.Exporter, error) {
+	opts := []otlptracegrpc.Option{
+		otlptracegrpc.WithEndpoint("api.honeycomb.io:443"),
+		otlptracegrpc.WithHeaders(map[string]string{
+			"x-honeycomb-team":    os.Getenv("HONEYCOMB_TEAM"),
+			"x-honeycomb-dataset": os.Getenv("HONEYCOMB_DATASET"),
+		}),
+		otlptracegrpc.WithTLSCredentials(credentials.NewClientTLSFromCert(nil, "")),
 	}
-	defer exp.Close()
 
-	config := sdktrace.Config{
-		DefaultSampler: sdktrace.AlwaysSample(),
-	}
-	tp, err := sdktrace.NewProvider(sdktrace.WithConfig(config), sdktrace.WithSyncer(exp))
-	if err != nil {
-		log.Fatal(err)
-	}
-	global.SetTraceProvider(tp)
+	client := otlptracegrpc.NewClient(opts...)
+	return otlptrace.New(ctx, client)
+}
 
-	tracer := global.Tracer("greeting-service/year-service")
-
-	mux := http.NewServeMux()
-
-	mux.HandleFunc("/year", func(w http.ResponseWriter, r *http.Request) {
-		attrs, _, spanCtx := httptrace.Extract(r.Context(), r)
-		_, span := tracer.Start(
-			trace.ContextWithRemoteSpanContext(r.Context(), spanCtx), "/year",
-			trace.WithAttributes(attrs...),
+func newTraceProvider(exp *otlptrace.Exporter) *sdktrace.TracerProvider {
+	resource :=
+		resource.NewWithAttributes(
+			semconv.SchemaURL,
+			semconv.ServiceNameKey.String("year-service"), // lol no generics
 		)
+
+	return sdktrace.NewTracerProvider(
+		sdktrace.WithBatcher(exp),
+		sdktrace.WithResource(resource),
+	)
+}
+
+func calculateYear() int {
+	years := []int{2015, 2016, 2017, 2018, 2019, 2020, 2021}
+	rand.Seed(time.Now().UnixNano())
+	time.Sleep(time.Duration(rand.Intn(5)) * time.Millisecond)
+	return years[rand.Intn(len(years))]
+}
+
+func yearHandler(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	year := func(ctx context.Context) int {
+		_, span := tracer.Start(ctx, "calculate-year")
 		defer span.End()
 
-		rand.Seed(time.Now().UnixNano())
-		time.Sleep(time.Duration(rand.Intn(5)) * time.Millisecond)
+		return calculateYear()
+	}(ctx)
 
-		fmt.Fprintf(w, "%d", years[rand.Intn(len(years))])
-	})
+	fmt.Fprintf(w, "%d", year)
+}
 
-	log.Fatal(http.ListenAndServe(":6001", mux))
+func main() {
+	ctx := context.Background()
+
+	exp, err := newExporter(ctx)
+	if err != nil {
+		log.Fatalf("failed to initialize exporter: %v", err)
+	}
+
+	tp := newTraceProvider(exp)
+
+	// Handle this error in a sensible manner where possible
+	defer func() { _ = tp.Shutdown(ctx) }()
+
+	// Set the Tracer Provider and the W3C Trace Context propagator as globals.
+	// Important, otherwise this won't let you see distributed traces be connected!
+	otel.SetTracerProvider(tp)
+	otel.SetTextMapPropagator(
+		propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}),
+	)
+
+	tracer = tp.Tracer("greeting-service/year-service")
+
+	mux := http.NewServeMux()
+	mux.HandleFunc("/year", yearHandler)
+
+	wrappedHandler := otelhttp.NewHandler(mux, "year")
+
+	log.Fatal(http.ListenAndServe(":6001", wrappedHandler))
 }
