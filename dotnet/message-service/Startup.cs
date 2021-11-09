@@ -28,7 +28,7 @@ namespace message_service
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "message_service", Version = "v1" });
             });
 
-            services.UseHoneycomb(Configuration);
+            services.AddHoneycomb(Configuration);
 
             var redisConfigString = Environment.GetEnvironmentVariable("REDIS_URL");
             if (string.IsNullOrWhiteSpace(redisConfigString))
