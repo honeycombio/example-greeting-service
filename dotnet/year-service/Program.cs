@@ -1,11 +1,9 @@
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
 const string activitySourceName = "honeycomb.examples.year-service-dotnet";
-ActivitySource activitySource = new(activitySourceName);
 
 builder.Services.AddOpenTelemetryTracing(providerBuilder => providerBuilder
     .SetResourceBuilder(ResourceBuilder.CreateDefault()
@@ -23,6 +21,7 @@ builder.Services.AddOpenTelemetryTracing(providerBuilder => providerBuilder
         options.Headers = $"x-honeycomb-team={apiKey},x-honeycomb-dataset={dataset}";
     }));
 
+Tracer tracer = TracerProvider.Default.GetTracer(activitySourceName);
 var app = builder.Build();
 int[] years =
 {
@@ -31,8 +30,8 @@ int[] years =
 
 app.MapGet("/year", () =>
 {
-    using var activity = activitySource.StartActivity("🗓 get-a-year ✨");
-    activity?.SetTag("banana", 1);
+    using var span = tracer.StartActiveSpan("🗓 get-a-year ✨");
+    span.SetAttribute("banana", 1);
     var rng = new Random();
     var i = rng.Next(years.Length - 1);
     var year = years[i];
