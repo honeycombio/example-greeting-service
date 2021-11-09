@@ -14,8 +14,8 @@ namespace name_service
 {
     public class Startup
     {
-        private const string ActivitySourceName = "honeycomb.examples.name-service-dotnet";
-        public static readonly ActivitySource ActivitySource = new(ActivitySourceName);
+        private const string _activitySourceName = "honeycomb.examples.name-service-dotnet";
+        public static readonly ActivitySource ActivitySource = new(_activitySourceName);
 
         public Startup(IConfiguration configuration)
         {
@@ -40,31 +40,8 @@ namespace name_service
                     .AddService(this.Configuration.GetValue<string>("Otlp:ServiceName"))
                     .AddEnvironmentVariableDetector()
                 )
-                .AddSource(ActivitySourceName)
-                .AddAspNetCoreInstrumentation(options => options.Enrich = (activity, eventName, rawObject) =>
-                {
-                    switch (eventName)
-                    {
-                        case "OnStartActivity":
-                            {
-                                if (rawObject is HttpRequest httpRequest)
-                                {
-                                    activity.SetTag("requestProtocol", httpRequest.Protocol);
-                                }
-
-                                break;
-                            }
-                        case "OnStopActivity":
-                            {
-                                if (rawObject is HttpResponse httpResponse)
-                                {
-                                    activity.SetTag("responseLength", httpResponse.ContentLength); // doesn't seem to work
-                                }
-
-                                break;
-                            }
-                    }
-                })
+                .AddSource(_activitySourceName)
+                .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation()
                 .AddOtlpExporter(options =>
                 {
