@@ -1,9 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
+using OpenTelemetry.Trace;
+using OpenTelemetry;
 
 namespace name_service.Controllers
 {
@@ -12,6 +13,7 @@ namespace name_service.Controllers
     public class NameController : ControllerBase
     {
         private readonly IHttpClientFactory _clientFactory;
+        private readonly Tracer _tracer;
 
         private static readonly Dictionary<int, string[]> _namesByYear = new()
         {
@@ -26,6 +28,7 @@ namespace name_service.Controllers
         public NameController(IHttpClientFactory clientFactory)
         {
             _clientFactory = clientFactory;
+            _tracer = TracerProvider.Default.GetTracer(Startup.TelemetrySourceName);
         }
 
         private static string GetYearEndpoint()
@@ -44,13 +47,13 @@ namespace name_service.Controllers
         [HttpGet]
         public async Task<string> GetAsync()
         {
-            var current = Activity.Current;
-            current?.AddTag("apple", 1);
-            current?.AddBaggage("avocado", "12");
+            var currentSpan = Tracer.CurrentSpan;
+            currentSpan.SetAttribute("apple", 1);
+            Baggage.SetBaggage("avocado", "12");
 
             var year = await GetYear();
 
-            using var nameLookupActivity = Startup.ActivitySource.StartActivity("📖 look up name based on year ✨");
+            using var nameLookupSpan = _tracer.StartActiveSpan("📖 look up name based on year ✨");
             var name = "OH NO!";
             if (year != 0)
             {
@@ -58,14 +61,15 @@ namespace name_service.Controllers
                 var i = rng.Next(0, 9);
                 name = _namesByYear[year][i];
             }
-            nameLookupActivity?.AddTag("app.name", name);
-            nameLookupActivity?.AddBaggage("app.name", name);
+
+            nameLookupSpan.SetAttribute("app.name", name);
+            Baggage.SetBaggage("app.name", name);
             return name;
         }
 
         private async Task<int> GetYear()
         {
-            using var yearServiceCallActivity = Startup.ActivitySource.StartActivity("✨ call /year ✨");
+            using var yearServiceCallSpan = _tracer.StartActiveSpan("✨ call /year ✨");
             var request = new HttpRequestMessage(HttpMethod.Get, GetYearEndpoint());
             var client = _clientFactory.CreateClient();
             var response = await client.SendAsync(request);

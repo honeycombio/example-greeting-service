@@ -7,14 +7,12 @@ using Microsoft.OpenApi.Models;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using System;
-using System.Diagnostics;
 
 namespace name_service
 {
     public class Startup
     {
-        private const string _activitySourceName = "honeycomb.examples.name-service-dotnet";
-        public static readonly ActivitySource ActivitySource = new(_activitySourceName);
+        public const string TelemetrySourceName = "honeycomb.examples.name-service-dotnet";
 
         public Startup(IConfiguration configuration)
         {
@@ -39,7 +37,7 @@ namespace name_service
                     .AddService(this.Configuration.GetValue<string>("Otlp:ServiceName"))
                     .AddEnvironmentVariableDetector()
                 )
-                .AddSource(_activitySourceName)
+                .AddSource(TelemetrySourceName)
                 .AddAspNetCoreInstrumentation()
                 .AddHttpClientInstrumentation()
                 .AddOtlpExporter(options =>
