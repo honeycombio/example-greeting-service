@@ -3,14 +3,14 @@ using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
-const string activitySourceName = "honeycomb.examples.year-service-dotnet";
+const string telemetrySourceName = "honeycomb.examples.year-service-dotnet";
 
 builder.Services.AddOpenTelemetryTracing(providerBuilder => providerBuilder
     .SetResourceBuilder(ResourceBuilder.CreateDefault()
         .AddService(builder.Configuration.GetValue<string>("Otlp:ServiceName"))
         .AddEnvironmentVariableDetector()
     )
-    .AddSource(activitySourceName)
+    .AddSource(telemetrySourceName)
     .AddAspNetCoreInstrumentation()
     .AddHttpClientInstrumentation()
     .AddOtlpExporter(options =>
@@ -21,7 +21,7 @@ builder.Services.AddOpenTelemetryTracing(providerBuilder => providerBuilder
         options.Headers = $"x-honeycomb-team={apiKey},x-honeycomb-dataset={dataset}";
     }));
 
-Tracer tracer = TracerProvider.Default.GetTracer(activitySourceName);
+Tracer tracer = TracerProvider.Default.GetTracer(telemetrySourceName);
 var app = builder.Build();
 int[] years =
 {
