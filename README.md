@@ -28,6 +28,7 @@ variables:
 
 - HONEYCOMB_API_KEY - Your honeycomb API key
 - HONEYCOMB_DATASET - The name of the dataset you want to write to
+- $OTEL_EXPORTER_OTLP_ENDPOINT=`https://api.honeycomb.io`
 
 ### Caveats
 
@@ -39,6 +40,20 @@ All of these statements are true!
 ### Running
 
 There is a `Tiltfile` to run these services on a local host using https://tilt.dev/ - after installing Tilt, running `tilt up` should spin up all of the services.
+
+#### Language-Specific notes
+
+##### dotnet
+
+- Use the tiltfile in the `dotnet` subdirectory
+- Expects dotnet v6.0 or later (via Microsoft's [installation instructions](https://docs.microsoft.com/en-us/dotnet/core/install/))
+
+[Microsoft's instructions](https://docs.microsoft.com/en-us/dotnet/core/install/linux-snap):
+
+  ```bash
+  sudo snap install dotnet-sdk --classic --channel=6.0
+  sudo snap alias dotnet-sdk.dotnet dotnet
+  ```
 
 ### Tips
 

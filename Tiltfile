@@ -183,31 +183,31 @@ def launch_node_year_service(auto_init=True):
   launch_node_svc("year-node", dirname="node/year-service", auto_init=auto_init)
 
 # Launch one of each of these types of services. Go services init by default
-launch_go_frontend()
+# launch_go_frontend()
 # launch_python_frontend()
 # launch_ruby_frontend()
-# launch_java_frontend()
+launch_java_frontend()
 # launch_dotnet_frontend()
 # launch_node_frontend()
 
-launch_go_message_service()
+# launch_go_message_service()
 # launch_python_message_service()
 # launch_ruby_message_service()
-# launch_java_message_service()
+launch_java_message_service()
 # launch_dotnet_message_service()
 # launch_node_message_service()
 
-launch_go_name_service()
+# launch_go_name_service()
 # launch_python_name_service()
 # launch_ruby_name_service()
-# launch_java_name_service()
+launch_java_name_service()
 # launch_dotnet_name_service()
 # launch_node_name_service()
 
-launch_go_year_service()
+#launch_go_year_service()
 # launch_python_year_service()
 # launch_ruby_year_service()
-# launch_java_year_service()
+launch_java_year_service()
 # launch_dotnet_year_service()
 # launch_node_year_service()
 
@@ -224,5 +224,4 @@ launch_go_year_service()
 # eg
 # local_resource ( "shepherd" , "" , serve_cmd='cd cmd/shepherd && go run main.go -debug -p :8081' )
 
-# link to quip doc on tilt: https://honeycomb.quip.com/h2MFAEUaKTKe
 # link to tilt API docs: https://docs.tilt.dev/api.html
