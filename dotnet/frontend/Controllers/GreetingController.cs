@@ -49,16 +49,21 @@ namespace frontend.Controllers
         [HttpGet]
         public async Task<string> GetAsync()
         {
-//            using var span = _tracer.StartActiveSpan("Preparing Greeting");
-//            span.SetAttribute("testAttribute", "Greeting");
-//            Baggage.Current.SetBaggage("testBaggage", "Greetings");
+            using var span = _tracer.StartActiveSpan("Preparing Greeting");
+            span.SetAttribute("testAttribute", "Greeting");
+            Baggage.Current.SetBaggage("testBaggage", "Greetings");
             var httpClient = _clientFactory.CreateClient();
-            var name = await GetNameAsync(httpClient);
-            var message = await GetMessageAsync(httpClient);
+            var nameTask= GetNameAsync(httpClient);
+            var messageTask = GetMessageAsync(httpClient);
 
-//            using var renderSpan = _tracer.StartActiveSpan("🎨 render greeting ✨");
-//            renderSpan.SetAttribute("app.name", name);
-//            renderSpan.SetAttribute("app.message", message);
+            await Task.WhenAll( nameTask, messageTask );
+
+            var name = nameTask.Result;
+            var message = messageTask.Result;
+
+            using var renderSpan = _tracer.StartActiveSpan("🎨 render greeting ✨");
+            renderSpan.SetAttribute("app.name", name);
+            renderSpan.SetAttribute("app.message", message);
             return $"Hello {name}, {message}";
         }
 
