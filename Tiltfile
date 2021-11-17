@@ -3,6 +3,12 @@ print("hello my friends")
 
 docker_compose("./docker-compose.yml")
 
+local_resource(
+  'curl greeting',
+  cmd='curl localhost:7000/greeting',
+  trigger_mode=TRIGGER_MODE_MANUAL,
+  auto_init=False)
+
 def launch_go_svc(name, dirname="", flags="", auto_init=True):
     '''
     Starts a single go service.
@@ -226,3 +232,11 @@ launch_go_year_service()
 
 # link to quip doc on tilt: https://honeycomb.quip.com/h2MFAEUaKTKe
 # link to tilt API docs: https://docs.tilt.dev/api.html
+
+# Environment variables for the Java example:
+# export HONEYCOMB_DATASET=greetings
+# export HONEYCOMB_API_KEY=api-key
+# export OTEL_EXPORTER_OTLP_HEADERS='x-honeycomb-team=api-key,x-honeycomb-dataset=greetings'
+# if using dogfood:
+# export OTEL_EXPORTER_OTLP_ENDPOINT=https://api-dogfood.honeycomb.io
+# export HONEYCOMB_API_ENDPOINT=https://api-dogfood.honeycomb.io
