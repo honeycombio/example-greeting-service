@@ -3,6 +3,12 @@ print("hello my friends")
 
 docker_compose("./docker-compose.yml")
 
+local_resource(
+  'curl greeting',
+  cmd='curl localhost:7000/greeting',
+  trigger_mode=TRIGGER_MODE_MANUAL,
+  auto_init=False)
+
 def launch_go_svc(name, dirname="", flags="", auto_init=True):
     '''
     Starts a single go service.
