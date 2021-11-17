@@ -30,8 +30,8 @@ int[] years =
 
 app.MapGet("/year", () =>
 {
-    using var span = tracer.StartActiveSpan("🗓 get-a-year ✨");
-    span.SetAttribute("banana", 1);
+//    using var span = tracer.StartActiveSpan("🗓 get-a-year ✨");
+//    span.SetAttribute("banana", 1);
     var rng = new Random();
     var i = rng.Next(years.Length - 1);
     var year = years[i];

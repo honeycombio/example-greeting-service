@@ -49,22 +49,22 @@ namespace frontend.Controllers
         [HttpGet]
         public async Task<string> GetAsync()
         {
-            using var span = _tracer.StartActiveSpan("Preparing Greeting");
-            span.SetAttribute("testAttribute", "Greeting");
-            Baggage.Current.SetBaggage("testBaggage", "Greetings");
+//            using var span = _tracer.StartActiveSpan("Preparing Greeting");
+//            span.SetAttribute("testAttribute", "Greeting");
+//            Baggage.Current.SetBaggage("testBaggage", "Greetings");
             var httpClient = _clientFactory.CreateClient();
             var name = await GetNameAsync(httpClient);
             var message = await GetMessageAsync(httpClient);
 
-            using var renderSpan = _tracer.StartActiveSpan("🎨 render greeting ✨");
-            renderSpan.SetAttribute("app.name", name);
-            renderSpan.SetAttribute("app.message", message);
+//            using var renderSpan = _tracer.StartActiveSpan("🎨 render greeting ✨");
+//            renderSpan.SetAttribute("app.name", name);
+//            renderSpan.SetAttribute("app.message", message);
             return $"Hello {name}, {message}";
         }
 
         private async Task<string> GetNameAsync(HttpClient client)
         {
-            using var span = _tracer.StartActiveSpan("✨ call /name ✨");
+//            using var span = _tracer.StartActiveSpan("✨ call /name ✨");
             var request = new HttpRequestMessage(HttpMethod.Get, GetNameEndpoint());
             var response = await client.SendAsync(request);
             if (!response.IsSuccessStatusCode)
@@ -77,7 +77,7 @@ namespace frontend.Controllers
 
         private async Task<string> GetMessageAsync(HttpClient client)
         {
-            using var span = _tracer.StartActiveSpan("✨ call /message ✨");
+//            using var span = _tracer.StartActiveSpan("✨ call /message ✨");
             var request = new HttpRequestMessage(HttpMethod.Get, GetMessageEndpoint());
             var response = await client.SendAsync(request);
             if (!response.IsSuccessStatusCode)

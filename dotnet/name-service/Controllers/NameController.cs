@@ -47,13 +47,13 @@ namespace name_service.Controllers
         [HttpGet]
         public async Task<string> GetAsync()
         {
-            var currentSpan = Tracer.CurrentSpan;
-            currentSpan.SetAttribute("apple", 1);
-            Baggage.SetBaggage("avocado", "12");
+//            var currentSpan = Tracer.CurrentSpan;
+//            currentSpan.SetAttribute("apple", 1);
+//            Baggage.SetBaggage("avocado", "12");
 
             var year = await GetYear();
 
-            using var nameLookupSpan = _tracer.StartActiveSpan("📖 look up name based on year ✨");
+            //  using var nameLookupSpan = _tracer.StartActiveSpan("📖 look up name based on year ✨");
             var name = "OH NO!";
             if (year != 0)
             {
@@ -62,14 +62,14 @@ namespace name_service.Controllers
                 name = _namesByYear[year][i];
             }
 
-            nameLookupSpan.SetAttribute("app.name", name);
-            Baggage.SetBaggage("app.name", name);
+//            nameLookupSpan.SetAttribute("app.name", name);
+//            Baggage.SetBaggage("app.name", name);
             return name;
         }
 
         private async Task<int> GetYear()
         {
-            using var yearServiceCallSpan = _tracer.StartActiveSpan("✨ call /year ✨");
+            // using var yearServiceCallSpan = _tracer.StartActiveSpan("✨ call /year ✨");
             var request = new HttpRequestMessage(HttpMethod.Get, GetYearEndpoint());
             var client = _clientFactory.CreateClient();
             var response = await client.SendAsync(request);
