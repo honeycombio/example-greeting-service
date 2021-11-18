@@ -28,7 +28,14 @@ variables:
 
 - HONEYCOMB_API_KEY - Your honeycomb API key
 - HONEYCOMB_DATASET - The name of the dataset you want to write to
-- $OTEL_EXPORTER_OTLP_ENDPOINT=`https://api.honeycomb.io`
+- OTEL_EXPORTER_OTLP_ENDPOINT=https://api.honeycomb.io
+
+Some services use vanilla OTEL:
+- OTEL_EXPORTER_OTLP_HEADERS='x-honeycomb-team=api-key,x-honeycomb-dataset=greetings'
+
+If using dogfood:
+- OTEL_EXPORTER_OTLP_ENDPOINT=https://api-dogfood.honeycomb.io
+- HONEYCOMB_API_ENDPOINT=https://api-dogfood.honeycomb.io
 
 ### Caveats
 
