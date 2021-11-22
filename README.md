@@ -34,10 +34,11 @@ Some services use vanilla OTEL:
 
 - `OTEL_EXPORTER_OTLP_HEADERS='x-honeycomb-team=api-key,x-honeycomb-dataset=greetings'`
 
-If using dogfood:
+If configuring non-prod API endpoint:
 
-- `OTEL_EXPORTER_OTLP_ENDPOINT=https://api-dogfood.honeycomb.io`
-- `HONEYCOMB_API_ENDPOINT=https://api-dogfood.honeycomb.io`
+- `OTEL_EXPORTER_OTLP_ENDPOINT=https://api.some.place`
+- `HONEYCOMB_API_ENDPOINT=https://api.some.place`
+
 
 ### Caveats
 
