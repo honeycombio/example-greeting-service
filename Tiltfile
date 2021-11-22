@@ -230,5 +230,4 @@ launch_go_year_service()
 # eg
 # local_resource ( "shepherd" , "" , serve_cmd='cd cmd/shepherd && go run main.go -debug -p :8081' )
 
-# link to quip doc on tilt: https://honeycomb.quip.com/h2MFAEUaKTKe
 # link to tilt API docs: https://docs.tilt.dev/api.html
