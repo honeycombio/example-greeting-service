@@ -47,13 +47,9 @@ namespace name_service.Controllers
         [HttpGet]
         public async Task<string> GetAsync()
         {
-            var currentSpan = Tracer.CurrentSpan;
-            currentSpan.SetAttribute("apple", 1);
-            Baggage.SetBaggage("avocado", "12");
-
+            Console.WriteLine("Enter Name::GetAsync");
             var year = await GetYear();
 
-            using var nameLookupSpan = _tracer.StartActiveSpan("📖 look up name based on year ✨");
             var name = "OH NO!";
             if (year != 0)
             {
@@ -62,19 +58,19 @@ namespace name_service.Controllers
                 name = _namesByYear[year][i];
             }
 
-            nameLookupSpan.SetAttribute("app.name", name);
-            Baggage.SetBaggage("app.name", name);
+            Console.WriteLine("Leave Name::GetAsync", name);
             return name;
         }
 
         private async Task<int> GetYear()
         {
-            using var yearServiceCallSpan = _tracer.StartActiveSpan("✨ call /year ✨");
+            Console.WriteLine("Enter Name::GetYear");
             var request = new HttpRequestMessage(HttpMethod.Get, GetYearEndpoint());
             var client = _clientFactory.CreateClient();
             var response = await client.SendAsync(request);
             if (!response.IsSuccessStatusCode) return 0;
             var yearString = await response.Content.ReadAsStringAsync();
+            Console.WriteLine("Exit Name::GetYear", yearString);
             return int.Parse(yearString);
         }
     }
