@@ -3,13 +3,13 @@ const beeline = require('honeycomb-beeline');
 
 beeline({
   // Get this via https://ui.honeycomb.io/account after signing up for Honeycomb
-  writeKey: `${process.env.HONEYCOMB_API_KEY}`,
+  writeKey: process.env.HONEYCOMB_API_KEY,
   // The name of your app is a good choice to start with
-  dataset: `${process.env.HONEYCOMB_DATASET}`,
-  serviceName: `${process.env.SERVICE_NAME}` || 'node-frontend-service',
-  apiHost: `${process.env.HONEYCOMB_API}` || 'https://api.honeycomb.io',
+  dataset: process.env.HONEYCOMB_DATASET,
+  serviceName: process.env.SERVICE_NAME || 'node-frontend-service',
+  apiHost: process.env.HONEYCOMB_API || 'https://api.honeycomb.io',
   httpTraceParserHook: beeline.w3c.httpTraceParserHook,
-  httpTracePropagationHook: beeline.w3c.httpTracePropagationHook
+  httpTracePropagationHook: beeline.w3c.httpTracePropagationHook,
 });
 
 const express = require('express');
