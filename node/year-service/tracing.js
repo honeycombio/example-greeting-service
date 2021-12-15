@@ -1,14 +1,18 @@
+const process = require('process');
+const { Metadata, credentials } = require('@grpc/grpc-js');
+
+const { NodeSDK } = require('@opentelemetry/sdk-node');
+const {
+  getNodeAutoInstrumentations,
+} = require('@opentelemetry/auto-instrumentations-node');
 const { Resource } = require('@opentelemetry/resources');
-const { ResourceAttributes } = require('@opentelemetry/semantic-conventions');
-// prettier-ignore
-const { ExpressInstrumentation } = require('@opentelemetry/instrumentation-express');
-const { HttpInstrumentation } = require('@opentelemetry/instrumentation-http');
-const { NodeTracerProvider } = require('@opentelemetry/node');
-const { registerInstrumentations } = require('@opentelemetry/instrumentation');
-const { SimpleSpanProcessor } = require('@opentelemetry/tracing');
-// prettier-ignore
-const { CollectorTraceExporter } = require('@opentelemetry/exporter-collector-grpc');
-const grpc = require('@grpc/grpc-js');
+const {
+  SemanticResourceAttributes,
+} = require('@opentelemetry/semantic-conventions');
+const {
+  OTLPTraceExporter,
+} = require('@opentelemetry/exporter-trace-otlp-grpc');
+
 // Honeycomb
 const HONEYCOMB_API_KEY = process.env.HONEYCOMB_API_KEY || '';
 const HONEYCOMB_DATASET = process.env.HONEYCOMB_DATASET || '';
@@ -16,27 +20,33 @@ const SERVICE_NAME = process.env.SERVICE_NAME || 'node-year-service';
 const OTLP_ENDPOINT =
   process.env.OTLP_ENDPOINT || 'grpc://api.honeycomb.io:443/';
 
-const provider = new NodeTracerProvider({
-  resource: new Resource({
-    [ResourceAttributes.SERVICE_NAME]: `${SERVICE_NAME}`,
-  }),
-});
-
-const metadata = new grpc.Metadata();
+const metadata = new Metadata();
 metadata.set('x-honeycomb-team', HONEYCOMB_API_KEY);
 metadata.set('x-honeycomb-dataset', HONEYCOMB_DATASET);
 
-provider.addSpanProcessor(
-  new SimpleSpanProcessor(
-    new CollectorTraceExporter({
-      url: OTLP_ENDPOINT,
-      credentials: grpc.credentials.createSsl(),
-      metadata,
-    })
-  )
-);
-provider.register();
+const traceExporter = new OTLPTraceExporter({
+  url: OTLP_ENDPOINT,
+  credentials: credentials.createSsl(),
+  metadata,
+});
 
-registerInstrumentations({
-  instrumentations: [HttpInstrumentation, ExpressInstrumentation],
+const sdk = new NodeSDK({
+  resource: new Resource({
+    [SemanticResourceAttributes.SERVICE_NAME]: SERVICE_NAME,
+  }),
+  traceExporter,
+  instrumentations: [getNodeAutoInstrumentations()],
+});
+
+sdk
+  .start()
+  .then(() => console.log('Tracing initialized'))
+  .catch((error) => console.log('Error initializing tracing', error));
+
+process.on('SIGTERM', () => {
+  sdk
+    .shutdown()
+    .then(() => console.log('Tracing terminated'))
+    .catch((error) => console.log('Error terminating tracing', error))
+    .finally(() => process.exit(0));
 });
