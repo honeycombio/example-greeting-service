@@ -28,13 +28,13 @@ const messageUrl = `http://${MESSAGE_ENDPOINT}/message`;
 const app = express();
 app.get('/greeting', async (req, res) => {
   beeline.addContext({ name: 'Greetings' });
-  const greetingSpan = beeline.startSpan({name: 'Preparing Greeting'});
+  const greetingSpan = beeline.startSpan({ name: 'Preparing Greeting' });
   beeline.addTraceContext({ name: 'Greetings' });
   beeline.finishSpan(greetingSpan);
-  const nameSpan = beeline.startSpan({name: '✨ call /name ✨'});
+  const nameSpan = beeline.startSpan({ name: '✨ call /name ✨' });
   const name = await getName(nameUrl);
   beeline.finishSpan(nameSpan);
-  const messageSpan = beeline.startSpan({name: '✨ call /message ✨'});
+  const messageSpan = beeline.startSpan({ name: '✨ call /message ✨' });
   const message = await getMessage(messageUrl);
   beeline.finishSpan(messageSpan);
   res.send(`Hello ${name}, ${message}`);

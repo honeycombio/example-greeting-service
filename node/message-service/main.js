@@ -22,7 +22,7 @@ const HOST = '0.0.0.0';
 const app = express();
 app.get('/message', async (req, res) => {
   beeline.addContext({ name: 'Message' });
-  const messageSpan = beeline.startSpan({name: 'look up message'});
+  const messageSpan = beeline.startSpan({ name: 'look up message' });
   const message = await determineMessage(messages);
   beeline.finishSpan(messageSpan);
   res.send(`${message}`);
