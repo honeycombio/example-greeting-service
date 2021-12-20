@@ -2,19 +2,15 @@
 
 ## Notes
 
-- Node services still a WIP
-- Year service is on its own for now (is not yet called in any way by greeting service)
-- Frontend and Message services use beelines
-- Year service uses Open Telemetry
+- Frontend, message, and name services use beelines
+- Year service uses vanilla OTel
 
 ## How to run
 
 **Required**: set environment variables
 
-- HONEYCOMB_API
 - HONEYCOMB_API_KEY
 - HONEYCOMB_DATASET
-- OTLP_ENDPOINT
 
 ### Option 1: One service at a time
 
@@ -33,6 +29,8 @@
 
 `curl localhost:7000/greeting` for greeting
 
-`curl localhost:6001` for year only
-
 `curl localhost:9000/message` for message only
+
+`curl localhost:8000/name` for name only
+
+`curl localhost:6001` for year only

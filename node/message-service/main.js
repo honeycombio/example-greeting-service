@@ -3,13 +3,13 @@ const beeline = require('honeycomb-beeline');
 
 beeline({
   // Get this via https://ui.honeycomb.io/account after signing up for Honeycomb
-  writeKey: `${process.env.HONEYCOMB_API_KEY}`,
+  writeKey: process.env.HONEYCOMB_API_KEY,
   // The name of your app is a good choice to start with
-  dataset: `${process.env.HONEYCOMB_DATASET}`,
-  serviceName: `${process.env.SERVICE_NAME}` || 'node-message-service',
-  apiHost: `${process.env.HONEYCOMB_API}` || 'https://api.honeycomb.io',
+  dataset: process.env.HONEYCOMB_DATASET,
+  serviceName: process.env.SERVICE_NAME || 'node-message-service',
+  apiHost: process.env.HONEYCOMB_API_ENDPOINT || 'https://api.honeycomb.io',
   httpTraceParserHook: beeline.w3c.httpTraceParserHook,
-  httpTracePropagationHook: beeline.w3c.httpTracePropagationHook
+  httpTracePropagationHook: beeline.w3c.httpTracePropagationHook,
 });
 
 const express = require('express');
@@ -22,7 +22,7 @@ const HOST = '0.0.0.0';
 const app = express();
 app.get('/message', async (req, res) => {
   beeline.addContext({ name: 'Message' });
-  const messageSpan = beeline.startSpan({name: 'look up message'});
+  const messageSpan = beeline.startSpan({ name: 'look up message' });
   const message = await determineMessage(messages);
   beeline.finishSpan(messageSpan);
   res.send(`${message}`);

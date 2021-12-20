@@ -3,13 +3,13 @@ const beeline = require('honeycomb-beeline');
 
 beeline({
   // Get this via https://ui.honeycomb.io/account after signing up for Honeycomb
-  writeKey: `${process.env.HONEYCOMB_API_KEY}`,
+  writeKey: process.env.HONEYCOMB_API_KEY,
   // The name of your app is a good choice to start with
-  dataset: `${process.env.HONEYCOMB_DATASET}`,
-  serviceName: `${process.env.SERVICE_NAME}` || 'node-name-service',
-  apiHost: `${process.env.HONEYCOMB_API}` || 'https://api.honeycomb.io',
+  dataset: process.env.HONEYCOMB_DATASET,
+  serviceName: process.env.SERVICE_NAME || 'node-name-service',
+  apiHost: process.env.HONEYCOMB_API_ENDPOINT || 'https://api.honeycomb.io',
   httpTraceParserHook: beeline.w3c.httpTraceParserHook,
-  httpTracePropagationHook: beeline.w3c.httpTracePropagationHook
+  httpTracePropagationHook: beeline.w3c.httpTracePropagationHook,
 });
 
 const express = require('express');
@@ -25,11 +25,11 @@ const yearURL = `http://${YEAR_ENDPOINT}/year`;
 // App
 const app = express();
 app.get('/name', async (req, res) => {
-  beeline.addContext({someContext: 'year'})
-  const yearSpan = beeline.startSpan({name: '✨ call /year ✨'});
+  beeline.addContext({ someContext: 'year' });
+  const yearSpan = beeline.startSpan({ name: '✨ call /year ✨' });
   const year = await getYear(yearURL);
   beeline.finishSpan(yearSpan);
-  const nameSpan = beeline.startSpan({name: 'look up name based on year'});
+  const nameSpan = beeline.startSpan({ name: 'look up name based on year' });
   const name = determineName(year);
   beeline.finishSpan(nameSpan);
   res.send(`${name}`);
@@ -50,7 +50,7 @@ const names = new Map([
   [2020, ["olivia", "noah", "emma", "liam", "ava", "elijah", "isabella", "oliver", "sophia", "lucas"]],
 ]);
 
-const getYear = async (url) => 
+const getYear = async (url) =>
   fetch(url)
     .then((data) => {
       return data.text();
@@ -70,7 +70,7 @@ const determineName = (year) => {
   console.log(typeof year);
   const namesInYear = names.get(year);
   return getRandomNumber(namesInYear);
-}
+};
 
 app.listen(PORT, HOST);
 console.log(`Running node name service on http://${HOST}:${PORT}`);
