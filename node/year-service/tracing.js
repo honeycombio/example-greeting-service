@@ -11,7 +11,7 @@ const { OTLPTraceExporter } = require('@opentelemetry/exporter-trace-otlp-grpc')
 const HONEYCOMB_API_KEY = process.env.HONEYCOMB_API_KEY || '';
 const HONEYCOMB_DATASET = process.env.HONEYCOMB_DATASET || '';
 const SERVICE_NAME = process.env.SERVICE_NAME || 'node-year-service';
-const OTLP_ENDPOINT = process.env.OTLP_ENDPOINT || 'grpc://api.honeycomb.io:443/';
+const OTLP_ENDPOINT = process.env.HONEYCOMB_API_ENDPOINT || 'grpc://api.honeycomb.io:443/';
 
 const metadata = new Metadata();
 metadata.set('x-honeycomb-team', HONEYCOMB_API_KEY);

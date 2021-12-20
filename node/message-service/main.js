@@ -7,7 +7,7 @@ beeline({
   // The name of your app is a good choice to start with
   dataset: process.env.HONEYCOMB_DATASET,
   serviceName: process.env.SERVICE_NAME || 'node-message-service',
-  apiHost: process.env.HONEYCOMB_API || 'https://api.honeycomb.io',
+  apiHost: process.env.HONEYCOMB_API_ENDPOINT || 'https://api.honeycomb.io',
   httpTraceParserHook: beeline.w3c.httpTraceParserHook,
   httpTracePropagationHook: beeline.w3c.httpTracePropagationHook,
 });
