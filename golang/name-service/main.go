@@ -6,85 +6,127 @@ import (
 	"io/ioutil"
 	"log"
 	"math/rand"
+	"net"
 	"net/http"
+	"net/url"
 	"os"
 	"strconv"
 	"time"
 
-	beeline "github.com/honeycombio/beeline-go"
-	"github.com/honeycombio/beeline-go/propagation"
-	"github.com/honeycombio/beeline-go/wrappers/config"
-	"github.com/honeycombio/beeline-go/wrappers/hnynethttp"
-
-	"go.opentelemetry.io/otel/instrumentation/httptrace"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
+	"go.opentelemetry.io/otel/propagation"
+	"go.opentelemetry.io/otel/sdk/resource"
+	sdktrace "go.opentelemetry.io/otel/sdk/trace"
+	semconv "go.opentelemetry.io/otel/semconv/v1.7.0"
+	"go.opentelemetry.io/otel/trace"
+	"google.golang.org/grpc/credentials"
 )
 
 var (
-	apiKey         = os.Getenv("HONEYCOMB_API_KEY")
-	dataset        = os.Getenv("HONEYCOMB_DATASET")
 	yearServiceUrl = os.Getenv("YEAR_ENDPOINT") + "/year"
+	tracer         trace.Tracer
 )
 
+func getGrpcEndpoint() string {
+	apiEndpoint, exists := os.LookupEnv("HONEYCOMB_API_ENDPOINT")
+	if !exists {
+		apiEndpoint = "api.honeycomb.io:443"
+	} else {
+		u, err := url.Parse(apiEndpoint)
+		if err != nil {
+			panic(fmt.Sprintf("invalid endpoint url: %s", apiEndpoint))
+		}
+		var host, port string
+		if u.Port() != "" {
+			host, port, _ = net.SplitHostPort(u.Host)
+		} else {
+			host = u.Host
+			port = "443"
+		}
+		apiEndpoint = fmt.Sprintf("%s:%s", host, port)
+	}
+	return apiEndpoint
+}
+
+func newExporter(ctx context.Context) (*otlptrace.Exporter, error) {
+	opts := []otlptracegrpc.Option{
+		otlptracegrpc.WithEndpoint(getGrpcEndpoint()),
+		otlptracegrpc.WithHeaders(map[string]string{
+			"x-honeycomb-team":    os.Getenv("HONEYCOMB_API_KEY"),
+			"x-honeycomb-dataset": os.Getenv("HONEYCOMB_DATASET"),
+		}),
+		otlptracegrpc.WithTLSCredentials(credentials.NewClientTLSFromCert(nil, "")),
+	}
+
+	client := otlptracegrpc.NewClient(opts...)
+	return otlptrace.New(ctx, client)
+}
+
+func newTraceProvider(exp *otlptrace.Exporter) *sdktrace.TracerProvider {
+	r :=
+		resource.NewWithAttributes(
+			semconv.SchemaURL,
+			semconv.ServiceNameKey.String("name-go"), // lol no generics
+		)
+
+	return sdktrace.NewTracerProvider(
+		sdktrace.WithBatcher(exp),
+		sdktrace.WithResource(r),
+	)
+}
+
 func main() {
-	beeline.Init(beeline.Config{
-		WriteKey:    apiKey,
-		Dataset:     dataset,
-		ServiceName: "name-go",
-	})
-	defer beeline.Close()
+	ctx := context.Background()
+
+	exp, err := newExporter(ctx)
+	if err != nil {
+		log.Fatalf("failed to initialize exporter: %v", err)
+	}
+
+	tp := newTraceProvider(exp)
+	defer func() { _ = tp.Shutdown(ctx) }()
+
+	otel.SetTracerProvider(tp)
+	otel.SetTextMapPropagator(
+		propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}),
+	)
+
+	tracer = tp.Tracer("greeting-service/year-service")
 
 	namesByYear := map[int][]string{
-		2015: []string{"sophia", "jackson", "emma", "aiden", "olivia", "liam", "ava", "lucas", "mia", "noah"},
-		2016: []string{"sophia", "jackson", "emma", "aiden", "olivia", "lucas", "ava", "liam", "mia", "noah"},
-		2017: []string{"sophia", "jackson", "olivia", "liam", "emma", "noah", "ava", "aiden", "isabella", "lucas"},
-		2018: []string{"sophia", "jackson", "olivia", "liam", "emma", "noah", "ava", "aiden", "isabella", "caden"},
-		2019: []string{"sophia", "liam", "olivia", "jackson", "emma", "noah", "ava", "aiden", "aria", "grayson"},
-		2020: []string{"olivia", "noah", "emma", "liam", "ava", "elijah", "isabella", "oliver", "sophia", "lucas"},
+		2016: {"sophia", "jackson", "emma", "aiden", "olivia", "lucas", "ava", "liam", "mia", "noah"},
+		2017: {"sophia", "jackson", "olivia", "liam", "emma", "noah", "ava", "aiden", "isabella", "lucas"},
+		2018: {"sophia", "jackson", "olivia", "liam", "emma", "noah", "ava", "aiden", "isabella", "caden"},
+		2019: {"sophia", "liam", "olivia", "jackson", "emma", "noah", "ava", "aiden", "aria", "grayson"},
+		2020: {"olivia", "noah", "emma", "liam", "ava", "elijah", "isabella", "oliver", "sophia", "lucas"},
 	}
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/name", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Printf("%+v\n", r.Header)
 		rand.Seed(time.Now().UnixNano())
 		time.Sleep(time.Duration(rand.Intn(5)) * time.Millisecond)
 		year, _ := getYear(r.Context())
 		names := namesByYear[year]
-		fmt.Fprintf(w, names[rand.Intn(len(names))])
+		_, _ = fmt.Fprintf(w, names[rand.Intn(len(names))])
 	})
 
-	traceHeaderParserHook := func(r *http.Request) *propagation.PropagationContext {
-		headers := map[string]string{
-			"traceparent": r.Header.Get("traceparent"),
-		}
-		ctx := r.Context()
-		ctx, prop, err := propagation.UnmarshalW3CTraceContext(ctx, headers)
-		if err != nil {
-			fmt.Println("Error unmarshaling header")
-			fmt.Println(err)
-		}
-		return prop
-	}
+	wrappedHandler := otelhttp.NewHandler(mux, "name")
 
 	log.Println("Listening on ", ":8000")
-	log.Fatal(http.ListenAndServe(":8000", hnynethttp.WrapHandlerWithConfig(mux, config.HTTPIncomingConfig{HTTPParserHook: traceHeaderParserHook})))
-}
-
-func propagateTraceHook(r *http.Request, prop *propagation.PropagationContext) map[string]string {
-	ctx := r.Context()
-	ctx, headers := propagation.MarshalW3CTraceContext(ctx, prop)
-	return headers
+	log.Fatal(http.ListenAndServe(":8000", wrappedHandler))
 }
 
 func getYear(ctx context.Context) (int, context.Context) {
-	ctx, span := beeline.StartSpan(ctx, "✨ call /year ✨")
-	defer span.Send()
-	req, _ := http.NewRequest("GET", yearServiceUrl, nil)
-	ctx, req = httptrace.W3C(ctx, req)
-	httptrace.Inject(ctx, req)
-	client := &http.Client{
-		Transport: hnynethttp.WrapRoundTripperWithConfig(http.DefaultTransport, config.HTTPOutgoingConfig{HTTPPropagationHook: propagateTraceHook}),
-		Timeout:   time.Second * 5,
+	ctx, span := tracer.Start(ctx, "✨ call /year ✨")
+	defer span.End()
+	req, err := http.NewRequestWithContext(ctx, "GET", yearServiceUrl, nil)
+	if err != nil {
+		fmt.Printf("error creating request: %s", err)
 	}
+	client := http.Client{Transport: otelhttp.NewTransport(http.DefaultTransport)}
 	res, err := client.Do(req)
 	if err != nil {
 		panic(err)

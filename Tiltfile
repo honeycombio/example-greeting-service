@@ -23,8 +23,13 @@ def launch_go_svc(name, dirname="", flags="", auto_init=True):
         dirname if dirname else name,
         flags if flags else ""
     )
+    env = {
+        'NAME_ENDPOINT': 'http://localhost:8000',
+        'YEAR_ENDPOINT': 'http://localhost:6001',
+        'MESSAGE_ENDPOINT': 'http://localhost:9000',
+    }
     print("About to start {} with command {}".format(name, cmd))
-    local_resource(name, "", auto_init=auto_init, serve_cmd=cmd)
+    local_resource(name, "", auto_init=auto_init, serve_cmd=cmd, serve_env=env)
 
 
 def launch_go_frontend(auto_init=True):
