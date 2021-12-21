@@ -8,11 +8,19 @@ import (
 	"os"
 	"time"
 
-	beeline "github.com/honeycombio/beeline-go"
+	"github.com/honeycombio/beeline-go"
 	"github.com/honeycombio/beeline-go/propagation"
 	"github.com/honeycombio/beeline-go/wrappers/config"
 	"github.com/honeycombio/beeline-go/wrappers/hnynethttp"
 )
+
+func getHttpEndpoint() string {
+	apiEndpoint, exists := os.LookupEnv("HONEYCOMB_API_ENDPOINT")
+	if !exists {
+		apiEndpoint = "https://api.honeycomb.io"
+	}
+	return apiEndpoint
+}
 
 func traceParserHook(r *http.Request) *propagation.PropagationContext {
 	headers := map[string]string{
@@ -29,6 +37,7 @@ func traceParserHook(r *http.Request) *propagation.PropagationContext {
 
 func main() {
 	beeline.Init(beeline.Config{
+		APIHost:     getHttpEndpoint(),
 		WriteKey:    os.Getenv("HONEYCOMB_API_KEY"),
 		Dataset:     os.Getenv("HONEYCOMB_DATASET"),
 		ServiceName: "message-go",
@@ -47,7 +56,7 @@ func main() {
 		defer span.Send()
 		rand.Seed(time.Now().UnixNano())
 		time.Sleep(time.Duration(rand.Intn(5)) * time.Millisecond)
-		fmt.Fprintf(w, messages[rand.Intn(len(messages))])
+		_, _ = fmt.Fprintf(w, messages[rand.Intn(len(messages))])
 	})
 
 	log.Fatal(

@@ -5,73 +5,113 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"net"
 	"net/http"
+	"net/url"
 	"os"
 
-	"go.opentelemetry.io/otel/api/correlation"
-	"go.opentelemetry.io/otel/api/global"
-	"go.opentelemetry.io/otel/api/trace"
-	"go.opentelemetry.io/otel/instrumentation/httptrace"
-
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
+	"go.opentelemetry.io/otel/propagation"
+	"go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
-
-	"github.com/honeycombio/opentelemetry-exporter-go/honeycomb"
+	semconv "go.opentelemetry.io/otel/semconv/v1.7.0"
+	"go.opentelemetry.io/otel/trace"
+	"google.golang.org/grpc/credentials"
 )
 
 var (
-	apiKey            = os.Getenv("HONEYCOMB_API_KEY")
-	dataset           = os.Getenv("HONEYCOMB_DATASET")
 	nameServiceUrl    = os.Getenv("NAME_ENDPOINT") + "/name"
 	messageServiceUrl = os.Getenv("MESSAGE_ENDPOINT") + "/message"
+	tracer            trace.Tracer
 )
 
-func main() {
-	exp, err := honeycomb.NewExporter(
-		honeycomb.Config{
-			APIKey: apiKey,
-		},
-		honeycomb.TargetingDataset(dataset),
-		honeycomb.WithServiceName("frontend-go"),
+func getGrpcEndpoint() string {
+	apiEndpoint, exists := os.LookupEnv("HONEYCOMB_API_ENDPOINT")
+	if !exists {
+		apiEndpoint = "api.honeycomb.io:443"
+	} else {
+		u, err := url.Parse(apiEndpoint)
+		if err != nil {
+			panic(fmt.Sprintf("invalid endpoint url: %s", apiEndpoint))
+		}
+		var host, port string
+		if u.Port() != "" {
+			host, port, _ = net.SplitHostPort(u.Host)
+		} else {
+			host = u.Host
+			port = "443"
+		}
+		apiEndpoint = fmt.Sprintf("%s:%s", host, port)
+	}
+	return apiEndpoint
+}
+
+func newExporter(ctx context.Context) (*otlptrace.Exporter, error) {
+	opts := []otlptracegrpc.Option{
+		otlptracegrpc.WithEndpoint(getGrpcEndpoint()),
+		otlptracegrpc.WithHeaders(map[string]string{
+			"x-honeycomb-team":    os.Getenv("HONEYCOMB_API_KEY"),
+			"x-honeycomb-dataset": os.Getenv("HONEYCOMB_DATASET"),
+		}),
+		otlptracegrpc.WithTLSCredentials(credentials.NewClientTLSFromCert(nil, "")),
+	}
+
+	client := otlptracegrpc.NewClient(opts...)
+	return otlptrace.New(ctx, client)
+}
+
+func newTraceProvider(exp *otlptrace.Exporter) *sdktrace.TracerProvider {
+	r :=
+		resource.NewWithAttributes(
+			semconv.SchemaURL,
+			semconv.ServiceNameKey.String("frontend-go"),
+		)
+
+	return sdktrace.NewTracerProvider(
+		sdktrace.WithBatcher(exp),
+		sdktrace.WithResource(r),
 	)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer exp.Close()
+}
 
-	config := sdktrace.Config{
-		DefaultSampler: sdktrace.AlwaysSample(),
-	}
-	tp, err := sdktrace.NewProvider(sdktrace.WithConfig(config), sdktrace.WithSyncer(exp))
-	if err != nil {
-		log.Fatal(err)
-	}
-	global.SetTraceProvider(tp)
+func main() {
+	ctx := context.Background()
 
-	tracer := global.Tracer("greeting-service/frontend")
+	exp, err := newExporter(ctx)
+	if err != nil {
+		log.Fatalf("failed to initialize exporter: %v", err)
+	}
+
+	tp := newTraceProvider(exp)
+
+	// Handle this error in a sensible manner where possible
+	defer func() { _ = tp.Shutdown(ctx) }()
+
+	// Set the Tracer Provider and the W3C Trace Context propagator as globals.
+	// Important, otherwise this won't let you see distributed traces be connected!
+	otel.SetTracerProvider(tp)
+	otel.SetTextMapPropagator(
+		propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}),
+	)
+
+	tracer = tp.Tracer("greeting-service/year-service")
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/greeting", func(w http.ResponseWriter, r *http.Request) {
-		attrs, entries, spanCtx := httptrace.Extract(r.Context(), r)
+		name := getName(r.Context())
+		message := getMessage(r.Context())
 
-		r = r.WithContext(correlation.ContextWithMap(r.Context(), correlation.NewMap(correlation.MapUpdate{MultiKV: entries})))
-
-		ctx, span := tracer.Start(
-			trace.ContextWithRemoteSpanContext(r.Context(), spanCtx), "/greeting",
-			trace.WithAttributes(attrs...),
-		)
-		defer span.End()
-
-		name := getName(ctx)
-		message := getMessage(ctx)
-
-		fmt.Fprintf(w, "Hello %s, %s", name, message)
+		_, _ = fmt.Fprintf(w, "Hello %s, %s", name, message)
 	})
 
-	log.Fatal(http.ListenAndServe(":7000", mux))
+	wrappedHandler := otelhttp.NewHandler(mux, "frontend")
+
+	log.Fatal(http.ListenAndServe(":7000", wrappedHandler))
 }
 
 func getName(ctx context.Context) string {
-	tracer := global.Tracer("greeting-service/frontend")
 	var getNameSpan trace.Span
 	ctx, getNameSpan = tracer.Start(ctx, "✨ call /name ✨")
 	defer getNameSpan.End()
@@ -79,7 +119,6 @@ func getName(ctx context.Context) string {
 }
 
 func getMessage(ctx context.Context) string {
-	tracer := global.Tracer("greeting-service/frontend")
 	var getMessageSpan trace.Span
 	ctx, getMessageSpan = tracer.Start(ctx, "✨ call /message ✨")
 	defer getMessageSpan.End()
@@ -87,10 +126,8 @@ func getMessage(ctx context.Context) string {
 }
 
 func makeRequest(ctx context.Context, url string) string {
-	req, _ := http.NewRequest("GET", url, nil)
-	ctx, req = httptrace.W3C(ctx, req)
-	httptrace.Inject(ctx, req)
-	client := http.DefaultClient
+	req, _ := http.NewRequestWithContext(ctx, "GET", url, nil)
+	client := http.Client{Transport: otelhttp.NewTransport(http.DefaultTransport)}
 	res, err := client.Do(req)
 	if err != nil {
 		panic(err)

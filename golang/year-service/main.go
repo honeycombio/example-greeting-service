@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+	"net"
 	"net/http"
+	"net/url"
 	"os"
 	"time"
 
@@ -26,11 +28,32 @@ var (
 	tracer trace.Tracer
 )
 
+func getGrpcEndpoint() string {
+	apiEndpoint, exists := os.LookupEnv("HONEYCOMB_API_ENDPOINT")
+	if !exists {
+		apiEndpoint = "api.honeycomb.io:443"
+	} else {
+		u, err := url.Parse(apiEndpoint)
+		if err != nil {
+			panic(fmt.Sprintf("invalid endpoint url: %s", apiEndpoint))
+		}
+		var host, port string
+		if u.Port() != "" {
+			host, port, _ = net.SplitHostPort(u.Host)
+		} else {
+			host = u.Host
+			port = "443"
+		}
+		apiEndpoint = fmt.Sprintf("%s:%s", host, port)
+	}
+	return apiEndpoint
+}
+
 func newExporter(ctx context.Context) (*otlptrace.Exporter, error) {
 	opts := []otlptracegrpc.Option{
-		otlptracegrpc.WithEndpoint("api.honeycomb.io:443"),
+		otlptracegrpc.WithEndpoint(getGrpcEndpoint()),
 		otlptracegrpc.WithHeaders(map[string]string{
-			"x-honeycomb-team":    os.Getenv("HONEYCOMB_TEAM"),
+			"x-honeycomb-team":    os.Getenv("HONEYCOMB_API_KEY"),
 			"x-honeycomb-dataset": os.Getenv("HONEYCOMB_DATASET"),
 		}),
 		otlptracegrpc.WithTLSCredentials(credentials.NewClientTLSFromCert(nil, "")),
@@ -41,20 +64,20 @@ func newExporter(ctx context.Context) (*otlptrace.Exporter, error) {
 }
 
 func newTraceProvider(exp *otlptrace.Exporter) *sdktrace.TracerProvider {
-	resource :=
+	r :=
 		resource.NewWithAttributes(
 			semconv.SchemaURL,
-			semconv.ServiceNameKey.String("year-service"), // lol no generics
+			semconv.ServiceNameKey.String("year-go"), // lol no generics
 		)
 
 	return sdktrace.NewTracerProvider(
 		sdktrace.WithBatcher(exp),
-		sdktrace.WithResource(resource),
+		sdktrace.WithResource(r),
 	)
 }
 
 func calculateYear() int {
-	years := []int{2015, 2016, 2017, 2018, 2019, 2020, 2021}
+	years := []int{2016, 2017, 2018, 2019, 2020}
 	rand.Seed(time.Now().UnixNano())
 	time.Sleep(time.Duration(rand.Intn(5)) * time.Millisecond)
 	return years[rand.Intn(len(years))]
@@ -70,7 +93,7 @@ func yearHandler(w http.ResponseWriter, r *http.Request) {
 		return calculateYear()
 	}(ctx)
 
-	fmt.Fprintf(w, "%d", year)
+	_, _ = fmt.Fprintf(w, "%d", year)
 }
 
 func main() {
