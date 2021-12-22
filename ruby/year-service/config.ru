@@ -8,7 +8,7 @@ require "honeycomb/propagation/w3c"
 Honeycomb.configure do |config|
   config.write_key = ENV["HONEYCOMB_API_KEY"]
   config.service_name = "year-ruby"
-  config.api_host = ENV['HONEYCOMB_API']
+  config.api_host = ENV['HONEYCOMB_API_ENDPOINT']
   config.dataset = ENV['HONEYCOMB_DATASET']
 
   config.http_trace_parser_hook do |env|
