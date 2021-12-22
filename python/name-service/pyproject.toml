@@ -6,10 +6,14 @@ authors = ["Douglas Soo <dsoo@alum.mit.edu>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-honeycomb-beeline = "^2.12.2"
 flask = "^1.1.2"
 python-dotenv = "^0.14.0"
 requests = "^2.24.0"
+opentelemetry-api = "^1.8.0"
+opentelemetry-sdk = "^1.8.0"
+opentelemetry-exporter-otlp-proto-grpc = "^1.8.0"
+opentelemetry-instrumentation-flask = "^0.27b0"
+opentelemetry-instrumentation-requests = "^0.27b0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
