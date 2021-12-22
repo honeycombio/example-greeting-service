@@ -6,4 +6,4 @@ RUN bundle install
 COPY message.ru /myapp
 
 EXPOSE 9000
-CMD [ "rackup", "message.ru", "--server", "puma", "--host", "0.0.0.0"]
+CMD [ "bundle", "exec", "rackup", "message.ru", "--server", "puma", "--host", "0.0.0.0"]

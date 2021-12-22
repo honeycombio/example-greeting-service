@@ -6,4 +6,4 @@ RUN bundle install
 COPY name.rb /myapp
 
 EXPOSE 8000
-CMD [ "ruby", "name.rb"]
+CMD [ "bundle", "exec", "ruby", "name.rb"]

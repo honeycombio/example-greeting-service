@@ -7,4 +7,4 @@ RUN bundle install
 COPY config.ru /app
 
 EXPOSE 6001
-CMD ["rackup", "--host", "0.0.0.0", "--port", "6001"]
+CMD ["bundle", "exec", "rackup", "--host", "0.0.0.0", "--port", "6001"]
