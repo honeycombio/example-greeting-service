@@ -24,3 +24,8 @@ tab_width = 4
 # New line preferences
 end_of_line = crlf
 insert_final_newline = false
+
+[*.md]
+indent_size = 2
+tab_width = 2
+insert_final_newline = true
