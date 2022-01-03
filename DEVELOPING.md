@@ -20,7 +20,7 @@ export OTEL_EXPORTER_OTLP_HEADERS="x-honeycomb-team=${HONEYCOMB_API_KEY},x-honey
 **Tip**: Create and modify this and other `.envrc` files with vim; editing in VSCode seems to muddy the characters in unseen ways.
 
 To use these environment variables, you'll need to `direnv allow .` whenever the file changes.
-Consider adding an alias for your shell to more easiliy/quickly type a shortened version `da`:
+Consider adding an alias for your shell to more easily/quickly type a shortened version `da`:
 
 `alias da="direnv allow ."`
 
