@@ -1,0 +1,5 @@
+export HONEYCOMB_API_KEY=
+export HONEYCOMB_DATASET=greetings
+export HONEYCOMB_API=https://api.honeycomb.io
+export OTEL_EXPORTER_OTLP_ENDPOINT=${HONEYCOMB_API}
+export OTEL_EXPORTER_OTLP_HEADERS="x-honeycomb-team=${HONEYCOMB_API_KEY},x-honeycomb-dataset=${HONEYCOMB_DATASET}"
