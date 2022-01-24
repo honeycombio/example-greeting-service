@@ -1,0 +1,96 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://help.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+defaults: &defaults
+  schedule:
+    interval: "monthly"
+  labels:
+    - "type: dependencies"
+  reviewers:
+    - "honeycombio/telemetry-team"
+updates:
+# DOTNET
+  - package-ecosystem: "nuget"
+    directory: "/dotnet"
+    <<: *defaults
+# ELIXIR
+  - package-ecosystem: "mix"
+    directory: "/elixir/frontend"
+    <<: *defaults
+  - package-ecosystem: "mix"
+    directory: "/elixir/message"
+    <<: *defaults
+  - package-ecosystem: "mix"
+    directory: "/elixir/name"
+    <<: *defaults
+  - package-ecosystem: "mix"
+    directory: "/elixir/year"
+    <<: *defaults
+# GOLANG
+  - package-ecosystem: "gomod"
+    directory: "/golang/frontend"
+    <<: *defaults
+  - package-ecosystem: "gomod"
+    directory: "/golang/message-service"
+    <<: *defaults
+  - package-ecosystem: "gomod"
+    directory: "/golang/name-service"
+    <<: *defaults
+  - package-ecosystem: "gomod"
+    directory: "/golang/year-service"
+    <<: *defaults
+# JAVA
+  - package-ecosystem: "gradle"
+    directory: "/java/frontend"
+    <<: *defaults
+  - package-ecosystem: "gradle"
+    directory: "/java/message-service"
+    <<: *defaults
+  - package-ecosystem: "gradle"
+    directory: "/java/name-service"
+    <<: *defaults
+  - package-ecosystem: "gradle"
+    directory: "/java/year-service"
+    <<: *defaults
+# NODE
+  - package-ecosystem: "npm"
+    directory: "/node/frontend"
+    <<: *defaults
+  - package-ecosystem: "npm"
+    directory: "/node/message-service"
+    <<: *defaults
+  - package-ecosystem: "npm"
+    directory: "/node/name-service"
+    <<: *defaults
+  - package-ecosystem: "npm"
+    directory: "/node/year-service"
+    <<: *defaults
+# PYTHON
+  - package-ecosystem: "pip"
+    directory: "/python/frontend"
+    <<: *defaults
+  - package-ecosystem: "pip"
+    directory: "/python/message-service"
+    <<: *defaults
+  - package-ecosystem: "pip"
+    directory: "/python/name-service"
+    <<: *defaults
+  - package-ecosystem: "pip"
+    directory: "/python/year-service"
+    <<: *defaults
+# RUBY
+  - package-ecosystem: "bundler"
+    directory: "/ruby/frontend"
+    <<: *defaults
+  - package-ecosystem: "bundler"
+    directory: "/ruby/message-service"
+    <<: *defaults
+  - package-ecosystem: "bundler"
+    directory: "/ruby/name-service"
+    <<: *defaults
+  - package-ecosystem: "bundler"
+    directory: "/ruby/year-service"
+    <<: *defaults
