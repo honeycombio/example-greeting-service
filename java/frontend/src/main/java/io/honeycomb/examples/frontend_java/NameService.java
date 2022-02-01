@@ -20,7 +20,7 @@ public class NameService {
 	private Tracer tracer;
 
   private String name_endpoint() {
-    String nameEndpointFromEnv = System.getenv().getOrDefault("NAME_ENDPOINT", "http://localhost:8000");
+    String nameEndpointFromEnv = "http://" + System.getenv().getOrDefault("NAME_ENDPOINT", "localhost:8000");
     return nameEndpointFromEnv + "/name";
   }
   @WithSpan

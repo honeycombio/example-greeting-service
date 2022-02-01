@@ -2,7 +2,7 @@ package io.honeycomb.examples.javaotlp;
 
 import java.util.Random;
 
-import io.honeycomb.opentelemetry.HoneycombSdk;
+import io.opentelemetry.api.OpenTelemetry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import io.opentelemetry.extension.annotations.WithSpan;
@@ -16,11 +16,11 @@ public class YearService {
     private static final Random generator = new Random();
 
     @Autowired
-    private HoneycombSdk sdk;
+    private OpenTelemetry otel;
 
     @WithSpan
     public String getYear() {
-        Tracer tracer = sdk.getTracer("year-internal");
+        Tracer tracer = otel.getTracer("year-internal");
         Span span = tracer.spanBuilder("🗓 get-a-year ✨").startSpan();
         int rnd = generator.nextInt(YEARS.length);
         String year = YEARS[rnd];
