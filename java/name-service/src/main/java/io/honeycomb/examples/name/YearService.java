@@ -21,7 +21,7 @@ public class YearService {
     private Tracer tracer;
 
     private String year_endpoint() {
-        String yearEndpointFromEnv = System.getenv().getOrDefault("YEAR_ENDPOINT", "http://localhost:6001");
+        String yearEndpointFromEnv = "http://" + System.getenv().getOrDefault("YEAR_ENDPOINT", "localhost:6001");
         return yearEndpointFromEnv + "/year";
     }
 

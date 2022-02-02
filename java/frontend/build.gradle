@@ -9,8 +9,8 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 ext {
-    otelVersion = '1.5.0'
-    otelAgentVersion = '1.5.3'
+    otelVersion = '1.9.1'
+    otelAgentVersion = '1.9.2'
 }
 
 configurations {
@@ -26,7 +26,7 @@ dependencies {
     implementation("io.opentelemetry:opentelemetry-api:${otelVersion}")
     implementation("io.opentelemetry:opentelemetry-extension-annotations:${otelVersion}")
 
-    agent "io.opentelemetry.javaagent:opentelemetry-javaagent:${otelAgentVersion}:all"
+    agent "io.opentelemetry.javaagent:opentelemetry-javaagent:${otelAgentVersion}"
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {

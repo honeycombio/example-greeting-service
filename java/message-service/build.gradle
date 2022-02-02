@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    agent "io.honeycomb:honeycomb-opentelemetry-javaagent:${beestroVersion}:all"
+    agent "io.honeycomb:honeycomb-opentelemetry-javaagent:${beestroVersion}"
 
     implementation("io.honeycomb:honeycomb-opentelemetry-sdk:${beestroVersion}")
     implementation 'org.springframework.boot:spring-boot-starter-web'
