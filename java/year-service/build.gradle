@@ -9,7 +9,7 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 ext {
-    beestroVersion = '0.4.0'
+    distroVersion = '0.9.0'
 }
 
 repositories {
@@ -18,7 +18,7 @@ repositories {
 }
 
 dependencies {
-    implementation("io.honeycomb:honeycomb-opentelemetry-sdk:${beestroVersion}")
+    implementation("io.honeycomb:honeycomb-opentelemetry-sdk:${distroVersion}")
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
