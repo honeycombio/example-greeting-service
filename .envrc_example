@@ -4,8 +4,6 @@ export HONEYCOMB_API_ENDPOINT=${HONEYCOMB_API}
 export OTEL_EXPORTER_OTLP_ENDPOINT=${HONEYCOMB_API}
 export OTEL_EXPORTER_OTLP_HEADERS="x-honeycomb-team=${HONEYCOMB_API_KEY}"
 
-# SERVICE_NAME is set in Tiltfile, otherwise it should be set in each service
-
 ##
 ## classic honeycomb ##
 ##

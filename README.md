@@ -38,7 +38,6 @@ Each service reads its configuration from the environment.
 Specific environment variables:
 
 - `HONEYCOMB_API_KEY` - Your honeycomb API key
-- `SERVICE_NAME` - The name of the service
 - `OTEL_EXPORTER_OTLP_ENDPOINT=https://api.honeycomb.io`
 
 Some services use vanilla OTEL:
@@ -58,7 +57,6 @@ If using Classic Honeycomb, you'll also need a dataset and must include in the O
 ## Running
 
 There is a `Tiltfile` to run these services on a local host using <https://tilt.dev/>.
-The `Tiltfile` also sets the service name for you.
 After installing Tilt, running `tilt up` should spin up all of the services.
 
 The default setup runs the go services; comment out `launch_go_frontend()`, `launch_go_message_service()`, etc. and uncomment the language of choice near the bottom of the Tiltfile.
