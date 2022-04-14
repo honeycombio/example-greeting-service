@@ -1,5 +1,17 @@
 export HONEYCOMB_API_KEY=
-export HONEYCOMB_DATASET=greetings
 export HONEYCOMB_API=https://api.honeycomb.io
+export HONEYCOMB_API_ENDPOINT=${HONEYCOMB_API}
 export OTEL_EXPORTER_OTLP_ENDPOINT=${HONEYCOMB_API}
-export OTEL_EXPORTER_OTLP_HEADERS="x-honeycomb-team=${HONEYCOMB_API_KEY},x-honeycomb-dataset=${HONEYCOMB_DATASET}"
+export OTEL_EXPORTER_OTLP_HEADERS="x-honeycomb-team=${HONEYCOMB_API_KEY}"
+
+# SERVICE_NAME set in Tiltfile, set in some code directly, but may still be needed for some services
+
+##
+## classic honeycomb ##
+##
+# export HONEYCOMB_API_KEY=
+# export HONEYCOMB_DATASET=greetings
+# export HONEYCOMB_API=https://api.honeycomb.io
+# export HONEYCOMB_API_ENDPOINT=${HONEYCOMB_API}
+# export OTEL_EXPORTER_OTLP_ENDPOINT=${HONEYCOMB_API}
+# export OTEL_EXPORTER_OTLP_HEADERS="x-honeycomb-team=${HONEYCOMB_API_KEY},x-honeycomb-dataset=${HONEYCOMB_DATASET}"

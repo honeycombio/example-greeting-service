@@ -38,17 +38,21 @@ Each service reads its configuration from the environment.
 Specific environment variables:
 
 - `HONEYCOMB_API_KEY` - Your honeycomb API key
-- `HONEYCOMB_DATASET` - The name of the dataset you want to write to
 - `OTEL_EXPORTER_OTLP_ENDPOINT=https://api.honeycomb.io`
 
 Some services use vanilla OTEL:
 
-- `OTEL_EXPORTER_OTLP_HEADERS='x-honeycomb-team=api-key,x-honeycomb-dataset=greetings'`
+- `OTEL_EXPORTER_OTLP_HEADERS='x-honeycomb-team=api-key'`
 
 If configuring non-prod API endpoint:
 
 - `OTEL_EXPORTER_OTLP_ENDPOINT=https://api.some.place`
 - `HONEYCOMB_API_ENDPOINT=https://api.some.place`
+
+If using Classic Honeycomb, you'll also need a dataset and must include in the OTEL headers:
+
+- `HONEYCOMB_DATASET` - The name of the dataset you want to write to
+- `OTEL_EXPORTER_OTLP_HEADERS='x-honeycomb-team=api-key,x-honeycomb-dataset=greetings'`
 
 ## Running
 

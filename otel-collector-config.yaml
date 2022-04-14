@@ -17,11 +17,13 @@ exporters:
     headers:
       # use environment variables to set the values for these headers
       "x-honeycomb-team": "${HONEYCOMB_API_KEY}"
-      "x-honeycomb-dataset": "${HONEYCOMB_DATASET}"
-
+    #   "x-honeycomb-dataset": "${HONEYCOMB_DATASET}" for classic only
+#   file: # optionally export data to a file
+#     path: ./data.json # optional file to store exported data
 service:
   pipelines:
     traces:
       receivers: [otlp]
       processors: [batch]
       exporters: [otlp/hny, logging]
+    #   exporters: [otlp/hny, logging, file]
