@@ -59,6 +59,7 @@ func main() {
 		_, _ = fmt.Fprintf(w, messages[rand.Intn(len(messages))])
 	})
 
+	log.Println("Listening on http://localhost:9000/message")
 	log.Fatal(
 		http.ListenAndServe(
 			":9000",
