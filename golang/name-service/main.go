@@ -66,11 +66,12 @@ func newExporter(ctx context.Context) (*otlptrace.Exporter, error) {
 }
 
 func newTraceProvider(exp *otlptrace.Exporter) *sdktrace.TracerProvider {
-	r :=
+	r, _ := resource.Merge(
+		resource.Default(),
 		resource.NewWithAttributes(
 			semconv.SchemaURL,
-			semconv.ServiceNameKey.String("name-go"), // lol no generics
-		)
+			semconv.ServiceNameKey.String("name-go"),
+		))
 
 	return sdktrace.NewTracerProvider(
 		sdktrace.WithBatcher(exp),
@@ -115,7 +116,7 @@ func main() {
 
 	wrappedHandler := otelhttp.NewHandler(mux, "name")
 
-	log.Println("Listening on ", ":8000")
+	log.Println("Listening on http://localhost:8000/name")
 	log.Fatal(http.ListenAndServe(":8000", wrappedHandler))
 }
 

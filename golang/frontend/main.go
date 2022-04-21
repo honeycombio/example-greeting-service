@@ -64,11 +64,12 @@ func newExporter(ctx context.Context) (*otlptrace.Exporter, error) {
 }
 
 func newTraceProvider(exp *otlptrace.Exporter) *sdktrace.TracerProvider {
-	r :=
+	r, _ := resource.Merge(
+		resource.Default(),
 		resource.NewWithAttributes(
 			semconv.SchemaURL,
 			semconv.ServiceNameKey.String("frontend-go"),
-		)
+		))
 
 	return sdktrace.NewTracerProvider(
 		sdktrace.WithBatcher(exp),
@@ -108,6 +109,7 @@ func main() {
 
 	wrappedHandler := otelhttp.NewHandler(mux, "frontend")
 
+	log.Println("Listening on http://localhost:7000/greeting")
 	log.Fatal(http.ListenAndServe(":7000", wrappedHandler))
 }
 
