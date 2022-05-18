@@ -7,7 +7,7 @@ authors = ["Douglas Soo <dsoo@alum.mit.edu>"]
 [tool.poetry.dependencies]
 python = "^3.8"
 werkzeug = "^1.0.1"
-honeycomb-beeline = "^2.12.2"
+honeycomb-beeline = "^3.4.0"
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
 
