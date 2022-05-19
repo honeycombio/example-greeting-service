@@ -15,7 +15,6 @@ class YearappConfig(AppConfig):
         # models and do not initialize here.
         beeline.init(
             writekey=os.environ.get("HONEYCOMB_API_KEY"),
-            dataset=os.environ.get("HONEYCOMB_DATASET"),
             api_host=os.environ.get("HONEYCOMB_API_ENDPOINT"),
             service_name='year-python',
             debug=True,
