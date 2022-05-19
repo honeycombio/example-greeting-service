@@ -46,8 +46,7 @@ tracer = trace.get_tracer_provider().get_tracer(__name__)
 
 trace.get_tracer_provider().add_span_processor(
     BatchSpanProcessor(OTLPSpanExporter(
-        headers=(("x-honeycomb-team", os.environ.get("HONEYCOMB_API_KEY")),
-                 ("x-honeycomb-dataset", os.environ.get("HONEYCOMB_DATASET"))),
+        headers=(("x-honeycomb-team", os.environ.get("HONEYCOMB_API_KEY")),),
         endpoint=os.environ.get("HONEYCOMB_API_ENDPOINT",
                                 "https://api.honeycomb.io")
     )))
