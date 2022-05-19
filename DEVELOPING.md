@@ -31,7 +31,9 @@ export OTEL_EXPORTER_OTLP_ENDPOINT=${HONEYCOMB_API}
 export OTEL_EXPORTER_OTLP_HEADERS="x-honeycomb-team=${HONEYCOMB_API_KEY},x-honeycomb-dataset=${HONEYCOMB_DATASET}"
 ```
 
-**Tip**: Create and modify this and other `.envrc` files with vim; editing in VSCode seems to muddy the characters in unseen ways.
+**Tip**: The Editor Config plugin for VSCode breaks `.envrc` files by forcing them into CRLF mode instead of LF mode, which means that the resulting shell scripts all have carriage returns in them. You can disable that extension, or use a different editor like vim or nano.
+
+**Tip**: Monterey Control Center uses port 7000 for AirPlay and this will break your ability to run EGS; you can turn it off in the System Settings at the bottom of the Sharing settings.
 
 To use these environment variables, you'll need to `direnv allow .` whenever the file changes.
 Consider adding an alias for your shell to more easily/quickly type a shortened version `da`:
@@ -46,6 +48,12 @@ Add the `source_up` and `layout` needed based on the language (**NOTE**: not rec
 # go
 source_up
 layout go
+```
+
+```shell
+# java
+source_up
+layout java
 ```
 
 ```shell
