@@ -29,3 +29,6 @@ insert_final_newline = false
 indent_size = 2
 tab_width = 2
 insert_final_newline = true
+
+[.envrc]
+end_of_line = lf
