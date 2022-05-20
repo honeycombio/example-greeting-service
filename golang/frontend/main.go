@@ -35,7 +35,7 @@ func getGrpcEndpoint() string {
 	} else {
 		u, err := url.Parse(apiEndpoint)
 		if err != nil {
-			panic(fmt.Sprintf("invalid endpoint url: %s", apiEndpoint))
+			panic(fmt.Errorf("error %s parsing url: %s", err, apiEndpoint))
 		}
 		var host, port string
 		if u.Port() != "" {
