@@ -9,9 +9,8 @@ require 'faraday'
 
 Honeycomb.configure do |config|
   config.write_key = ENV['HONEYCOMB_API_KEY']
-  config.dataset = ENV['HONEYCOMB_DATASET']
   config.service_name = ENV['SERVICE_NAME'] || "frontend-ruby"
-  config.api_host = ENV['HONEYCOMB_API']
+  config.api_host = ENV['HONEYCOMB_API_ENDPOINT']
 
   config.http_trace_parser_hook do |env|
     Honeycomb::W3CPropagation::UnmarshalTraceContext.parse_rack_env(env)
