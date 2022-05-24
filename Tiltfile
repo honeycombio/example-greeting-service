@@ -193,33 +193,62 @@ def launch_node_name_service(auto_init=True):
 def launch_node_year_service(auto_init=True):
   launch_node_svc("year-node", dirname="node/year-service", auto_init=auto_init)
 
+
+languages = ["go", "py", "rb", "java", "dotnet", "node"]
+
+config.define_string_list("to-run", args=True)
+cfg = config.parse()
+
+groups = {
+    'node': ['frontend-node', 'message-node', 'name-node', 'year-node'],
+    'go': ['frontend-go', 'message-go', 'name-go', 'year-go']
+}
+
+resources = ['collector', 'redis', 'curl greeting']
+to_run = cfg.get('to-run', []) or ["go"]
+
+for arg in to_run:
+  if arg in groups:
+    resources += groups[arg]
+  else:
+    # also support specifying individual services instead of groups, e.g. `tilt up a b d`
+    resources.append(arg)
+config.set_enabled_resources(resources)
+
+# can we run services programatically?
+
+
+
+
+
+
 # Launch one of each of these types of services. Go services init by default
-# launch_go_frontend()
-# launch_python_frontend()
-# launch_ruby_frontend()
-# launch_java_frontend()
-# launch_dotnet_frontend()
+launch_go_frontend()
+launch_python_frontend()
+launch_ruby_frontend()
+launch_java_frontend()
+launch_dotnet_frontend()
 launch_node_frontend()
 
-# launch_go_message_service()
-# launch_python_message_service()
-# launch_ruby_message_service()
-# launch_java_message_service()
-# launch_dotnet_message_service()
+launch_go_message_service()
+launch_python_message_service()
+launch_ruby_message_service()
+launch_java_message_service()
+launch_dotnet_message_service()
 launch_node_message_service()
 
-# launch_go_name_service()
-# launch_python_name_service()
-# launch_ruby_name_service()
-# launch_java_name_service()
-# launch_dotnet_name_service()
+launch_go_name_service()
+launch_python_name_service()
+launch_ruby_name_service()
+launch_java_name_service()
+launch_dotnet_name_service()
 launch_node_name_service()
 
-# launch_go_year_service()
-# launch_python_year_service()
-# launch_ruby_year_service()
-# launch_java_year_service()
-# launch_dotnet_year_service()
+launch_go_year_service()
+launch_python_year_service()
+launch_ruby_year_service()
+launch_java_year_service()
+launch_dotnet_year_service()
 launch_node_year_service()
 
 ###
