@@ -87,6 +87,10 @@ sudo snap install dotnet-sdk --classic --channel=6.0
 sudo snap alias dotnet-sdk.dotnet dotnet
 ```
 
+### node
+
+Node specific setup instructions can be found in the [README](node/README.md) in the `node` folder.
+
 ## Different dependencies
 
 ### go

@@ -12,6 +12,19 @@
 - HONEYCOMB_API_KEY
 - HONEYCOMB_DATASET
 
+### Install Node
+If you're using option 1 or 3 listed below, you will have to install node on your machine. The preferred way to install node is with [asdf](https://asdf-vm.com/guide/getting-started.html#_1-install-dependencies).
+
+Once you have asdf set up, run the following to install node. Check the version needed in the `.tool-versions` file in the root of this repo.
+
+```
+asdf plugin add nodejs https://github.com/asdf-vm/asdf-nodejs.git
+```
+
+```
+asdf install nodejs <insert-version-here>
+```
+
 ### Option 1: One service at a time
 
 - In each individual service directory, run `npm start`
