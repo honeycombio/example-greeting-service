@@ -1,8 +1,10 @@
 # prints show up in the Tiltfile log so you know what's been run
 print("hello my friends")
 
+# required resrouces: collector & redis
 docker_compose("./docker-compose.yml")
 
+# curl greeting service, language / ecosystem agnostic
 local_resource(
   'curl greeting',
   cmd='curl localhost:7000/greeting',
@@ -194,35 +196,7 @@ def launch_node_year_service(auto_init=True):
   launch_node_svc("year-node", dirname="node/year-service", auto_init=auto_init)
 
 
-languages = ["go", "py", "rb", "java", "dotnet", "node"]
-
-config.define_string_list("to-run", args=True)
-cfg = config.parse()
-
-groups = {
-    'node': ['frontend-node', 'message-node', 'name-node', 'year-node'],
-    'go': ['frontend-go', 'message-go', 'name-go', 'year-go']
-}
-
-resources = ['collector', 'redis', 'curl greeting']
-to_run = cfg.get('to-run', []) or ["go"]
-
-for arg in to_run:
-  if arg in groups:
-    resources += groups[arg]
-  else:
-    # also support specifying individual services instead of groups, e.g. `tilt up a b d`
-    resources.append(arg)
-config.set_enabled_resources(resources)
-
-# can we run services programatically?
-
-
-
-
-
-
-# Launch one of each of these types of services. Go services init by default
+# Launch all services so that all service resources are registered with Tilt
 launch_go_frontend()
 launch_python_frontend()
 launch_ruby_frontend()
@@ -250,6 +224,39 @@ launch_ruby_year_service()
 launch_java_year_service()
 launch_dotnet_year_service()
 launch_node_year_service()
+ 
+# Get list of service to run from command line args supported by Tilt
+config.define_string_list("to-run", args=True)
+cfg = config.parse()
+
+# Create map of "groups" of services to commonly run together (e.g. all node services)
+supported_languages = ["go", "py", "rb", "java", "dotnet", "node"]
+language_specific_services = ["frontend", "message", "name", "year"]
+
+def append_lang(lang):
+    lang_appended_list = []
+    for service in language_specific_services:
+        lang_appended_list.append(service + "-" +lang)
+    return lang_appended_list
+groups = { i: append_lang(i) for i in supported_languages }
+
+# Common resources we always want to run
+resources = ['collector', 'redis', 'curl greeting']
+
+# Resources/groups specified from the command line
+# If none are specified it defaults to the "go" group of services so we don't run all the things
+to_run = cfg.get('to-run', []) or ["go"]
+
+# Create the final list of services to run
+for arg in to_run:
+  if arg in groups:
+    resources += groups[arg]
+  else:
+    # also support specifying individual services instead of groups, e.g. `tilt up a b d`
+    resources.append(arg)
+
+# Enable the specified subset of resources or just all the required services + go services if nothing is specified
+config.set_enabled_resources(resources)
 
 ###
 # Notes
