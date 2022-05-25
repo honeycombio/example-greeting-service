@@ -31,7 +31,7 @@ module O11yWrapper
   # outside the process as with Baggage.
   #
   # ... though, you *could* choose to check your CarryOn into Baggage at any
-  # point you are confortable propagating your CarryOn data to other services.
+  # point you are comfortable propagating your CarryOn data to other services.
   module CarryOn
     extend self
 
