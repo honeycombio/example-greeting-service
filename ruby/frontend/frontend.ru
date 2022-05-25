@@ -8,10 +8,27 @@ require 'faraday'
 require 'opentelemetry/sdk'
 require 'opentelemetry/exporter/otlp'
 require 'opentelemetry/instrumentation/all'
+require_relative './o11y_wrapper.rb'
+
 begin
   OpenTelemetry::SDK.configure do |c|
     c.service_name = ENV['SERVICE_NAME'] || "frontend-ruby"
+
+    # enable all auto-instrumentation available
     c.use_all()
+
+    # add the Baggage and CarryOn processors to thepipeline
+    c.add_span_processor(O11yWrapper::BaggageSpanProcessor.new)
+    c.add_span_processor(O11yWrapper::CarryOnSpanProcessor.new)
+
+    # Because we tinkered with the pipeline, we'll need to
+    # wire up span batching and sending via OTLP ourselves.
+    # This is usually the default.
+    c.add_span_processor(
+      OpenTelemetry::SDK::Trace::Export::BatchSpanProcessor.new(
+        OpenTelemetry::Exporter::OTLP::Exporter.new()
+      )
+    )
   end
 rescue OpenTelemetry::SDK::ConfigurationError => e
   puts "What now?"
@@ -38,10 +55,26 @@ end
 
 class GreetingsController < ActionController::Base
   def index
-    @name = NameClient.get_name
-    @message = MessageClient.get_message
-    Tracer.in_span("🎨 render message ✨") do |span|
-      render inline: "Hello <%= @name %>, <%= @message %>"
+    # set something in CarryOn that will appear in all child spans from the frontend,
+    # but will NOT appear on child spans from other services
+    O11yWrapper::CarryOn.with_attributes({"app.carry_on" => "my wayward son"}) do
+
+      # a span event!
+      OpenTelemetry::Trace
+        .current_span
+        .add_event("Emoji are fun! ᕕ( ᐛ )ᕗ")
+
+      @name = NameClient.get_name
+
+      # set name in Baggage for child spans, both frontend and other services from
+      # this point in the trace forward
+      OpenTelemetry::Context.with_current(OpenTelemetry::Baggage.set_value("app.visitor_name", @name)) do
+        @message = MessageClient.get_message
+
+        Tracer.in_span("🎨 render greeting ✨") do |span|
+          render inline: "Hello <%= @name %>, <%= @message %>"
+        end
+      end
     end
   end
 end
