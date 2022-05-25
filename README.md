@@ -82,7 +82,9 @@ It's also possible to run a combination of services in different languages, for 
 tilt up frontend-node message-go name-py year-rb
 ```
 
-To configure a common set of services that are specific to ongoing development, or to override the default option of running all services in go, add a file `tilt_config.json` and specify a group or set of services. This file is ignored by git so it can be developer specific and allows running `tilt up` without having to specify futher arguments.
+To configure a common set of services that are specific to ongoing development, or to override the default option of running all services in go, add a file `tilt_config.json` and specify a group or set of services.
+This file is ignored by git so it can be developer specific and allows running `tilt up` without having to specify further arguments.
+
 
 Example `tilt_config.json` to override go as the default service
 
