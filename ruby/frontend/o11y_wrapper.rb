@@ -39,7 +39,7 @@ module O11yWrapper
     CONTEXT_KEY = ::OpenTelemetry::Context.create_key('carry-on-attrs')
     private_constant :CONTEXT_KEY
 
-    # retrieve the CarryOn attributes from the current context
+    # retrieve the CarryOn attributes from a given or current context
     def attributes(context = nil)
       context ||= ::OpenTelemetry::Context.current
       context.value(CONTEXT_KEY) || {}
