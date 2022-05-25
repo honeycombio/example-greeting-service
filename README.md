@@ -59,7 +59,46 @@ If using Classic Honeycomb, you'll also need a dataset and must include in the O
 There is a `Tiltfile` to run these services on a local host using <https://tilt.dev/>.
 After installing Tilt, running `tilt up` should spin up all of the services.
 
-The default setup runs the go services; comment out `launch_go_frontend()`, `launch_go_message_service()`, etc. and uncomment the language of choice near the bottom of the Tiltfile.
+The default setup runs the go services.
+
+To run services in another supported language, add the language name after the tilt command:
+
+```shell
+tilt up node
+```
+
+List of supported languages
+
+- `go`
+- `py`
+- `rb`
+- `java`
+- `dotnet`
+- `node`
+
+It's also possible to run a combination of services in different languages, for example the following command would run each specific service mentioned along with the required services (collector, redis, curl greeting)
+
+```shell
+tilt up frontend-node message-go name-py year-rb
+```
+
+To configure a common set of services that are specific to ongoing development, or to override the default option of running all services in go, add a file `tilt_config.json` and specify a group or set of services. This file is ignored by git so it can be developer specific and allows running `tilt up` without having to specify futher arguments.
+
+Example `tilt_config.json` to override go as the default service
+
+```json
+{
+  "to-run": ["node"]
+}
+```
+
+Example `tilt_config.json` to override the default with multiple services
+
+```json
+{
+  "to-run": ["frontend-node", "message-go", "name-py", "year-rb"]
+}
+```
 
 Once running, `curl localhost:7000/greeting` to get a greeting and a trace!
 
