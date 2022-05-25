@@ -1,7 +1,8 @@
 # prints show up in the Tiltfile log so you know what's been run
 print("hello my friends")
 
-# required resrouces: collector & redis
+# required resources: collector & redis
+
 docker_compose("./docker-compose.yml")
 
 # curl greeting service, language / ecosystem agnostic
