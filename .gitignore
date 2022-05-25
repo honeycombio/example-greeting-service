@@ -458,3 +458,6 @@ $RECYCLE.BIN/
 *.direnv/cache/
 .envrc
 .env
+
+# User specific Tilt config
+tilt_config.json
