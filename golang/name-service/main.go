@@ -6,14 +6,13 @@ import (
 	"io/ioutil"
 	"log"
 	"math/rand"
-	"net"
 	"net/http"
-	"net/url"
 	"os"
 	"strconv"
 	"time"
 
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+	"go.opentelemetry.io/contrib/propagators/b3"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
@@ -22,7 +21,6 @@ import (
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.7.0"
 	"go.opentelemetry.io/otel/trace"
-	"google.golang.org/grpc/credentials"
 )
 
 var (
@@ -30,38 +28,56 @@ var (
 	tracer         trace.Tracer
 )
 
-func getGrpcEndpoint() string {
-	apiEndpoint, exists := os.LookupEnv("HONEYCOMB_API_ENDPOINT")
-	if !exists {
-		apiEndpoint = "api.honeycomb.io:443"
-	} else {
-		u, err := url.Parse(apiEndpoint)
-		if err != nil {
-			panic(fmt.Errorf("error %s parsing url: %s", err, apiEndpoint))
-		}
-		var host, port string
-		if u.Port() != "" {
-			host, port, _ = net.SplitHostPort(u.Host)
-		} else {
-			host = u.Host
-			port = "443"
-		}
-		apiEndpoint = fmt.Sprintf("%s:%s", host, port)
-	}
-	return apiEndpoint
-}
+// func getGrpcEndpoint() string {
+// 	apiEndpoint, exists := os.LookupEnv("HONEYCOMB_API_ENDPOINT")
+// 	if !exists {
+// 		apiEndpoint = "api.honeycomb.io:443"
+// 	} else {
+// 		u, err := url.Parse(apiEndpoint)
+// 		if err != nil {
+// 			panic(fmt.Errorf("error %s parsing url: %s", err, apiEndpoint))
+// 		}
+// 		var host, port string
+// 		if u.Port() != "" {
+// 			host, port, _ = net.SplitHostPort(u.Host)
+// 		} else {
+// 			host = u.Host
+// 			port = "443"
+// 		}
+// 		apiEndpoint = fmt.Sprintf("%s:%s", host, port)
+// 	}
+// 	return apiEndpoint
+// }
 
+// func newExporter(ctx context.Context) (*otlptrace.Exporter, error) {
+// 	opts := []otlptracegrpc.Option{
+// 		otlptracegrpc.WithEndpoint(getGrpcEndpoint()),
+// 		otlptracegrpc.WithHeaders(map[string]string{
+// 			"x-honeycomb-team":    os.Getenv("HONEYCOMB_API_KEY"),
+// 			"x-honeycomb-dataset": os.Getenv("HONEYCOMB_DATASET"),
+// 		}),
+// 		otlptracegrpc.WithTLSCredentials(credentials.NewClientTLSFromCert(nil, "")),
+// 	}
+
+// 	client := otlptracegrpc.NewClient(opts...)
+// 	return otlptrace.New(ctx, client)
+// }
+
+// func newTraceProvider(exp *otlptrace.Exporter) *sdktrace.TracerProvider {
+// 	r, _ := resource.Merge(
+// 		resource.Default(),
+// 		resource.NewWithAttributes(
+// 			semconv.SchemaURL,
+// 			semconv.ServiceNameKey.String("name-go"),
+// 		))
+
+// 	return sdktrace.NewTracerProvider(
+// 		sdktrace.WithBatcher(exp),
+// 		sdktrace.WithResource(r),
+// 	)
+// }
 func newExporter(ctx context.Context) (*otlptrace.Exporter, error) {
-	opts := []otlptracegrpc.Option{
-		otlptracegrpc.WithEndpoint(getGrpcEndpoint()),
-		otlptracegrpc.WithHeaders(map[string]string{
-			"x-honeycomb-team":    os.Getenv("HONEYCOMB_API_KEY"),
-			"x-honeycomb-dataset": os.Getenv("HONEYCOMB_DATASET"),
-		}),
-		otlptracegrpc.WithTLSCredentials(credentials.NewClientTLSFromCert(nil, "")),
-	}
-
-	client := otlptracegrpc.NewClient(opts...)
+	client := otlptracegrpc.NewClient()
 	return otlptrace.New(ctx, client)
 }
 
@@ -72,13 +88,11 @@ func newTraceProvider(exp *otlptrace.Exporter) *sdktrace.TracerProvider {
 			semconv.SchemaURL,
 			semconv.ServiceNameKey.String("name-go"),
 		))
-
 	return sdktrace.NewTracerProvider(
 		sdktrace.WithBatcher(exp),
 		sdktrace.WithResource(r),
 	)
 }
-
 func main() {
 	ctx := context.Background()
 
@@ -92,7 +106,10 @@ func main() {
 
 	otel.SetTracerProvider(tp)
 	otel.SetTextMapPropagator(
-		propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}),
+		propagation.NewCompositeTextMapPropagator(
+			propagation.TraceContext{},
+			propagation.Baggage{},
+			b3.New()),
 	)
 
 	tracer = tp.Tracer("greeting-service/year-service")

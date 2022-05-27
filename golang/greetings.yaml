@@ -1,0 +1,282 @@
+##################################################################################################
+# frontend-go services
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-go
+  labels:
+    app: frontend-go
+    service: frontend-go
+spec:
+  ports:
+  - port: 7000
+    name: http
+  selector:
+    app: frontend-go
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: frontend-go
+  labels:
+    account: frontend-go
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-go
+  labels:
+    app: frontend-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend-go
+  template:
+    metadata:
+      labels:
+        app: frontend-go
+    spec:
+      serviceAccountName: frontend-go
+      containers:
+      - name: frontend-go
+        image: frontend-go:local
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 7000
+        env:
+          - name: OTEL_SERVICE_NAME
+            value: frontend-go
+          - name: HONEYCOMB_API_KEY
+            value: <API_KEY>
+          - name: HONEYCOMB_DATASET
+            value: greetings
+          - name: HONEYCOMB_API
+            value: http://otel-collector:4317
+          - name: HONEYCOMB_API_ENDPOINT
+            value: http://otel-collector:4317
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            value: http://otel-collector:4317
+          - name: OTEL_EXPORTER_OTLP_HEADERS
+            value: "x-honeycomb-team=<API_KEY>,x-honeycomb-dataset=greetings"
+          - name: MESSAGE_ENDPOINT
+            value: http://message-go:9000
+          - name: NAME_ENDPOINT
+            value: http://name-go:8000
+          - name: YEAR_ENDPOINT
+            value: http://year-go:6001
+---
+##################################################################################################
+# message-go services
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: message-go
+  labels:
+    app: message-go
+    service: message-go
+spec:
+  ports:
+  - port: 9000
+    name: http
+  selector:
+    app: message-go
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: message-go
+  labels:
+    account: message-go
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: message-go
+  labels:
+    app: message-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: message-go
+  template:
+    metadata:
+      labels:
+        app: message-go
+    spec:
+      serviceAccountName: message-go
+      containers:
+      - name: message-go
+        image: message-go:local
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 9000
+        env:
+          - name: OTEL_SERVICE_NAME
+            value: message-go
+          - name: SERVICE_NAME
+            value: message-go
+          - name: HONEYCOMB_API_KEY
+            value: <API_KEY>
+          - name: HONEYCOMB_DATASET
+            value: greetings
+          - name: HONEYCOMB_API
+            value: http://otel-collector:4317
+          - name: HONEYCOMB_API_ENDPOINT
+            value: http://otel-collector:4317
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            value: http://otel-collector:4317
+          - name: OTEL_EXPORTER_OTLP_HEADERS
+            value: "x-honeycomb-team=<API_KEY>,x-honeycomb-dataset=greetings"
+          - name: MESSAGE_ENDPOINT
+            value: http://message-go:9000
+          - name: NAME_ENDPOINT
+            value: http://name-go:8000
+          - name: YEAR_ENDPOINT
+            value: http://year-go:6001
+---
+##################################################################################################
+# name-go services
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: name-go
+  labels:
+    app: name-go
+    service: name-go
+spec:
+  ports:
+  - port: 8000
+    name: http
+  selector:
+    app: name-go
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: name-go
+  labels:
+    account: name-go
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: name-go
+  labels:
+    app: name-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: name-go
+  template:
+    metadata:
+      labels:
+        app: name-go
+    spec:
+      serviceAccountName: name-go
+      containers:
+      - name: name-go
+        image: name-go:local
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+        env:
+          - name: OTEL_SERVICE_NAME
+            value: name-go
+          - name: HONEYCOMB_API_KEY
+            value: <API_KEY>
+          - name: HONEYCOMB_DATASET
+            value: greetings
+          - name: HONEYCOMB_API
+            value: http://otel-collector:4317
+          - name: HONEYCOMB_API_ENDPOINT
+            value: http://otel-collector:4317
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            value: http://otel-collector:4317
+          - name: OTEL_EXPORTER_OTLP_HEADERS
+            value: "x-honeycomb-team=<API_KEY>,x-honeycomb-dataset=greetings"
+          - name: MESSAGE_ENDPOINT
+            value: http://message-go:9000
+          - name: NAME_ENDPOINT
+            value: http://name-go:8000
+          - name: YEAR_ENDPOINT
+            value: http://year-go:6001
+---
+##################################################################################################
+# year-go services
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: year-go
+  labels:
+    app: year-go
+    service: year-go
+spec:
+  ports:
+  - port: 6001
+    name: http
+  selector:
+    app: year-go
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: year-go
+  labels:
+    account: year-go
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: year-go
+  labels:
+    app: year-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: year-go
+  template:
+    metadata:
+      labels:
+        app: year-go
+    spec:
+      serviceAccountName: year-go
+      containers:
+      - name: year-go
+        image: year-go:local
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 6001
+        env:
+          - name: OTEL_SERVICE_NAME
+            value: year-go
+          - name: HONEYCOMB_API_KEY
+            value: <API_KEY>
+          - name: HONEYCOMB_DATASET
+            value: greetings
+          - name: HONEYCOMB_API
+            value: http://otel-collector:4317
+          - name: HONEYCOMB_API_ENDPOINT
+            value: http://otel-collector:4317
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            value: http://otel-collector:4317
+          - name: OTEL_EXPORTER_OTLP_HEADERS
+            value: "x-honeycomb-team=<API_KEY>,x-honeycomb-dataset=greetings"
+          - name: MESSAGE_ENDPOINT
+            value: http://message-go:9000
+          - name: NAME_ENDPOINT
+            value: http://name-go:8000
+          - name: YEAR_ENDPOINT
+            value: http://year-go:6001
+---
