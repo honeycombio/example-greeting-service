@@ -1,5 +1,5 @@
-apiVersion: telemetry.istio.io/v1alpha1
-kind: Telemetry
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
 metadata:
   name: mesh-default
   namespace: istio-system
@@ -8,6 +8,10 @@ spec:
     enableTracing: true
     defaultConfig:
       tracing:
+        custom_tags:
+          is_it_istio:
+            literal:
+              value: true
         zipkin:
           address: otel-collector.default:9411
         sampling: 100
