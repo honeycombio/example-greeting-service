@@ -11,7 +11,7 @@ spec:
         custom_tags:
           is_it_istio:
             literal:
-              value: true
+              value: yep
         zipkin:
           address: otel-collector.default:9411
         sampling: 100
