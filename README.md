@@ -75,6 +75,7 @@ List of supported languages
 - `java`
 - `dotnet`
 - `node`
+- `elixir`
 
 It's also possible to run a combination of services in different languages, for example the following command would run each specific service mentioned along with the required services (collector, redis, curl greeting)
 
