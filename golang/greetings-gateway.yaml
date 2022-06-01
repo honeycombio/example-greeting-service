@@ -1,0 +1,90 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: greetings-gateway
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: greetings-frontend
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - greetings-gateway
+  http:
+  - match:
+    - uri:
+        exact: /greeting
+    route:
+    - destination:
+        host: frontend-go
+        port:
+          number: 7000
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: greetings-message
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - greetings-gateway
+  http:
+  - match:
+    - uri:
+        exact: /message
+    route:
+    - destination:
+        host: message-go
+        port:
+          number: 9000
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: greetings-name
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - greetings-gateway
+  http:
+  - match:
+    - uri:
+        exact: /name
+    route:
+    - destination:
+        host: name-go
+        port:
+          number: 8000
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: greetings-year
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - greetings-gateway
+  http:
+  - match:
+    - uri:
+        exact: /year
+    route:
+    - destination:
+        host: year-go
+        port:
+          number: 6001

@@ -61,6 +61,10 @@ export SECURE_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressga
 export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
 ```
 
+### also add gateway
+
+`kubectl apply -f greetings-gateway.yaml`
+
 ### curl the greeting again
 
 `curl localhost/greeting`
