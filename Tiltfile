@@ -231,6 +231,41 @@ def launch_node_name_service(auto_init=True):
 def launch_node_year_service(auto_init=True):
   launch_node_svc("year-node", dirname="node/year-service", auto_init=auto_init)
 
+def launch_elixir_svc(name, dirname="", cmd="", auto_init=True):
+    '''
+    Starts a single Elixir service.
+
+    Parameters:
+    name: used to display the name of the process in the tilt tab
+    dirname: (optional) directory name in which to run the app defaults to 'name'
+    flags: (optional) any additional flags to add to the command line
+
+    '''
+    
+    # env = {'SERVICE_NAME': name}
+
+    setup_cmd = "cd {} && mix local.hex --force && mix local.rebar --force && mix deps.get && mix deps.compile".format(
+        dirname if dirname else name,
+    )
+    serve_cmd = "cd {} && mix {}".format(dirname, cmd)
+
+    if "elixir" in to_run or name in to_run:
+        print("About to start {} with command {}".format(name, serve_cmd))
+
+    local_resource(name, setup_cmd, auto_init=auto_init, serve_cmd=serve_cmd)
+
+def launch_elixir_frontend(auto_init=True):
+    launch_elixir_svc("frontend-elixir", dirname="elixir/frontend", cmd="phx.server", auto_init=auto_init)
+
+def launch_elixir_message_service(auto_init=True):
+    launch_elixir_svc("message-elixir", dirname="elixir/message", cmd="run --no-halt", auto_init=auto_init)
+
+def launch_elixir_name_service(auto_init=True):
+    launch_elixir_svc("name-elixir", dirname="elixir/name", cmd="run --no-halt", auto_init=auto_init)
+
+def launch_elixir_year_service(auto_init=True):
+    launch_elixir_svc("year-elixir", dirname="elixir/year", cmd="run --no-halt", auto_init=auto_init)
+
 
 # Launch all services so that all service resources are registered with Tilt
 launch_go_frontend()
@@ -239,6 +274,7 @@ launch_ruby_frontend()
 launch_java_frontend()
 launch_dotnet_frontend()
 launch_node_frontend()
+launch_elixir_frontend()
 
 launch_go_message_service()
 launch_python_message_service()
@@ -246,6 +282,7 @@ launch_ruby_message_service()
 launch_java_message_service()
 launch_dotnet_message_service()
 launch_node_message_service()
+launch_elixir_message_service()
 
 launch_go_name_service()
 launch_python_name_service()
@@ -253,6 +290,7 @@ launch_ruby_name_service()
 launch_java_name_service()
 launch_dotnet_name_service()
 launch_node_name_service()
+launch_elixir_name_service()
 
 launch_go_year_service()
 launch_python_year_service()
@@ -260,9 +298,10 @@ launch_ruby_year_service()
 launch_java_year_service()
 launch_dotnet_year_service()
 launch_node_year_service()
+launch_elixir_year_service()
 
 # Create map of "groups" of services to commonly run together (e.g. all node services)
-supported_languages = ["go", "py", "rb", "java", "dotnet", "node"]
+supported_languages = ["go", "py", "rb", "java", "dotnet", "node", "elixir"]
 language_specific_services = ["frontend", "message", "name", "year"]
 
 def append_lang(lang):

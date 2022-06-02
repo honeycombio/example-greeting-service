@@ -35,8 +35,7 @@ asdf install nodejs <insert-version-here>
 
 ### Option 3: All Node Services via Tilt
 
-- In Tiltfile, uncomment Node services (and comment out go services)
-- In top-level directory run `tilt up`
+In top-level directory run `tilt up node`
 
 ## See it in action
 

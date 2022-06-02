@@ -32,3 +32,6 @@ insert_final_newline = true
 
 [.envrc]
 end_of_line = lf
+
+[.tool-versions]
+end_of_line = lf
