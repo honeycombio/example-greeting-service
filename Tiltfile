@@ -233,12 +233,13 @@ def launch_node_year_service(auto_init=True):
 
 def launch_elixir_svc(name, dirname="", cmd="", auto_init=True):
     '''
-    Starts a single Node service.
+    Starts a single Elixir service.
 
     Parameters:
     name: used to display the name of the process in the tilt tab
-    dirname: (optional) directory name in which to run `npm start` defaults to 'name'
+    dirname: (optional) directory name in which to run the app defaults to 'name'
     flags: (optional) any additional flags to add to the command line
+
     '''
     
     # env = {'SERVICE_NAME': name}
