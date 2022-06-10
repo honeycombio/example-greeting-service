@@ -11,6 +11,7 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/contrib/propagators/b3"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	"go.opentelemetry.io/otel/sdk/resource"
@@ -24,55 +25,6 @@ var (
 	messageServiceUrl = os.Getenv("MESSAGE_ENDPOINT") + "/message"
 	tracer            trace.Tracer
 )
-
-// func getGrpcEndpoint() string {
-// 	apiEndpoint, exists := os.LookupEnv("HONEYCOMB_API_ENDPOINT")
-// 	if !exists {
-// 		apiEndpoint = "api.honeycomb.io:443"
-// 	} else {
-// 		u, err := url.Parse(apiEndpoint)
-// 		if err != nil {
-// 			panic(fmt.Errorf("error %s parsing url: %s", err, apiEndpoint))
-// 		}
-// 		var host, port string
-// 		if u.Port() != "" {
-// 			host, port, _ = net.SplitHostPort(u.Host)
-// 		} else {
-// 			host = u.Host
-// 			port = "443"
-// 		}
-// 		apiEndpoint = fmt.Sprintf("%s:%s", host, port)
-// 	}
-// 	return apiEndpoint
-// }
-
-// func newExporter(ctx context.Context) (*otlptrace.Exporter, error) {
-// 	opts := []otlptracegrpc.Option{
-// 		otlptracegrpc.WithEndpoint(getGrpcEndpoint()),
-// 		otlptracegrpc.WithHeaders(map[string]string{
-// 			"x-honeycomb-team":    os.Getenv("HONEYCOMB_API_KEY"),
-// 			"x-honeycomb-dataset": os.Getenv("HONEYCOMB_DATASET"),
-// 		}),
-// 		otlptracegrpc.WithTLSCredentials(credentials.NewClientTLSFromCert(nil, "")),
-// 	}
-
-// 	client := otlptracegrpc.NewClient(opts...)
-// 	return otlptrace.New(ctx, client)
-// }
-
-// func newTraceProvider(exp *otlptrace.Exporter) *sdktrace.TracerProvider {
-// 	r, _ := resource.Merge(
-// 		resource.Default(),
-// 		resource.NewWithAttributes(
-// 			semconv.SchemaURL,
-// 			semconv.ServiceNameKey.String("frontend-go"),
-// 		))
-
-// 	return sdktrace.NewTracerProvider(
-// 		sdktrace.WithBatcher(exp),
-// 		sdktrace.WithResource(r),
-// 	)
-// }
 
 func newExporter(ctx context.Context) (*otlptrace.Exporter, error) {
 	client := otlptracegrpc.NewClient()
@@ -105,23 +57,32 @@ func main() {
 	// Handle this error in a sensible manner where possible
 	defer func() { _ = tp.Shutdown(ctx) }()
 
-	// Set the Tracer Provider and the W3C Trace Context propagator as globals.
-	// Important, otherwise this won't let you see distributed traces be connected!
 	otel.SetTracerProvider(tp)
-	otel.SetTextMapPropagator(b3.New())
-	// otel.SetTextMapPropagator(
-	// 	propagation.NewCompositeTextMapPropagator(
-	// 		propagation.TraceContext{},
-	// 		propagation.Baggage{},
-	// 		b3.New()),
-	// )
+	// b3 := b3.New() // nope
+	// b3 := b3.New(b3.WithInjectEncoding(b3.B3MultipleHeader | b3.B3SingleHeader)) // nope
+
+	b3 := b3.New(b3.WithInjectEncoding(b3.B3MultipleHeader))
+	otel.SetTextMapPropagator(b3)
 
 	tracer = tp.Tracer("greeting-service/year-service")
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/greeting", func(w http.ResponseWriter, r *http.Request) {
-		name := getName(r.Context())
-		message := getMessage(r.Context())
+		// extract x-request-id from headers and propagate in request
+		myHeader := r.Header.Get("x-request-id")
+
+		_, newSpan := tracer.Start(r.Context(), "get ma headers")
+		newSpan.SetAttributes(attribute.String("x-request-id", r.Header.Get("x-request-id")))
+		newSpan.SetAttributes(attribute.String("x-b3-trace-id", r.Header.Get("x-b3-trace-id")))
+		newSpan.SetAttributes(attribute.String("x-b3-spanid", r.Header.Get("x-b3-spanid")))
+		newSpan.SetAttributes(attribute.String("x-b3-parentspanid", r.Header.Get("x-b3-parentspanid")))
+		newSpan.SetAttributes(attribute.String("x-b3-sampled", r.Header.Get("x-b3-sampled")))
+		newSpan.SetAttributes(attribute.String("x-b3-flags", r.Header.Get("x-b3-flags")))
+		newSpan.SetAttributes(attribute.String("x-ot-span-context", r.Header.Get("x-ot-span-context")))
+		defer newSpan.End()
+
+		name := getName(r.Context(), myHeader)
+		message := getMessage(r.Context(), myHeader)
 
 		_, _ = fmt.Fprintf(w, "Hello %s, %s", name, message)
 	})
@@ -132,22 +93,23 @@ func main() {
 	log.Fatal(http.ListenAndServe(":7000", wrappedHandler))
 }
 
-func getName(ctx context.Context) string {
+func getName(ctx context.Context, headerId string) string {
 	var getNameSpan trace.Span
 	ctx, getNameSpan = tracer.Start(ctx, "✨ call /name ✨")
 	defer getNameSpan.End()
-	return makeRequest(ctx, nameServiceUrl)
+	return makeRequest(ctx, nameServiceUrl, headerId)
 }
 
-func getMessage(ctx context.Context) string {
+func getMessage(ctx context.Context, headerId string) string {
 	var getMessageSpan trace.Span
 	ctx, getMessageSpan = tracer.Start(ctx, "✨ call /message ✨")
 	defer getMessageSpan.End()
-	return makeRequest(ctx, messageServiceUrl)
+	return makeRequest(ctx, messageServiceUrl, headerId)
 }
 
-func makeRequest(ctx context.Context, url string) string {
+func makeRequest(ctx context.Context, url, headerId string) string {
 	req, _ := http.NewRequestWithContext(ctx, "GET", url, nil)
+	req.Header.Add("x-request-id", headerId)
 	client := http.Client{Transport: otelhttp.NewTransport(http.DefaultTransport)}
 	res, err := client.Do(req)
 	if err != nil {

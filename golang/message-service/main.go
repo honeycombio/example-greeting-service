@@ -1,19 +1,5 @@
 package main
 
-// import (
-// 	"fmt"
-// 	"log"
-// 	"math/rand"
-// 	"net/http"
-// 	"os"
-// 	"time"
-
-// 	"github.com/honeycombio/beeline-go"
-// 	"github.com/honeycombio/beeline-go/propagation"
-// 	"github.com/honeycombio/beeline-go/wrappers/config"
-// 	"github.com/honeycombio/beeline-go/wrappers/hnynethttp"
-// )
-
 import (
 	"context"
 	"fmt"
@@ -24,6 +10,7 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/contrib/propagators/b3"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	"go.opentelemetry.io/otel/sdk/resource"
@@ -31,28 +18,6 @@ import (
 	semconv "go.opentelemetry.io/otel/semconv/v1.4.0"
 	"go.opentelemetry.io/otel/trace"
 )
-
-// func getHttpEndpoint() string {
-// 	apiEndpoint, exists := os.LookupEnv("HONEYCOMB_API_ENDPOINT")
-// 	if !exists {
-// 		apiEndpoint = "https://api.honeycomb.io"
-// 	}
-// 	return apiEndpoint
-// }
-
-// func traceParserHook(r *http.Request) *propagation.PropagationContext {
-// 	headers := map[string]string{
-// 		"traceparent": r.Header.Get("traceparent"),
-// 	}
-// 	ctx := r.Context()
-// 	// ctx, prop, err := propagation.UnmarshalW3CTraceContext(ctx, headers)
-// 	ctx, prop, err := propagation.UnmarshalB3TraceContext(ctx, headers)
-// 	if err != nil {
-// 		fmt.Println("Error unmarshaling header")
-// 		fmt.Println(err)
-// 	}
-// 	return prop
-// }
 
 var (
 	tracer trace.Tracer
@@ -85,6 +50,16 @@ func calculateMessage() string {
 }
 
 func messageHandler(w http.ResponseWriter, r *http.Request) {
+	_, newSpan := tracer.Start(r.Context(), "get ma headers")
+	newSpan.SetAttributes(attribute.String("x-request-id", r.Header.Get("x-request-id")))
+	newSpan.SetAttributes(attribute.String("x-b3-trace-id", r.Header.Get("x-b3-trace-id")))
+	newSpan.SetAttributes(attribute.String("x-b3-spanid", r.Header.Get("x-b3-spanid")))
+	newSpan.SetAttributes(attribute.String("x-b3-parentspanid", r.Header.Get("x-b3-parentspanid")))
+	newSpan.SetAttributes(attribute.String("x-b3-sampled", r.Header.Get("x-b3-sampled")))
+	newSpan.SetAttributes(attribute.String("x-b3-flags", r.Header.Get("x-b3-flags")))
+	newSpan.SetAttributes(attribute.String("x-ot-span-context", r.Header.Get("x-ot-span-context")))
+	defer newSpan.End()
+
 	ctx := r.Context()
 	message := func(ctx context.Context) string {
 		_, span := tracer.Start(ctx, "look up message")
@@ -97,13 +72,6 @@ func messageHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	// beeline.Init(beeline.Config{
-	// 	APIHost:     getHttpEndpoint(),
-	// 	WriteKey:    os.Getenv("HONEYCOMB_API_KEY"),
-	// 	Dataset:     os.Getenv("HONEYCOMB_DATASET"),
-	// 	ServiceName: "message-go",
-	// })
-	// defer beeline.Close()
 
 	ctx := context.Background()
 
@@ -117,16 +85,9 @@ func main() {
 	// Handle this error in a sensible manner where possible
 	defer func() { _ = tp.Shutdown(ctx) }()
 
-	// Set the Tracer Provider and the W3C Trace Context propagator as globals.
-	// Important, otherwise this won't let you see distributed traces be connected!
 	otel.SetTracerProvider(tp)
-	otel.SetTextMapPropagator(b3.New())
-	// otel.SetTextMapPropagator(
-	// 	propagation.NewCompositeTextMapPropagator(
-	// 		propagation.TraceContext{},
-	// 		propagation.Baggage{},
-	// 		b3.New()),
-	// )
+	b3 := b3.New(b3.WithInjectEncoding(b3.B3MultipleHeader))
+	otel.SetTextMapPropagator(b3)
 
 	tracer = tp.Tracer("greeting-service/message-service")
 
@@ -136,12 +97,5 @@ func main() {
 	wrappedHandler := otelhttp.NewHandler(mux, "message")
 
 	log.Println("Listening on http://localhost:9000/message")
-	// log.Fatal(
-	// 	http.ListenAndServe(
-	// 		":9000",
-	// 		hnynethttp.WrapHandlerWithConfig(
-	// 			mux,
-	// 			config.HTTPIncomingConfig{
-	// 				HTTPParserHook: traceParserHook})))
 	log.Fatal(http.ListenAndServe(":9000", wrappedHandler))
 }

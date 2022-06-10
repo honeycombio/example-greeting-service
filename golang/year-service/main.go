@@ -23,55 +23,6 @@ var (
 	tracer trace.Tracer
 )
 
-// func getGrpcEndpoint() string {
-// 	apiEndpoint, exists := os.LookupEnv("HONEYCOMB_API_ENDPOINT")
-// 	if !exists {
-// 		apiEndpoint = "api.honeycomb.io:443"
-// 	} else {
-// 		u, err := url.Parse(apiEndpoint)
-// 		if err != nil {
-// 			panic(fmt.Errorf("error %s parsing url: %s", err, apiEndpoint))
-// 		}
-// 		var host, port string
-// 		if u.Port() != "" {
-// 			host, port, _ = net.SplitHostPort(u.Host)
-// 		} else {
-// 			host = u.Host
-// 			port = "443"
-// 		}
-// 		apiEndpoint = fmt.Sprintf("%s:%s", host, port)
-// 	}
-// 	return apiEndpoint
-// }
-
-// func newExporter(ctx context.Context) (*otlptrace.Exporter, error) {
-// 	opts := []otlptracegrpc.Option{
-// 		otlptracegrpc.WithEndpoint(getGrpcEndpoint()),
-// 		otlptracegrpc.WithHeaders(map[string]string{
-// 			"x-honeycomb-team":    os.Getenv("HONEYCOMB_API_KEY"),
-// 			"x-honeycomb-dataset": os.Getenv("HONEYCOMB_DATASET"),
-// 		}),
-// 		otlptracegrpc.WithTLSCredentials(credentials.NewClientTLSFromCert(nil, "")),
-// 	}
-
-// 	client := otlptracegrpc.NewClient(opts...)
-// 	return otlptrace.New(ctx, client)
-// }
-
-// func newTraceProvider(exp *otlptrace.Exporter) *sdktrace.TracerProvider {
-// 	r, _ := resource.Merge(
-// 		resource.Default(),
-// 		resource.NewWithAttributes(
-// 			semconv.SchemaURL,
-// 			semconv.ServiceNameKey.String("year-go"),
-// 		))
-
-// 	return sdktrace.NewTracerProvider(
-// 		sdktrace.WithBatcher(exp),
-// 		sdktrace.WithResource(r),
-// 	)
-// }
-
 func newExporter(ctx context.Context) (*otlptrace.Exporter, error) {
 	client := otlptracegrpc.NewClient()
 	return otlptrace.New(ctx, client)
@@ -123,16 +74,9 @@ func main() {
 	// Handle this error in a sensible manner where possible
 	defer func() { _ = tp.Shutdown(ctx) }()
 
-	// Set the Tracer Provider and the W3C Trace Context propagator as globals.
-	// Important, otherwise this won't let you see distributed traces be connected!
 	otel.SetTracerProvider(tp)
-	otel.SetTextMapPropagator(b3.New())
-	// otel.SetTextMapPropagator(
-	// 	propagation.NewCompositeTextMapPropagator(
-	// 		propagation.TraceContext{},
-	// 		propagation.Baggage{},
-	// 		b3.New()),
-	// )
+	b3 := b3.New(b3.WithInjectEncoding(b3.B3MultipleHeader))
+	otel.SetTextMapPropagator(b3)
 
 	tracer = tp.Tracer("greeting-service/year-service")
 
