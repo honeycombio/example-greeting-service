@@ -7,7 +7,7 @@ module.exports = {
   },
   devtool: 'inline-source-map',
   devServer: {
-    static: './dist',
+    static: './bld',
   },
   mode: 'development',
   output: {
