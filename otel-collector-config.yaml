@@ -5,6 +5,10 @@ receivers:
         endpoint: 0.0.0.0:55680
       http:
         endpoint: 0.0.0.0:55681
+        # CORS for browser communication
+        cors:
+          allowed_origins: "http://localhost:8080"
+
 
 processors:
   batch:
@@ -26,4 +30,4 @@ service:
       receivers: [otlp]
       processors: [batch]
       exporters: [otlp/hny, logging]
-    #   exporters: [otlp/hny, logging, file]
+#   exporters: [otlp/hny, logging, file]
