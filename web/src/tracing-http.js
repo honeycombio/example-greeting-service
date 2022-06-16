@@ -11,7 +11,7 @@ import { FetchInstrumentation } from '@opentelemetry/instrumentation-fetch';
 
 const provider = new WebTracerProvider({
   resource: new Resource({
-    [SemanticResourceAttributes.SERVICE_NAME]: 'egs-browser',
+    [SemanticResourceAttributes.SERVICE_NAME]: 'browser',
   }),
 });
 
@@ -31,7 +31,12 @@ provider.register({
 });
 
 registerInstrumentations({
-  instrumentations: [new DocumentLoadInstrumentation(), new FetchInstrumentation()],
+  instrumentations: [
+    new DocumentLoadInstrumentation(),
+    new FetchInstrumentation({
+      propagateTraceHeaderCorsUrls: /http:\/\/localhost:7000\.*/,
+    }),
+  ],
 });
 
 export const tracer = trace.getTracer('example-tracer-browser');

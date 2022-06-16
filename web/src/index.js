@@ -13,13 +13,6 @@ window.onload = (event) => {
   documentLoadSpan.end(); //once page is loaded, end the span
 };
 
-const fetchGreeting = async () => {
-  const response = await fetch('http://localhost:7000/greeting');
-  const greeting = await response.text();
-  console.log(greeting);
-  return greeting;
-};
-
 const localGreeting = () => {
   // Get greeting
   const greetingSpan = tracer.startSpan('determineMessage', undefined, ctx);
@@ -42,19 +35,44 @@ const localGreeting = () => {
   return `Hello ${name}, ${greetingContent}`;
 };
 
-const main = async () => {
-  const response = await fetch('http://localhost:7000/greeting');
+const createButton = (text, onClick) => {
+  const button = document.createElement('button');
+  button.textContent = text;
+  button.onclick = onClick;
+  button.addEventListener('click', () => {
+    const buttonClickSpan = tracer.startSpan(text, { attributes: { button: text } }, ctx);
+    buttonClickSpan.end();
+  });
+  document.body.appendChild(button);
+};
+
+const getGreetingContent = async () => {
   let greetingContent;
-  if (response.ok) {
-    greetingContent = await response.text();
-  } else {
+
+  try {
+    const response = await fetch('http://localhost:7000/greeting');
+    if (response.ok) {
+      greetingContent = await response.text();
+    } else {
+      greetingContent = localGreeting();
+    }
+  } catch (error) {
     greetingContent = localGreeting();
   }
 
-  const greeting = document.createElement('h1');
+  const greeting =
+    document.getElementsByTagName('h1').length === 0
+      ? document.createElement('h1')
+      : document.getElementsByTagName('h1')[0];
   greeting.innerHTML = greetingContent;
 
-  document.body.appendChild(greeting);
+  if (document.getElementsByTagName('h1').length === 0) {
+    document.body.appendChild(greeting);
+  }
+};
+
+const main = async () => {
+  createButton('Refresh greeting', getGreetingContent);
 };
 
 main().then(() => {

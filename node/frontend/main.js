@@ -36,7 +36,9 @@ const corsOptions = {
   optionsSuccessStatus: 200
 };
 
-app.get('/greeting', cors(corsOptions), async (req, res) => {
+app.use(cors(corsOptions))
+
+app.get('/greeting', async (req, res) => {
   beeline.addContext({ name: 'Greetings' });
   const greetingSpan = beeline.startSpan({ name: 'Preparing Greeting' });
   beeline.addTraceContext({ name: 'Greetings' });
