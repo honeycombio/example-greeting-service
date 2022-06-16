@@ -15,6 +15,5 @@ const messages = [
 ];
 
 export function determineMessage() {
-  const message = messages[Math.floor(Math.random() * messages.length)];
   return messages[Math.floor(Math.random() * messages.length)];
 }
