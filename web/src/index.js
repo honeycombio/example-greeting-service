@@ -15,7 +15,15 @@ window.onload = (event) => {
   // ... attach timing information
   documentLoadSpan.end(); //once page is loaded, end the span
 };
-const main = () => {
+
+const fetchGreeting = async () => {
+    const response = await fetch('http://localhost:7000/greeting');
+    const greeting = await response.text();
+    console.log(greeting);
+    return greeting;
+};
+
+const localGreeting = () => {
   // Get greeting
   const greetingSpan = tracer.startSpan('determineMessage', undefined, ctx);
   const greetingContent = determineMessage();
@@ -34,12 +42,25 @@ const main = () => {
   nameSpan.setAttribute('chosenName', name);
   nameSpan.end();
 
-
-  const greeting = document.createElement('h1')
-  greeting.innerHTML = `Hello ${name}, ${greetingContent}`
-  
-  document.body.appendChild(greeting)
+    return `Hello ${name}, ${greetingContent}`;
 }
 
-main();
-parentSpan.end();
+const main = async () => {
+    const response = await fetch('http://localhost:7000/greeting');
+    let greetingContent;
+    if (response.ok) {
+        greetingContent = await response.text();
+    } else {
+        greetingContent = localGreeting();
+    }
+
+const greeting = document.createElement('h1')
+  greeting.innerHTML = greetingContent
+  
+  document.body.appendChild(greeting)
+
+}
+
+main().then(() => {
+    parentSpan.end();
+});

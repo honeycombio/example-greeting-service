@@ -11,7 +11,7 @@ const HOST = '0.0.0.0';
 // App
 const app = express();
 app.get('/year', async (req, res) => {
-  const greetingSp = opentelemetry.trace.getTracer('default').startSpan('Getting year');
+  const span = opentelemetry.trace.getTracer('default').startSpan('Getting year');
   const year = await determineYear(years);
   res.send(`${year}`);
   span.end();
