@@ -6,6 +6,9 @@ import { ZoneContextManager } from '@opentelemetry/context-zone';
 import { Resource } from '@opentelemetry/resources';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 
+import { registerInstrumentations } from '@opentelemetry/instrumentation';
+import { DocumentLoadInstrumentation } from '@opentelemetry/instrumentation-document-load';
+
 const provider = new WebTracerProvider({
   resource: new Resource({
     [SemanticResourceAttributes.SERVICE_NAME]: 'egs-browser',
@@ -23,12 +26,11 @@ provider.register({
   contextManager: new ZoneContextManager(),
 });
 
-const tracer = trace.getTracer();
-const root_span = tracer.startSpan('document_load');
-//start span when navigating to page
-root_span.setAttribute('pageUrlwindow', window.location.href);
-window.onload = (event) => {
-  // ... do loading things
-  // ... attach timing information
- root_span.end(); //once page is loaded, end the span
-};
+registerInstrumentations({
+    instrumentations: [
+        new DocumentLoadInstrumentation()
+    ]
+})
+
+export const tracer = trace.getTracer('example-tracer-browser');
+
