@@ -3,8 +3,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: {
-    "index": "./src/index.js",
-    "tracing-http": './src/tracing-http.js',
+    index: './src/index.js',
+    'tracing-http': './src/tracing-http.js',
   },
   devtool: 'inline-source-map',
   devServer: {
@@ -26,7 +26,7 @@ module.exports = {
   ],
   resolve: {
     fallback: {
-      path: require.resolve("path-browserify")
-    }
-  }
+      path: require.resolve('path-browserify'),
+    },
+  },
 };

@@ -19,19 +19,19 @@ const provider = new WebTracerProvider({
 // to your exporter. Using the SimpleSpanProcessor here as it sends the spans immediately to the
 // exporter without delay
 provider.addSpanProcessor(new SimpleSpanProcessor(new ConsoleSpanExporter()));
-provider.addSpanProcessor(new SimpleSpanProcessor(new OTLPTraceExporter({
-  url: "http://localhost:55681/v1/traces"
-})));
+provider.addSpanProcessor(
+  new SimpleSpanProcessor(
+    new OTLPTraceExporter({
+      url: 'http://localhost:55681/v1/traces',
+    })
+  )
+);
 provider.register({
   contextManager: new ZoneContextManager(),
 });
 
 registerInstrumentations({
-    instrumentations: [
-        new DocumentLoadInstrumentation(),
-        new FetchInstrumentation(),
-    ]
-})
+  instrumentations: [new DocumentLoadInstrumentation(), new FetchInstrumentation()],
+});
 
 export const tracer = trace.getTracer('example-tracer-browser');
-

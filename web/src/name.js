@@ -18,8 +18,7 @@ const getRandomNumber = (array) => {
 };
 
 export const determineName = (year) => {
-    console.log(typeof year);
-    const namesInYear = names.get(year);
-    return getRandomNumber(namesInYear);
-  };
-  
+  console.log(typeof year);
+  const namesInYear = names.get(year);
+  return getRandomNumber(namesInYear);
+};

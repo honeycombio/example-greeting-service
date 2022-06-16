@@ -1,5 +1,5 @@
 import { trace, context } from '@opentelemetry/api';
-import { tracer } from "./tracing-http";
+import { tracer } from './tracing-http';
 
 const messages = [
   'how are you?',
