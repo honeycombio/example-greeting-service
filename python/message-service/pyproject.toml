@@ -6,7 +6,7 @@ authors = ["Douglas Soo <doug@honeycomb.io>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-bottle = "^0.12.18"
+bottle = "^0.12.20"
 honeycomb-beeline = "^3.4.0"
 
 [tool.poetry.dev-dependencies]
