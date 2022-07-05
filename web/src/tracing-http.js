@@ -1,17 +1,14 @@
-import { trace } from '@opentelemetry/api';
 import { ConsoleSpanExporter, SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { WebTracerProvider } from '@opentelemetry/sdk-trace-web';
-import { ZoneContextManager } from '@opentelemetry/context-zone';
 import { Resource } from '@opentelemetry/resources';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
-import { DocumentLoadInstrumentation } from '@opentelemetry/instrumentation-document-load';
 import { FetchInstrumentation } from '@opentelemetry/instrumentation-fetch';
 
 const provider = new WebTracerProvider({
   resource: new Resource({
-    [SemanticResourceAttributes.SERVICE_NAME]: 'browser',
+    [SemanticResourceAttributes.SERVICE_NAME]: 'egs-browser',
   }),
 });
 
@@ -26,17 +23,11 @@ provider.addSpanProcessor(
     })
   )
 );
-provider.register({
-  contextManager: new ZoneContextManager(),
-});
 
 registerInstrumentations({
   instrumentations: [
-    new DocumentLoadInstrumentation(),
     new FetchInstrumentation({
       propagateTraceHeaderCorsUrls: /http:\/\/localhost:7000\.*/,
     }),
   ],
 });
-
-export const tracer = trace.getTracer('example-tracer-browser');
