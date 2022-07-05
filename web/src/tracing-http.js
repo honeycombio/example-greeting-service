@@ -1,6 +1,7 @@
 import { ConsoleSpanExporter, SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { WebTracerProvider } from '@opentelemetry/sdk-trace-web';
+import { ZoneContextManager } from '@opentelemetry/context-zone';
 import { Resource } from '@opentelemetry/resources';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
 import { registerInstrumentations } from '@opentelemetry/instrumentation';
@@ -24,10 +25,15 @@ provider.addSpanProcessor(
   )
 );
 
-registerInstrumentations({
-  instrumentations: [
-    new FetchInstrumentation({
-      propagateTraceHeaderCorsUrls: /http:\/\/localhost:7000\.*/,
-    }),
-  ],
+provider.register({
+  contextManager: new ZoneContextManager(),
 });
+
+// registerInstrumentations({
+//   instrumentations: [
+//     new FetchInstrumentation({
+//       propagateTraceHeaderCorsUrls: /http:\/\/localhost:7000\.*/,
+//     }),
+//   ],
+// });
+
