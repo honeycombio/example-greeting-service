@@ -16,9 +16,12 @@ const request = async (url, method = 'GET', headers, body) => {
           headers: { ...headers, traceparent },
           body,
         });
-
+        span.setAttributes({
+          'http.method': method,
+          'http.url': url,
+          'response.status_code': response.status,
+        });
         if (response.ok && response.status >= 200 && response.status < 400) {
-          console.log('ok');
           span.setStatus({ code: SpanStatusCode.OK });
           return response.text();
         } else {
