@@ -330,7 +330,7 @@ def append_lang(lang):
         lang_appended_list.append(service + "-" +lang)
     return lang_appended_list
 groups = { i: append_lang(i) for i in supported_languages }
-groups["web"] = ["vanillajs-web", "frontend-node", "message-node", "name-node", "year-node"]
+groups["web"] = ["vanillajs-web"]
 
 # Common resources we always want to run
 resources = ['collector', 'redis', 'curl greeting']

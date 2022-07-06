@@ -1,12 +1,11 @@
 # Browser greeting service
-A browser app that sends OTel traces to a collector that passes it through to Honeycomb. It's possible to run this with a backend to request greetings and trace HTTP requests through to the backend.
+
+A browser app that sends OTel traces to a collector that passes it through to Honeycomb. The browser app makes a request to `http://localhost:7000/greeting` to trace HTTP requests from the frontend through to the backend.
 
 ## Running the app
-```shell
-tilt up web
-```
 
-This will run the browser app that generates a greeting through JS code in the browser. To run the browser app so that it gets a greeting from a server run
+This will run the browser app that generates a greeting through JS code in the browser. To run the browser app so that it gets a greeting from a server run.
+
 ```shell
 tilt up web node
 ```

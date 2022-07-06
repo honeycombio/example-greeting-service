@@ -109,14 +109,11 @@ Once running, `curl localhost:7000/greeting` to get a greeting and a trace!
 ctrl+c to kill the session, and `tilt down` to spin down all services.
 
 ### Client apps
+
 To run the browser app inside of `/web` run
+
 ```shell
-tilt up web
+tilt up web node 
 ```
 
-This will run the browser app that generates a greeting through JS code in the browser. To run the browser app so that it gets a greeting from a server run
-```shell
-tilt up web node
-```
-
-It should be okay to run with other language backend services too, but they may not be configured with CORS to allow requests from localhost:8080, the node app definitely is so it's safest to use that one.
+This will start up the browser app as well as all node backend services. The browser app makes requests to `http://localhost:7000/greeting` so there has to be a set of backend services running. It could also be any one of our other supported languages (e.g. `py`, `go` etc.)
