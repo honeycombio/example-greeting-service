@@ -18,6 +18,7 @@ const request = async (url, method = 'GET', headers, body) => {
         });
 
         if (response.ok && response.status >= 200 && response.status < 400) {
+          console.log('ok');
           span.setStatus({ code: SpanStatusCode.OK });
           return response.text();
         } else {
@@ -25,6 +26,7 @@ const request = async (url, method = 'GET', headers, body) => {
         }
       } catch (error) {
         span.setStatus({ code: SpanStatusCode.ERROR, message: error.message });
+        throw new Error(error);
       } finally {
         span.end();
       }
@@ -47,20 +49,24 @@ const createButton = (text, onClick) => {
 };
 
 const updateGreetingContent = async () => {
+  const greeting =
+    document.getElementsByTagName('h1').length === 0
+      ? document.createElement('h1')
+      : document.getElementsByTagName('h1')[0];
   try {
     const greetingContent = await request('http://localhost:7000/greeting');
 
-    const greeting =
-      document.getElementsByTagName('h1').length === 0
-        ? document.createElement('h1')
-        : document.getElementsByTagName('h1')[0];
     greeting.innerHTML = greetingContent;
 
     if (document.getElementsByTagName('h1').length === 0) {
       document.body.appendChild(greeting);
     }
   } catch (error) {
-    console.log(error);
+    greeting.innerHTML = error.message;
+
+    if (document.getElementsByTagName('h1').length === 0) {
+      document.body.appendChild(greeting);
+    }
   }
 };
 
