@@ -4,6 +4,8 @@
   "description": "An example browser app that sends traces through Opentelemetry",
   "scripts": {
     "build": "webpack",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
     "start": "webpack serve --open",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -25,11 +27,13 @@
     "assert": "^2.0.0",
     "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",
+    "eslint": "^8.19.0",
     "events": "^3.3.0",
     "html-webpack-plugin": "^5.5.0",
     "os-browserify": "^0.3.0",
     "path-browserify": "^1.0.1",
     "prettier": "2.7.1",
+    "prettier-eslint": "^15.0.1",
     "process": "^0.11.10",
     "querystring-es3": "^0.2.1",
     "stream-browserify": "^3.0.0",
