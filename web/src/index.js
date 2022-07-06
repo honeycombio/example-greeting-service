@@ -1,5 +1,8 @@
 import { trace, SpanStatusCode } from '@opentelemetry/api';
 
+// General request handler, instrumented with OTel
+// Forwards traceparent header to connect spans created in the browser
+// with spans created on the backend
 const request = async (url, method = 'GET', headers, body) => {
   return trace
     .getTracer('request-tracer')
@@ -28,18 +31,22 @@ const request = async (url, method = 'GET', headers, body) => {
     });
 };
 
+// Generic button creator function, automatically instruments
+// onclick handler to link button clicks to whatever action is taken
 const createButton = (text, onClick) => {
   const button = document.createElement('button');
   button.textContent = text;
   button.onclick = () =>
-    trace.getTracer('button-onclick-tracer').startActiveSpan('Button onClick', (span) => {
-      onClick();
-      span.end();
-    });
+    trace
+      .getTracer('button-onclick-tracer')
+      .startActiveSpan(`Event: Button Click ${text}`, (span) => {
+        onClick();
+        span.end();
+      });
   document.body.appendChild(button);
 };
 
-const getGreetingContent = async () => {
+const updateGreetingContent = async () => {
   try {
     const greetingContent = await request('http://localhost:7000/greeting');
 
@@ -58,10 +65,12 @@ const getGreetingContent = async () => {
 };
 
 const main = async () => {
-  await getGreetingContent();
-  createButton('Refresh greeting', getGreetingContent);
+  await updateGreetingContent();
+  createButton('Refresh greeting', updateGreetingContent);
 };
 
+// onload kicks off the main function and instruments the page load
+// to link it to requests fired off as a result of the page load
 window.onload = (event) => {
   trace.getTracer('event-tracer').startActiveSpan(`Event: ${event.type}`, (span) => {
     span.setAttributes({
