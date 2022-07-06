@@ -1,20 +1,4 @@
-//TODOS
-// Manually instrument requests
-// parent span
-// request function
-// traceparent header
-// Connect page load with request
-
 import { trace, SpanStatusCode } from '@opentelemetry/api';
-
-window.onload = (event) => {
-  trace.getTracer('event-tracer').startActiveSpan(`Event: ${event.type}`, (span) => {
-    span.setAttributes({
-      duration_ms: event.timeStamp,
-    });
-    span.end();
-  });
-};
 
 const request = async (url, method = 'GET', headers, body) => {
   return trace
@@ -47,11 +31,11 @@ const request = async (url, method = 'GET', headers, body) => {
 const createButton = (text, onClick) => {
   const button = document.createElement('button');
   button.textContent = text;
-  button.onclick = onClick;
-  //   button.addEventListener('click', () => {
-  //     const buttonClickSpan = tracer.startSpan(text, { attributes: { button: text } }, ctx);
-  //     buttonClickSpan.end();
-  //   });
+  button.onclick = () =>
+    trace.getTracer('button-onclick-tracer').startActiveSpan('Button onClick', (span) => {
+      onClick();
+      span.end();
+    });
   document.body.appendChild(button);
 };
 
@@ -74,7 +58,16 @@ const getGreetingContent = async () => {
 };
 
 const main = async () => {
+  await getGreetingContent();
   createButton('Refresh greeting', getGreetingContent);
 };
 
-main().then(() => {});
+window.onload = (event) => {
+  trace.getTracer('event-tracer').startActiveSpan(`Event: ${event.type}`, (span) => {
+    span.setAttributes({
+      duration_ms: event.timeStamp,
+    });
+    main();
+    span.end();
+  });
+};
