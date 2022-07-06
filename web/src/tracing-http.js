@@ -4,8 +4,6 @@ import { WebTracerProvider } from '@opentelemetry/sdk-trace-web';
 import { ZoneContextManager } from '@opentelemetry/context-zone';
 import { Resource } from '@opentelemetry/resources';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
-// import { registerInstrumentations } from '@opentelemetry/instrumentation';
-// import { FetchInstrumentation } from '@opentelemetry/instrumentation-fetch';
 
 const provider = new WebTracerProvider({
   resource: new Resource({
@@ -31,11 +29,3 @@ provider.addSpanProcessor(
 provider.register({
   contextManager: new ZoneContextManager(),
 });
-
-// registerInstrumentations({
-//   instrumentations: [
-//     new FetchInstrumentation({
-//       propagateTraceHeaderCorsUrls: /http:\/\/localhost:7000\.*/,
-//     }),
-//   ],
-// });
