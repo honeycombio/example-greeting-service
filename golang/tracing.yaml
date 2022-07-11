@@ -9,9 +9,9 @@ spec:
     defaultConfig:
       tracing:
         custom_tags:
-          is_it_istio:
+          net.component:
             literal:
-              value: yep
+              value: proxy
         zipkin:
           address: otel-collector.default:9411
         sampling: 100
