@@ -14,6 +14,9 @@ beeline({
 
 const express = require('express');
 const fetch = require('node-fetch');
+const cors = require('cors');
+
+
 
 // Constants
 const PORT = 7000;
@@ -26,6 +29,15 @@ const messageUrl = `http://${MESSAGE_ENDPOINT}/message`;
 
 // App
 const app = express();
+
+// CORS for use with web frontend
+const corsOptions = {
+  origin: ['http://localhost:8080'],
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions))
+
 app.get('/greeting', async (req, res) => {
   beeline.addContext({ name: 'Greetings' });
   const greetingSpan = beeline.startSpan({ name: 'Preparing Greeting' });

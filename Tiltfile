@@ -266,8 +266,25 @@ def launch_elixir_name_service(auto_init=True):
 def launch_elixir_year_service(auto_init=True):
     launch_elixir_svc("year-elixir", dirname="elixir/year", cmd="run --no-halt", auto_init=auto_init)
 
+def launch_web_service(name, dirname="", flags="", auto_init=True):
+    cmd = "cd {} && npm install && npm start".format(
+        dirname if dirname else name,
+        flags if flags else ""
+    )
+
+    env = {'SERVICE_NAME': name}
+
+    if "web" in to_run or name in to_run:
+        print("About to start {} with command {}".format(name, cmd))
+
+    local_resource(name, "", auto_init=auto_init, serve_cmd=cmd, serve_env=env)
+
+def launch_web_vanillajs_service(auto_init=True):
+    launch_web_service("vanillajs-web", dirname="web", auto_init=auto_init)  
 
 # Launch all services so that all service resources are registered with Tilt
+
+# Server services
 launch_go_frontend()
 launch_python_frontend()
 launch_ruby_frontend()
@@ -300,6 +317,9 @@ launch_dotnet_year_service()
 launch_node_year_service()
 launch_elixir_year_service()
 
+# Client services
+launch_web_vanillajs_service()
+
 # Create map of "groups" of services to commonly run together (e.g. all node services)
 supported_languages = ["go", "py", "rb", "java", "dotnet", "node", "elixir"]
 language_specific_services = ["frontend", "message", "name", "year"]
@@ -310,6 +330,7 @@ def append_lang(lang):
         lang_appended_list.append(service + "-" +lang)
     return lang_appended_list
 groups = { i: append_lang(i) for i in supported_languages }
+groups["web"] = ["vanillajs-web"]
 
 # Common resources we always want to run
 resources = ['collector', 'redis', 'curl greeting']

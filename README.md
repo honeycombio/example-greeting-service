@@ -56,6 +56,7 @@ If using Classic Honeycomb, you'll also need a dataset and must include in the O
 
 ## Running
 
+### Server apps
 There is a `Tiltfile` to run these services on a local host using <https://tilt.dev/>.
 After installing Tilt, running `tilt up` should spin up all of the services.
 
@@ -106,3 +107,13 @@ Example `tilt_config.json` to override the default with multiple services
 Once running, `curl localhost:7000/greeting` to get a greeting and a trace!
 
 ctrl+c to kill the session, and `tilt down` to spin down all services.
+
+### Client apps
+
+To run the browser app inside of `/web` run
+
+```shell
+tilt up web node 
+```
+
+This will start up the browser app as well as all node backend services. The browser app makes requests to `http://localhost:7000/greeting` so there has to be a set of backend services running. It could also be any one of our other supported languages (e.g. `py`, `go` etc.)
