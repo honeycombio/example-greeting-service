@@ -64,7 +64,7 @@ def launch_python_svc(name, dirname, run_cmd, auto_init=True):
 
     Parameters:
     name: used to display the name of the process in the tilt tab
-    dirname: (optional) directory name in which to run `go run main.go` defaults to 'name'
+    dirname: (optional) directory name in which to run `python main.py` defaults to 'name'
     run_cmd: command required to run the service
     '''
 
