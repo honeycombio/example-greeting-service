@@ -53,7 +53,7 @@ The motivating use case is testing trace context header compatibility between Ho
   
 **Python**
 - [frontend](/python/frontend) using [beeline-python](https://github.com/honeycombio/beeline-python)
-- [message-service](/python/message-service) using [beeline-python](https://github.com/honeycombio/beeline-python)
+- [message-service](/python/message-service) using [opentelemetry-python](https://github.com/open-telemetry/opentelemetry-python)
 - [name-service](/python/name-service) using [opentelemetry-python](https://github.com/open-telemetry/opentelemetry-python)
 - [year-service](/python/year-service) using [beeline-python](https://github.com/honeycombio/beeline-python)
 
