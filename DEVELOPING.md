@@ -119,6 +119,8 @@ gem "honeycomb-beeline", path: "/home/paul/projects/beeline-ruby"
 
 ### python
 
+Prerequisite: `brew install poetry` if not already installed
+
 In Python, modify `pyproject.toml`:
 
 ```toml
