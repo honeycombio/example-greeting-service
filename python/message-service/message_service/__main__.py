@@ -33,6 +33,7 @@ RequestsInstrumentor().instrument()
 
 @app.route('/message')
 def message():
-    return random.choice(messages)
+    with tracer.start_as_current_span("🤖 choosing message✨"):
+        return random.choice(messages)
 
 run(app=app, host='0.0.0.0', port=9000)
