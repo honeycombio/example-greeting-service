@@ -17,4 +17,5 @@ In each service directory, run the Docker commands that build and start the serv
 ` docker build -t frontend .`
 ` docker run -dp 7000:7000 frontend`
 
-Or however it is you prefer to Docker. :)
+Or however it is you prefer to Docker. :) 
+TODO: run this in a way that the services are configured to export the traces
