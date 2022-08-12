@@ -53,7 +53,7 @@ The motivating use case is testing trace context header compatibility between Ho
   
 **Python**
 - [frontend](/python/frontend) using [beeline-python](https://github.com/honeycombio/beeline-python)
-- [message-service](/python/message-service) using [beeline-python](https://github.com/honeycombio/beeline-python)
+- [message-service](/python/message-service) using [opentelemetry-python](https://github.com/open-telemetry/opentelemetry-python)
 - [name-service](/python/name-service) using [opentelemetry-python](https://github.com/open-telemetry/opentelemetry-python)
 - [year-service](/python/year-service) using [beeline-python](https://github.com/honeycombio/beeline-python)
 
@@ -105,7 +105,9 @@ If using Classic Honeycomb, you'll also need a dataset and must include in the O
 There is a `Tiltfile` to run these services on a local host using <https://tilt.dev/>.
 After installing Tilt, running `tilt up` should spin up all of the services.
 
-The default setup runs the go services.
+This tiltfile utilizes [docker](https://docs.docker.com/desktop/install/mac-install/) and docker compose. You can verify they are installed first by checking `docker version` and `docker compose version` 
+
+The default tilt setup runs the go services.
 
 To run services in another supported language, add the language name after the tilt command:
 
