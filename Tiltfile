@@ -34,6 +34,8 @@ def launch_go_svc(name, dirname="", flags="", auto_init=True):
         flags if flags else ""
     )
     env = {
+        'SERVICE_NAME': name,
+        'OTEL_SERVICE_NAME': name,
         'NAME_ENDPOINT': 'http://localhost:8000',
         'YEAR_ENDPOINT': 'http://localhost:6001',
         'MESSAGE_ENDPOINT': 'http://localhost:9000',
