@@ -37,7 +37,7 @@ The motivating use case is testing trace context header compatibility between Ho
 - [frontend](/golang/frontend) using [opentelemetry-go](https://github.com/open-telemetry/opentelemetry-go)
 - [message-service](/golang/message-service) using [beeline-go](https://github.com/honeycombio/beeline-go)
 - [name-service](/golang/name-service) using [opentelemetry-go](https://github.com/open-telemetry/opentelemetry-go)
-- [year-service](/golang/year-service) using [opentelemetry-go](https://github.com/open-telemetry/opentelemetry-go)
+- [year-service](/golang/year-service) using [honeycomb-opentelemetry-go](https://github.com/honeycombio/honeycomb-opentelemetry-go)
 
 **Java**
 - [frontend](/java/frontend) using [opentelemetry-javaagent](https://github.com/open-telemetry/opentelemetry-java-instrumentation)
