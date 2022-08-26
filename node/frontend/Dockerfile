@@ -16,4 +16,4 @@ RUN npm install
 COPY . .
 
 EXPOSE 7000
-CMD [ "node", "main.js" ]
+CMD [ "node", "-r", "./tracing.js", "main.js" ]
