@@ -44,23 +44,14 @@ const tracer = opentelemetry.trace.getTracer(
 );
 
 app.get('/greeting', async (req, res) => {
-  // beeline.addContext({ name: 'Greetings' });
   const otelGreetingSpan = tracer.startSpan('✨ OTel Frontend ✨ Preparing Greeting ✨');
-  // const greetingSpan = beeline.startSpan({ name: 'Preparing Greeting' });
-  // beeline.addTraceContext({ name: 'Greetings' });
-  // beeline.finishSpan(greetingSpan);
   otelGreetingSpan.end()
   const otelNameSpan = tracer.startSpan('✨ OTel Frontend ✨ call /name ✨');
-
-  // const nameSpan = beeline.startSpan({ name: '✨ call /name ✨' });
   const name = await getName(nameUrl);
   otelNameSpan.end()
-  // beeline.finishSpan(nameSpan);
-  // const messageSpan = beeline.startSpan({ name: '✨ call /message ✨' });
   const otelMessageSpan = tracer.startSpan('✨ OTel Frontend ✨ call /message ✨');
   const message = await getMessage(messageUrl);
   otelMessageSpan.end()
-  // beeline.finishSpan(messageSpan);
   const otelResponseSpan = tracer.startSpan('✨ OTel Frontend ✨ post response ✨');
 
   res.send(`Hello ${name}, ${message}`);
@@ -74,7 +65,7 @@ const getName = (url) =>
     })
     .then((text) => {
       console.log(text);
-      beeline.addTraceContext({ user_name: text });
+      // beeline.addTraceContext({ user_name: text });
       return text;
     })
     .catch((err) => console.error(`Problem getting name: ${err}`));
@@ -86,7 +77,7 @@ const getMessage = (url) =>
     })
     .then((text) => {
       console.log(text);
-      beeline.addTraceContext({ user_message: text });
+      // beeline.addTraceContext({ user_message: text });
       return text;
     })
     .catch((err) => console.error(`Problem getting message: ${err}`));
