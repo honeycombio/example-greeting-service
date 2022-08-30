@@ -18,24 +18,11 @@ const metadata = new Metadata();
 metadata.set('x-honeycomb-team', HONEYCOMB_API_KEY);
 metadata.set('x-honeycomb-dataset', HONEYCOMB_DATASET);
 
-// registerInstrumentations({
-//     instrumentations: [],
-//   });
-
 const traceExporter = new OTLPTraceExporter({
   url: OTLP_ENDPOINT,
   credentials: credentials.createSsl(),
   metadata,
 });
-
-// const resource =
-//   Resource.default().merge(
-//     new Resource({
-//       [SemanticResourceAttributes.SERVICE_NAME]: SERVICE_NAME,
-//       [SemanticResourceAttributes.SERVICE_VERSION]: "0.1.0",
-//     })
-//   );
-
 
 const sdk = new NodeSDK({
   resource: new Resource({

@@ -1,23 +1,9 @@
 'use strict';
-const beeline = require('honeycomb-beeline');
 const opentelemetry = require('@opentelemetry/api');
-
-beeline({
-  // Get this via https://ui.honeycomb.io/account after signing up for Honeycomb
-  writeKey: process.env.HONEYCOMB_API_KEY,
-  // The name of your app is a good choice to start with
-  dataset: process.env.HONEYCOMB_DATASET,
-  serviceName: process.env.SERVICE_NAME || 'node-frontend-service',
-  apiHost: process.env.HONEYCOMB_API_ENDPOINT || 'https://api.honeycomb.io',
-  httpTraceParserHook: beeline.w3c.httpTraceParserHook,
-  httpTracePropagationHook: beeline.w3c.httpTracePropagationHook,
-});
 
 const express = require('express');
 const fetch = require('node-fetch');
 const cors = require('cors');
-
-
 
 // Constants
 const PORT = 7000;
@@ -44,18 +30,20 @@ const tracer = opentelemetry.trace.getTracer(
 );
 
 app.get('/greeting', async (req, res) => {
-  const otelGreetingSpan = tracer.startSpan('✨ OTel Frontend ✨ Preparing Greeting ✨');
-  otelGreetingSpan.end()
-  const otelNameSpan = tracer.startSpan('✨ OTel Frontend ✨ call /name ✨');
-  const name = await getName(nameUrl);
-  otelNameSpan.end()
-  const otelMessageSpan = tracer.startSpan('✨ OTel Frontend ✨ call /message ✨');
-  const message = await getMessage(messageUrl);
-  otelMessageSpan.end()
-  const otelResponseSpan = tracer.startSpan('✨ OTel Frontend ✨ post response ✨');
+  const greetingSpan = tracer.startSpan('✨ preparing greeting ✨');
+  greetingSpan.end()
 
+  const nameSpan = tracer.startSpan('✨ call /name ✨');
+  const name = await getName(nameUrl);
+  nameSpan.end()
+
+  const messageSpan = tracer.startSpan('✨ call /message ✨');
+  const message = await getMessage(messageUrl);
+  messageSpan.end()
+
+  const responseSpan = tracer.startSpan('✨ post response ✨');
   res.send(`Hello ${name}, ${message}`);
-  otelResponseSpan.end()
+  responseSpan.end()
 });
 
 const getName = (url) =>
