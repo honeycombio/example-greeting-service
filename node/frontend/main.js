@@ -30,11 +30,14 @@ const tracer = opentelemetry.trace.getTracer(
 );
 
 app.get('/greeting', async (req, res) => {
+  // beeline.addContext({ name: 'Greetings' });
   const greetingSpan = tracer.startSpan('✨ preparing greeting ✨');
+  // beeline.addTraceContext({ name: 'Greetings' });
   greetingSpan.end()
 
   const nameSpan = tracer.startSpan('✨ call /name ✨');
   const name = await getName(nameUrl);
+  nameSpan.setAttribute("user_name", name);
   nameSpan.end()
 
   const messageSpan = tracer.startSpan('✨ call /message ✨');
