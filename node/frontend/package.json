@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "dev": "nodemon main.js",
-    "start": "node main.js",
+    "start": "node -r ./tracing.js main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -14,6 +14,7 @@
     "@grpc/grpc-js": "^1.6.10",
     "@opentelemetry/api": "^1.1.0",
     "@opentelemetry/auto-instrumentations-node": "^0.31.2",
+    "@opentelemetry/context-async-hooks": "^1.6.0",
     "@opentelemetry/exporter-trace-otlp-grpc": "^0.32.0",
     "@opentelemetry/sdk-node": "^0.32.0",
     "cors": "^2.8.5",

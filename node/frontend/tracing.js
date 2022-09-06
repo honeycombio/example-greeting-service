@@ -2,11 +2,13 @@ const process = require('process');
 const { Metadata, credentials } = require('@grpc/grpc-js');
 
 const { NodeSDK } = require('@opentelemetry/sdk-node');
+// const { context } = require('@opentelemetry/api');
 // const { registerInstrumentations } = require("@opentelemetry/instrumentation");
 const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node');
 const { Resource } = require('@opentelemetry/resources');
 const { SemanticResourceAttributes } = require('@opentelemetry/semantic-conventions');
 const { OTLPTraceExporter } = require('@opentelemetry/exporter-trace-otlp-grpc');
+const { AsyncHooksContextManager } = require('@opentelemetry/context-async-hooks');
 
 // Honeycomb
 const HONEYCOMB_API_KEY = process.env.HONEYCOMB_API_KEY || '';
@@ -24,14 +26,22 @@ const traceExporter = new OTLPTraceExporter({
   metadata,
 });
 
+// // enable a context manager that deals in microtask queue contexts
+// const contextManager = new AsyncHooksContextManager() ;
+// contextManager.enable();
+// context.setGlobalContextManager(contextManager);
+
 const sdk = new NodeSDK({
   resource: new Resource({
     [SemanticResourceAttributes.SERVICE_NAME]: SERVICE_NAME,
     [SemanticResourceAttributes.SERVICE_VERSION]: "0.1.0",
   }),
   traceExporter,
-  instrumentations: [getNodeAutoInstrumentations()]
+  instrumentations: [getNodeAutoInstrumentations()],
+  // contextManager: new AsyncHooksContextManager()
 });
+
+
 
 sdk
   .start()

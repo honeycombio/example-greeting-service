@@ -61,6 +61,7 @@ const getName = (url) =>
       return text;
     })
     .catch((err) => console.error(`Problem getting name: ${err}`));
+    // Problem getting name: TypeError: Cannot read property 'setAttribute' of undefined
 
 const getMessage = (url) =>
   fetch(url)
