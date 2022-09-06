@@ -35,9 +35,14 @@ app.get('/greeting', async (req, res) => {
   // beeline.addTraceContext({ name: 'Greetings' });
   greetingSpan.end()
 
-  const nameSpan = tracer.startSpan('✨ call /name ✨');
+  const nameSpan = tracer.startSpan('✨ call /name ✨'); // try startActiveSpan 
   const name = await getName(nameUrl);
-  nameSpan.setAttribute("user_name", name);
+  // UnhandledPromiseRejectionWarning:
+  // nameSpan.setAttribute("app.user_name", text)
+ 
+  // with setACtive UnhandledPromiseRejectionWarning: TypeError: Cannot read property 'setAttribute' of undefined
+  nameSpan.setAttribute("app.user_name", name)
+  // with setActive TypeError: Cannot read property 'end' of undefined
   nameSpan.end()
 
   const messageSpan = tracer.startSpan('✨ call /message ✨');
@@ -56,7 +61,20 @@ const getName = (url) =>
     })
     .then((text) => {
       console.log(text);
+      //  of course: Problem getting name: ReferenceError: nameSpan is not defined
+      // nameSpan.addEvent({ add_user_name: text });
+
+      // opentelemetry.trace.getSpan(opentelemetry.context.active()).addEvent({ app.user_name: text });
+
+      // Question: how do I add attributes from this part of the execution to the nameSpan?
+      // recommended checking out Set Active Span on 36, but even with setActive, it becomes an attr on root span
+      const span = opentelemetry.trace.getSpan(opentelemetry.context.active())
+      span.setAttribute("user_name", text)
+     
       // beeline.addTraceContext({ user_name: text });
+
+      // for with SetActive, end span in context
+      // span.end()
       return text;
     })
     .catch((err) => console.error(`Problem getting name: ${err}`));
