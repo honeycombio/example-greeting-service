@@ -30,14 +30,11 @@ const tracer = opentelemetry.trace.getTracer(
 );
 
 app.get('/greeting', async (req, res) => {
-  // beeline.addContext({ name: 'Greetings' });
   const greetingSpan = tracer.startSpan('✨ preparing greeting ✨');
-  // beeline.addTraceContext({ name: 'Greetings' });
   greetingSpan.end()
 
   const nameSpan = tracer.startSpan('✨ call /name ✨');
   const name = await getName(nameUrl);
-  nameSpan.setAttribute("app.user_name", name)
   nameSpan.end()
 
   const messageSpan = tracer.startSpan('✨ call /message ✨');
@@ -56,12 +53,10 @@ const getName = (url) =>
     })
     .then((text) => {
       console.log(text);
-      const span = opentelemetry.trace.getSpan(opentelemetry.context.active())
-      span.setAttribute("user_name", text)
+      // TODO: add attribute to the nameSpan from this execution context
       return text;
     })
     .catch((err) => console.error(`Problem getting name: ${err}`));
-    // Problem getting name: TypeError: Cannot read property 'setAttribute' of undefined
 
 const getMessage = (url) =>
   fetch(url)
@@ -70,7 +65,7 @@ const getMessage = (url) =>
     })
     .then((text) => {
       console.log(text);
-      // beeline.addTraceContext({ user_message: text });
+      // TODO: add attribute to the messageSpan from this execution context
       return text;
     })
     .catch((err) => console.error(`Problem getting message: ${err}`));
