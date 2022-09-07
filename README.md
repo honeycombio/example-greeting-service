@@ -46,7 +46,7 @@ The motivating use case is testing trace context header compatibility between Ho
 - [year-service](/java/year-service) using [honeycomb-opentelemetry-skd](https://github.com/honeycombio/honeycomb-opentelemetry-java)
 
 **Node**
-- [frontend](/node/frontend) using [beeline-nodejs](https://github.com/honeycombio/beeline-nodejs)
+- [frontend](/node/frontend) using [opentelemetry-js](https://github.com/open-telemetry/opentelemetry-js)
 - [message-service](/node/message-service) using [beeline-nodejs](https://github.com/honeycombio/beeline-nodejs)
 - [name-service](/node/name-service) using [beeline-nodejs](https://github.com/honeycombio/beeline-nodejs)
 - [year-service](/node/year-service) using [opentelemetry-js](https://github.com/open-telemetry/opentelemetry-js)
