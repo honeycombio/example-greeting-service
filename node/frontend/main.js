@@ -35,6 +35,7 @@ app.get('/greeting', async (req, res) => {
 
   const nameSpan = tracer.startSpan('✨ call /name ✨');
   const name = await getName(nameUrl);
+  nameSpan.setAttribute("app.user_name", name);
   nameSpan.end()
 
   const messageSpan = tracer.startSpan('✨ call /message ✨');
@@ -53,7 +54,6 @@ const getName = (url) =>
     })
     .then((text) => {
       console.log(text);
-      // TODO: add attribute to the nameSpan from this execution context
       return text;
     })
     .catch((err) => console.error(`Problem getting name: ${err}`));
@@ -65,7 +65,6 @@ const getMessage = (url) =>
     })
     .then((text) => {
       console.log(text);
-      // TODO: add attribute to the messageSpan from this execution context
       return text;
     })
     .catch((err) => console.error(`Problem getting message: ${err}`));
