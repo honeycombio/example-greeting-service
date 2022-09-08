@@ -40,6 +40,7 @@ app.get('/greeting', async (req, res) => {
 
   const messageSpan = tracer.startSpan('✨ call /message ✨');
   const message = await getMessage(messageUrl);
+  messageSpan.setAttribute("app.user_message", message);
   messageSpan.end()
 
   const responseSpan = tracer.startSpan('✨ post response ✨');
