@@ -1,22 +1,9 @@
 'use strict';
-const beeline = require('honeycomb-beeline');
-
-beeline({
-  // Get this via https://ui.honeycomb.io/account after signing up for Honeycomb
-  writeKey: process.env.HONEYCOMB_API_KEY,
-  // The name of your app is a good choice to start with
-  dataset: process.env.HONEYCOMB_DATASET,
-  serviceName: process.env.SERVICE_NAME || 'node-frontend-service',
-  apiHost: process.env.HONEYCOMB_API_ENDPOINT || 'https://api.honeycomb.io',
-  httpTraceParserHook: beeline.w3c.httpTraceParserHook,
-  httpTracePropagationHook: beeline.w3c.httpTracePropagationHook,
-});
+const opentelemetry = require('@opentelemetry/api');
 
 const express = require('express');
 const fetch = require('node-fetch');
 const cors = require('cors');
-
-
 
 // Constants
 const PORT = 7000;
@@ -38,18 +25,27 @@ const corsOptions = {
 
 app.use(cors(corsOptions))
 
+const tracer = opentelemetry.trace.getTracer(
+  'default'
+);
+
 app.get('/greeting', async (req, res) => {
-  beeline.addContext({ name: 'Greetings' });
-  const greetingSpan = beeline.startSpan({ name: 'Preparing Greeting' });
-  beeline.addTraceContext({ name: 'Greetings' });
-  beeline.finishSpan(greetingSpan);
-  const nameSpan = beeline.startSpan({ name: '✨ call /name ✨' });
+  const greetingSpan = tracer.startSpan('✨ preparing greeting ✨');
+  greetingSpan.end()
+
+  const nameSpan = tracer.startSpan('✨ call /name ✨');
   const name = await getName(nameUrl);
-  beeline.finishSpan(nameSpan);
-  const messageSpan = beeline.startSpan({ name: '✨ call /message ✨' });
+  nameSpan.setAttribute("app.user_name", name);
+  nameSpan.end()
+
+  const messageSpan = tracer.startSpan('✨ call /message ✨');
   const message = await getMessage(messageUrl);
-  beeline.finishSpan(messageSpan);
+  messageSpan.setAttribute("app.user_message", message);
+  messageSpan.end()
+
+  const responseSpan = tracer.startSpan('✨ post response ✨');
   res.send(`Hello ${name}, ${message}`);
+  responseSpan.end()
 });
 
 const getName = (url) =>
@@ -59,7 +55,6 @@ const getName = (url) =>
     })
     .then((text) => {
       console.log(text);
-      beeline.addTraceContext({ user_name: text });
       return text;
     })
     .catch((err) => console.error(`Problem getting name: ${err}`));
@@ -71,7 +66,6 @@ const getMessage = (url) =>
     })
     .then((text) => {
       console.log(text);
-      beeline.addTraceContext({ user_message: text });
       return text;
     })
     .catch((err) => console.error(`Problem getting message: ${err}`));

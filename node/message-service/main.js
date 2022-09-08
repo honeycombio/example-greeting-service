@@ -24,6 +24,7 @@ app.get('/message', async (req, res) => {
   beeline.addContext({ name: 'Message' });
   const messageSpan = beeline.startSpan({ name: 'look up message' });
   const message = await determineMessage(messages);
+  beeline.addTraceContext({ user_message: message });
   beeline.finishSpan(messageSpan);
   res.send(`${message}`);
 });

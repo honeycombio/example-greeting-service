@@ -31,6 +31,7 @@ app.get('/name', async (req, res) => {
   beeline.finishSpan(yearSpan);
   const nameSpan = beeline.startSpan({ name: 'look up name based on year' });
   const name = determineName(year);
+  beeline.addTraceContext({ user_name: name });
   beeline.finishSpan(nameSpan);
   res.send(`${name}`);
 });
