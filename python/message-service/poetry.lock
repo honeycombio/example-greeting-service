@@ -15,10 +15,10 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [package.extras]
-tests_no_zope = ["cloudpickle", "pytest-mypy-plugins", "mypy", "six", "pytest (>=4.3.0)", "pympler", "hypothesis", "coverage[toml] (>=5.0.2)"]
-tests = ["cloudpickle", "zope.interface", "pytest-mypy-plugins", "mypy", "six", "pytest (>=4.3.0)", "pympler", "hypothesis", "coverage[toml] (>=5.0.2)"]
-docs = ["sphinx-notfound-page", "zope.interface", "sphinx", "furo"]
-dev = ["cloudpickle", "pre-commit", "sphinx-notfound-page", "sphinx", "furo", "zope.interface", "pytest-mypy-plugins", "mypy", "six", "pytest (>=4.3.0)", "pympler", "hypothesis", "coverage[toml] (>=5.0.2)"]
+dev = ["cloudpickle", "coverage[toml] (>=5.0.2)", "furo", "hypothesis", "mypy", "pre-commit", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins", "six", "sphinx", "sphinx-notfound-page", "zope.interface"]
+docs = ["furo", "sphinx", "sphinx-notfound-page", "zope.interface"]
+tests = ["cloudpickle", "coverage[toml] (>=5.0.2)", "hypothesis", "mypy", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins", "six", "zope.interface"]
+tests_no_zope = ["cloudpickle", "coverage[toml] (>=5.0.2)", "hypothesis", "mypy", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins", "six"]
 
 [[package]]
 name = "backoff"
@@ -75,7 +75,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 wrapt = ">=1.10,<2"
 
 [package.extras]
-dev = ["tox", "bump2version (<1)", "sphinx (<2)", "importlib-metadata (<3)", "importlib-resources (<4)", "configparser (<5)", "sphinxcontrib-websupport (<2)", "zipp (<2)", "PyTest (<5)", "PyTest-Cov (<2.6)", "pytest", "pytest-cov"]
+dev = ["PyTest", "PyTest (<5)", "PyTest-Cov", "PyTest-Cov (<2.6)", "bump2version (<1)", "configparser (<5)", "importlib-metadata (<3)", "importlib-resources (<4)", "sphinx (<2)", "sphinxcontrib-websupport (<2)", "tox", "zipp (<2)"]
 
 [[package]]
 name = "googleapis-common-protos"
@@ -131,22 +131,23 @@ python-versions = ">=3.6"
 
 [package.dependencies]
 Deprecated = ">=1.2.6"
+setuptools = ">=16.0"
 
 [[package]]
 name = "opentelemetry-exporter-otlp-proto-grpc"
-version = "1.12.0"
+version = "1.13.0"
 description = "OpenTelemetry Collector Protobuf over gRPC Exporter"
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [package.dependencies]
 backoff = {version = ">=1.10.0,<3.0.0", markers = "python_version >= \"3.7\""}
 googleapis-common-protos = ">=1.52,<2.0"
 grpcio = ">=1.0.0,<2.0.0"
-opentelemetry-api = ">=1.3,<2.0"
-opentelemetry-proto = "1.12.0"
-opentelemetry-sdk = ">=1.11,<2.0"
+opentelemetry-api = ">=1.12,<2.0"
+opentelemetry-proto = "1.13.0"
+opentelemetry-sdk = ">=1.12,<2.0"
 
 [package.extras]
 test = ["pytest-grpc"]
@@ -161,6 +162,7 @@ python-versions = ">=3.6"
 
 [package.dependencies]
 opentelemetry-api = ">=1.4,<2.0"
+setuptools = ">=16.0"
 wrapt = ">=1.0.0,<2.0.0"
 
 [[package]]
@@ -179,7 +181,7 @@ opentelemetry-util-http = "0.33b0"
 
 [package.extras]
 instruments = ["requests (>=2.0,<3.0)"]
-test = ["opentelemetry-test-utils (==0.33b0)", "httpretty (>=1.0,<2.0)", "requests (>=2.0,<3.0)"]
+test = ["httpretty (>=1.0,<2.0)", "opentelemetry-test-utils (==0.33b0)", "requests (>=2.0,<3.0)"]
 
 [[package]]
 name = "opentelemetry-instrumentation-wsgi"
@@ -200,11 +202,11 @@ test = ["opentelemetry-test-utils (==0.33b0)"]
 
 [[package]]
 name = "opentelemetry-proto"
-version = "1.12.0"
+version = "1.13.0"
 description = "OpenTelemetry Python Proto"
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [package.dependencies]
 protobuf = ">=3.13,<4.0"
@@ -220,6 +222,7 @@ python-versions = ">=3.6"
 [package.dependencies]
 opentelemetry-api = "1.12.0"
 opentelemetry-semantic-conventions = "0.33b0"
+setuptools = ">=16.0"
 typing-extensions = ">=3.7.4"
 
 [[package]]
@@ -258,7 +261,7 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [package.extras]
-dev = ["tox", "pre-commit"]
+dev = ["pre-commit", "tox"]
 
 [[package]]
 name = "protobuf"
@@ -324,8 +327,21 @@ idna = ">=2.5,<4"
 urllib3 = ">=1.21.1,<1.27"
 
 [package.extras]
-use_chardet_on_py3 = ["chardet (>=3.0.2,<6)"]
 socks = ["PySocks (>=1.5.6,!=1.5.7)"]
+use_chardet_on_py3 = ["chardet (>=3.0.2,<6)"]
+
+[[package]]
+name = "setuptools"
+version = "65.4.1"
+description = "Easily download, build, install, upgrade, and uninstall Python packages"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.extras]
+docs = ["furo", "jaraco.packaging (>=9)", "jaraco.tidelift (>=1.4)", "pygments-github-lexers (==0.0.5)", "rst.linker (>=1.9)", "sphinx (>=3.5)", "sphinx-favicon", "sphinx-hoverxref (<2)", "sphinx-inline-tabs", "sphinx-notfound-page (==0.8.3)", "sphinx-reredirects", "sphinxcontrib-towncrier"]
+testing = ["build[virtualenv]", "filelock (>=3.4.0)", "flake8 (<5)", "flake8-2020", "ini2toml[lite] (>=0.9)", "jaraco.envs (>=2.2)", "jaraco.path (>=3.2.0)", "mock", "pip (>=19.1)", "pip-run (>=8.8)", "pytest (>=6)", "pytest-black (>=0.3.7)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=1.3)", "pytest-flake8", "pytest-mypy (>=0.9.1)", "pytest-perf", "pytest-xdist", "tomli-w (>=1.0.0)", "virtualenv (>=13.0.0)", "wheel"]
+testing-integration = ["build[virtualenv]", "filelock (>=3.4.0)", "jaraco.envs (>=2.2)", "jaraco.path (>=3.2.0)", "pytest", "pytest-enabler", "pytest-xdist", "tomli", "virtualenv (>=13.0.0)", "wheel"]
 
 [[package]]
 name = "six"
@@ -352,9 +368,9 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*, <4"
 
 [package.extras]
+brotli = ["brotli (>=1.0.9)", "brotlicffi (>=0.8.0)", "brotlipy (>=0.6.0)"]
+secure = ["certifi", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "ipaddress", "pyOpenSSL (>=0.14)"]
 socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
-secure = ["ipaddress", "certifi", "idna (>=2.0.0)", "cryptography (>=1.3.4)", "pyOpenSSL (>=0.14)"]
-brotli = ["brotlipy (>=0.6.0)", "brotli (>=1.0.9)", "brotlicffi (>=0.8.0)"]
 
 [[package]]
 name = "wcwidth"
@@ -375,7 +391,7 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "f9eae8be1cebae367b78b77523d4903b2216d9c1c2112a56b8fbea90be2c3f33"
+content-hash = "5c870de26f0cfa5b3407ce27793cdd3c751684106d3373e7b607ccd342c5710f"
 
 [metadata.files]
 atomicwrites = [
@@ -475,8 +491,8 @@ opentelemetry-api = [
     {file = "opentelemetry_api-1.12.0-py3-none-any.whl", hash = "sha256:2e1cef8ce175be6464f240422babfe1dfb581daec96f0daad5d0d0e951b38f7b"},
 ]
 opentelemetry-exporter-otlp-proto-grpc = [
-    {file = "opentelemetry-exporter-otlp-proto-grpc-1.12.0.tar.gz", hash = "sha256:b69a5b080cabcb4e69e5fb27f697def3fb59685b11360fa2db01bea827b9cc97"},
-    {file = "opentelemetry_exporter_otlp_proto_grpc-1.12.0-py3-none-any.whl", hash = "sha256:4cb55908337ba2c05c1c74605d0eed2db7e122f0178b22afbe3b692ae5477985"},
+    {file = "opentelemetry_exporter_otlp_proto_grpc-1.13.0-py3-none-any.whl", hash = "sha256:75313f9924070c91be620f25775fb10ee4c409b99ce11dd89a029f353c3dc165"},
+    {file = "opentelemetry_exporter_otlp_proto_grpc-1.13.0.tar.gz", hash = "sha256:67460c2aa34e61f9c2ab4d8c6c28e3a7c917aeec3c585187c8c3fab980e33da0"},
 ]
 opentelemetry-instrumentation = [
     {file = "opentelemetry-instrumentation-0.33b0.tar.gz", hash = "sha256:763eb288b1c0fff9f6baa5494752cc9997f1f03ae3b03dd1fe0d667b1a04eecf"},
@@ -491,8 +507,8 @@ opentelemetry-instrumentation-wsgi = [
     {file = "opentelemetry_instrumentation_wsgi-0.33b0-py3-none-any.whl", hash = "sha256:baa6155d4c873af3c3e4880cf8a29d86fba29d2929b9315a6abfc00a6aee154a"},
 ]
 opentelemetry-proto = [
-    {file = "opentelemetry-proto-1.12.0.tar.gz", hash = "sha256:c7f3f2dab9060769ac3ca67b147a0433d7326d5622eed6ef8039afebd80591e3"},
-    {file = "opentelemetry_proto-1.12.0-py3-none-any.whl", hash = "sha256:24dbdd6408e31e43fd83afee3989a8f533e565979fafdf526d4cff22e1583d77"},
+    {file = "opentelemetry_proto-1.13.0-py3-none-any.whl", hash = "sha256:6df48b64e108018e42c48eb33fe37d9a8489598226043a6917dd936796becdaa"},
+    {file = "opentelemetry_proto-1.13.0.tar.gz", hash = "sha256:8f5e9cd4e930270822f3fe30d6d3420b2f843fc1d3fe789db622b88869bc8be1"},
 ]
 opentelemetry-sdk = [
     {file = "opentelemetry-sdk-1.12.0.tar.gz", hash = "sha256:bf37830ca4f93d0910cf109749237c5cb4465e31a54dfad8400011e9822a2a14"},
@@ -555,6 +571,10 @@ pytest = [
 requests = [
     {file = "requests-2.28.1-py3-none-any.whl", hash = "sha256:8fefa2a1a1365bf5520aac41836fbee479da67864514bdb821f31ce07ce65349"},
     {file = "requests-2.28.1.tar.gz", hash = "sha256:7c5599b102feddaa661c826c56ab4fee28bfd17f5abca1ebbe3e7f19d7c97983"},
+]
+setuptools = [
+    {file = "setuptools-65.4.1-py3-none-any.whl", hash = "sha256:1b6bdc6161661409c5f21508763dc63ab20a9ac2f8ba20029aaaa7fdb9118012"},
+    {file = "setuptools-65.4.1.tar.gz", hash = "sha256:3050e338e5871e70c72983072fe34f6032ae1cdeeeb67338199c2f74e083a80e"},
 ]
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
