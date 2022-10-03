@@ -212,3 +212,12 @@ updates:
         - "type: dependencies"
     reviewers:
         - "honeycombio/telemetry-team"
+# WEB
+  - package-ecosystem: "npm"
+    directory: "/web"
+    schedule:
+        interval: "monthly"
+    labels:
+        - "type: dependencies"
+    reviewers:
+        - "honeycombio/telemetry-team"
