@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Honeycomb.OpenTelemetry" Version="0.19.0-beta" />
+    <PackageReference Include="Honeycomb.OpenTelemetry" Version="1.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
