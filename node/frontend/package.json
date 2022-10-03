@@ -15,7 +15,7 @@
     "@opentelemetry/api": "^1.1.0",
     "@opentelemetry/auto-instrumentations-node": "^0.31.2",
     "@opentelemetry/exporter-trace-otlp-grpc": "^0.32.0",
-    "@opentelemetry/sdk-node": "^0.32.0",
+    "@opentelemetry/sdk-node": "^0.33.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "node-fetch": "^2.6.1"
