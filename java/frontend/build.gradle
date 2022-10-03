@@ -9,7 +9,7 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 ext {
-    otelVersion = '1.12.0'
+    otelVersion = '1.18.0'
     otelAgentVersion = '1.11.1'
 }
 
