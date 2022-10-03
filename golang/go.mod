@@ -4,8 +4,8 @@ go 1.18
 
 require (
 	github.com/honeycombio/beeline-go v1.8.0
-	github.com/honeycombio/honeycomb-opentelemetry-go v0.1.2
-	github.com/honeycombio/opentelemetry-go-contrib/launcher v0.0.0-20220811154106-5ed276335ffe
+	github.com/honeycombio/honeycomb-opentelemetry-go v0.2.0
+	github.com/honeycombio/opentelemetry-go-contrib/launcher v0.0.0-20220824095536-e0b3dd3fbfe7
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.32.0
 	go.opentelemetry.io/otel v1.9.0
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.9.0
