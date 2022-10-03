@@ -49,31 +49,7 @@ updates:
         - "honeycombio/telemetry-team"
 # GOLANG
   - package-ecosystem: "gomod"
-    directory: "/golang/frontend"
-    schedule:
-        interval: "monthly"
-    labels:
-        - "type: dependencies"
-    reviewers:
-        - "honeycombio/telemetry-team"
-  - package-ecosystem: "gomod"
-    directory: "/golang/message-service"
-    schedule:
-        interval: "monthly"
-    labels:
-        - "type: dependencies"
-    reviewers:
-        - "honeycombio/telemetry-team"
-  - package-ecosystem: "gomod"
-    directory: "/golang/name-service"
-    schedule:
-        interval: "monthly"
-    labels:
-        - "type: dependencies"
-    reviewers:
-        - "honeycombio/telemetry-team"
-  - package-ecosystem: "gomod"
-    directory: "/golang/year-service"
+    directory: "/golang"
     schedule:
         interval: "monthly"
     labels:
