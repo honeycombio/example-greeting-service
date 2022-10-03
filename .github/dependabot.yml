@@ -1,96 +1,199 @@
 # To get started with Dependabot version updates, you'll need to specify which
 # package ecosystems to update and where the package manifests are located.
 # Please see the documentation for all configuration options:
-# https://help.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+# https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
 
 version: 2
-defaults: &defaults
-  schedule:
-    interval: "monthly"
-  labels:
-    - "type: dependencies"
-  reviewers:
-    - "honeycombio/telemetry-team"
 updates:
 # DOTNET
   - package-ecosystem: "nuget"
     directory: "/dotnet"
-    <<: *defaults
+    schedule:
+        interval: "monthly"
+    labels:
+        - "type: dependencies"
+    reviewers:
+        - "honeycombio/telemetry-team"
 # ELIXIR
   - package-ecosystem: "mix"
     directory: "/elixir/frontend"
-    <<: *defaults
+    schedule:
+        interval: "monthly"
+    labels:
+        - "type: dependencies"
+    reviewers:
+        - "honeycombio/telemetry-team"
   - package-ecosystem: "mix"
     directory: "/elixir/message"
-    <<: *defaults
+    schedule:
+        interval: "monthly"
+    labels:
+        - "type: dependencies"
+    reviewers:
+        - "honeycombio/telemetry-team"
   - package-ecosystem: "mix"
     directory: "/elixir/name"
-    <<: *defaults
+    schedule:
+        interval: "monthly"
+    labels:
+        - "type: dependencies"
+    reviewers:
+        - "honeycombio/telemetry-team"
   - package-ecosystem: "mix"
     directory: "/elixir/year"
-    <<: *defaults
+    schedule:
+        interval: "monthly"
+    labels:
+        - "type: dependencies"
+    reviewers:
+        - "honeycombio/telemetry-team"
 # GOLANG
   - package-ecosystem: "gomod"
-    directory: "/golang/frontend"
-    <<: *defaults
-  - package-ecosystem: "gomod"
-    directory: "/golang/message-service"
-    <<: *defaults
-  - package-ecosystem: "gomod"
-    directory: "/golang/name-service"
-    <<: *defaults
-  - package-ecosystem: "gomod"
-    directory: "/golang/year-service"
-    <<: *defaults
+    directory: "/golang"
+    schedule:
+        interval: "monthly"
+    labels:
+        - "type: dependencies"
+    reviewers:
+        - "honeycombio/telemetry-team"
 # JAVA
   - package-ecosystem: "gradle"
     directory: "/java/frontend"
-    <<: *defaults
+    schedule:
+        interval: "monthly"
+    labels:
+        - "type: dependencies"
+    reviewers:
+        - "honeycombio/telemetry-team"
   - package-ecosystem: "gradle"
     directory: "/java/message-service"
-    <<: *defaults
+    schedule:
+        interval: "monthly"
+    labels:
+        - "type: dependencies"
+    reviewers:
+        - "honeycombio/telemetry-team"
   - package-ecosystem: "gradle"
     directory: "/java/name-service"
-    <<: *defaults
+    schedule:
+        interval: "monthly"
+    labels:
+        - "type: dependencies"
+    reviewers:
+        - "honeycombio/telemetry-team"
   - package-ecosystem: "gradle"
     directory: "/java/year-service"
-    <<: *defaults
+    schedule:
+        interval: "monthly"
+    labels:
+        - "type: dependencies"
+    reviewers:
+        - "honeycombio/telemetry-team"
 # NODE
   - package-ecosystem: "npm"
     directory: "/node/frontend"
-    <<: *defaults
+    schedule:
+        interval: "monthly"
+    labels:
+        - "type: dependencies"
+    reviewers:
+        - "honeycombio/telemetry-team"
   - package-ecosystem: "npm"
     directory: "/node/message-service"
-    <<: *defaults
+    schedule:
+        interval: "monthly"
+    labels:
+        - "type: dependencies"
+    reviewers:
+        - "honeycombio/telemetry-team"
   - package-ecosystem: "npm"
     directory: "/node/name-service"
-    <<: *defaults
+    schedule:
+        interval: "monthly"
+    labels:
+        - "type: dependencies"
+    reviewers:
+        - "honeycombio/telemetry-team"
   - package-ecosystem: "npm"
     directory: "/node/year-service"
-    <<: *defaults
+    schedule:
+        interval: "monthly"
+    labels:
+        - "type: dependencies"
+    reviewers:
+        - "honeycombio/telemetry-team"
 # PYTHON
   - package-ecosystem: "pip"
     directory: "/python/frontend"
-    <<: *defaults
+    schedule:
+        interval: "monthly"
+    labels:
+        - "type: dependencies"
+    reviewers:
+        - "honeycombio/telemetry-team"
   - package-ecosystem: "pip"
     directory: "/python/message-service"
-    <<: *defaults
+    schedule:
+        interval: "monthly"
+    labels:
+        - "type: dependencies"
+    reviewers:
+        - "honeycombio/telemetry-team"
   - package-ecosystem: "pip"
     directory: "/python/name-service"
-    <<: *defaults
+    schedule:
+        interval: "monthly"
+    labels:
+        - "type: dependencies"
+    reviewers:
+        - "honeycombio/telemetry-team"
   - package-ecosystem: "pip"
     directory: "/python/year-service"
-    <<: *defaults
+    schedule:
+        interval: "monthly"
+    labels:
+        - "type: dependencies"
+    reviewers:
+        - "honeycombio/telemetry-team"
 # RUBY
   - package-ecosystem: "bundler"
     directory: "/ruby/frontend"
-    <<: *defaults
+    schedule:
+        interval: "monthly"
+    labels:
+        - "type: dependencies"
+    reviewers:
+        - "honeycombio/telemetry-team"
   - package-ecosystem: "bundler"
     directory: "/ruby/message-service"
-    <<: *defaults
+    schedule:
+        interval: "monthly"
+    labels:
+        - "type: dependencies"
+    reviewers:
+        - "honeycombio/telemetry-team"
   - package-ecosystem: "bundler"
     directory: "/ruby/name-service"
-    <<: *defaults
+    schedule:
+        interval: "monthly"
+    labels:
+        - "type: dependencies"
+    reviewers:
+        - "honeycombio/telemetry-team"
   - package-ecosystem: "bundler"
     directory: "/ruby/year-service"
-    <<: *defaults
+    schedule:
+        interval: "monthly"
+    labels:
+        - "type: dependencies"
+    reviewers:
+        - "honeycombio/telemetry-team"
+# WEB
+  - package-ecosystem: "npm"
+    directory: "/web"
+    schedule:
+        interval: "monthly"
+    labels:
+        - "type: dependencies"
+    reviewers:
+        - "honeycombio/telemetry-team"
