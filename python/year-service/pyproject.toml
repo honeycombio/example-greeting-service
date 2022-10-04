@@ -6,7 +6,7 @@ authors = ["Douglas Soo <dsoo@alum.mit.edu>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-honeycomb-beeline = "^3.4.0"
+honeycomb-beeline = "^3.5.0"
 django = "^3.2"
 python-dotenv = "^0.14.0"
 
