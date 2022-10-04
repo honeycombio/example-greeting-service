@@ -30,7 +30,7 @@ python-versions = ">=3.7,<4.0"
 
 [[package]]
 name = "bottle"
-version = "0.12.20"
+version = "0.12.23"
 description = "Fast and simple WSGI-framework for small web-applications."
 category = "main"
 optional = false
@@ -391,7 +391,7 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "5c870de26f0cfa5b3407ce27793cdd3c751684106d3373e7b607ccd342c5710f"
+content-hash = "8487937d6a096d78ee584185763dd11293ed8f274f3656da5b524448c3e2ac30"
 
 [metadata.files]
 atomicwrites = [
@@ -407,8 +407,8 @@ backoff = [
     {file = "backoff-2.1.2.tar.gz", hash = "sha256:407f1bc0f22723648a8880821b935ce5df8475cf04f7b6b5017ae264d30f6069"},
 ]
 bottle = [
-    {file = "bottle-0.12.20-py3-none-any.whl", hash = "sha256:3c97e1e955c11e4ad2d73a60cdf83c4f4cf7b8b73c8344fc4b72f985432605cb"},
-    {file = "bottle-0.12.20.tar.gz", hash = "sha256:544023cd2cd6d382ebf9675fa0544d4d20e19d3a13b6932a812d099fb2f6cb84"},
+    {file = "bottle-0.12.23-py3-none-any.whl", hash = "sha256:9f1c363257c590bd34db5fad4693a7f06ff4217e9ad18337451de69c25137127"},
+    {file = "bottle-0.12.23.tar.gz", hash = "sha256:683de3aa399fb26e87b274dbcf70b1a651385d459131716387abdc3792e04167"},
 ]
 certifi = [
     {file = "certifi-2022.6.15-py3-none-any.whl", hash = "sha256:fe86415d55e84719d75f8b69414f6438ac3547d2078ab91b67e779ef69378412"},
