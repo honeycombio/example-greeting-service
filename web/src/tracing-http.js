@@ -4,6 +4,12 @@ import { WebTracerProvider } from '@opentelemetry/sdk-trace-web';
 import { ZoneContextManager } from '@opentelemetry/context-zone';
 import { Resource } from '@opentelemetry/resources';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
+import { registerInstrumentations } from '@opentelemetry/instrumentation';
+// import { DocumentLoadInstrumentation } from '@opentelemetry/instrumentation-document-load';
+// import { XMLHttpRequestInstrumentation } from '@opentelemetry/instrumentation-xml-http-request';
+// import { FetchInstrumentation } from '@opentelemetry/instrumentation-fetch';
+// import { UserInteractionInstrumentation } from '@opentelemetry/instrumentation-user-interaction';
+import { getWebAutoInstrumentations } from '@opentelemetry/auto-instrumentations-web';
 
 const provider = new WebTracerProvider({
   resource: new Resource({
@@ -28,4 +34,14 @@ provider.addSpanProcessor(
 
 provider.register({
   contextManager: new ZoneContextManager(),
+});
+
+registerInstrumentations({
+  instrumentations: [
+    getWebAutoInstrumentations(),
+    // new DocumentLoadInstrumentation(),
+    // new XMLHttpRequestInstrumentation(),
+    // new FetchInstrumentation(),
+    // new UserInteractionInstrumentation(),
+  ],
 });

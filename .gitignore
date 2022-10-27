@@ -461,3 +461,6 @@ $RECYCLE.BIN/
 
 # User specific Tilt config
 tilt_config.json
+
+dist
+stats.json
