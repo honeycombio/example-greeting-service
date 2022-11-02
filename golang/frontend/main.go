@@ -9,11 +9,10 @@ import (
 	"os"
 
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
-	"go.opentelemetry.io/contrib/propagators/b3"
 	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
+	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.7.0"
@@ -58,31 +57,17 @@ func main() {
 	defer func() { _ = tp.Shutdown(ctx) }()
 
 	otel.SetTracerProvider(tp)
-	// b3 := b3.New() // nope
-	// b3 := b3.New(b3.WithInjectEncoding(b3.B3MultipleHeader | b3.B3SingleHeader)) // nope
-
-	b3 := b3.New(b3.WithInjectEncoding(b3.B3MultipleHeader))
-	otel.SetTextMapPropagator(b3)
+	otel.SetTextMapPropagator(
+		propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}),
+	)
 
 	tracer = tp.Tracer("greeting-service/year-service")
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/greeting", func(w http.ResponseWriter, r *http.Request) {
-		// extract x-request-id from headers and propagate in request
-		myHeader := r.Header.Get("x-request-id")
 
-		_, newSpan := tracer.Start(r.Context(), "get ma headers")
-		newSpan.SetAttributes(attribute.String("x-request-id", r.Header.Get("x-request-id")))
-		newSpan.SetAttributes(attribute.String("x-b3-trace-id", r.Header.Get("x-b3-trace-id")))
-		newSpan.SetAttributes(attribute.String("x-b3-spanid", r.Header.Get("x-b3-spanid")))
-		newSpan.SetAttributes(attribute.String("x-b3-parentspanid", r.Header.Get("x-b3-parentspanid")))
-		newSpan.SetAttributes(attribute.String("x-b3-sampled", r.Header.Get("x-b3-sampled")))
-		newSpan.SetAttributes(attribute.String("x-b3-flags", r.Header.Get("x-b3-flags")))
-		newSpan.SetAttributes(attribute.String("x-ot-span-context", r.Header.Get("x-ot-span-context")))
-		defer newSpan.End()
-
-		name := getName(r.Context(), myHeader)
-		message := getMessage(r.Context(), myHeader)
+		name := getName(r.Context())
+		message := getMessage(r.Context())
 
 		_, _ = fmt.Fprintf(w, "Hello %s, %s", name, message)
 	})
@@ -93,23 +78,22 @@ func main() {
 	log.Fatal(http.ListenAndServe(":7000", wrappedHandler))
 }
 
-func getName(ctx context.Context, headerId string) string {
+func getName(ctx context.Context) string {
 	var getNameSpan trace.Span
 	ctx, getNameSpan = tracer.Start(ctx, "✨ call /name ✨")
 	defer getNameSpan.End()
-	return makeRequest(ctx, nameServiceUrl, headerId)
+	return makeRequest(ctx, nameServiceUrl)
 }
 
-func getMessage(ctx context.Context, headerId string) string {
+func getMessage(ctx context.Context) string {
 	var getMessageSpan trace.Span
 	ctx, getMessageSpan = tracer.Start(ctx, "✨ call /message ✨")
 	defer getMessageSpan.End()
-	return makeRequest(ctx, messageServiceUrl, headerId)
+	return makeRequest(ctx, messageServiceUrl)
 }
 
-func makeRequest(ctx context.Context, url, headerId string) string {
+func makeRequest(ctx context.Context, url string) string {
 	req, _ := http.NewRequestWithContext(ctx, "GET", url, nil)
-	req.Header.Add("x-request-id", headerId)
 	client := http.Client{Transport: otelhttp.NewTransport(http.DefaultTransport)}
 	res, err := client.Do(req)
 	if err != nil {

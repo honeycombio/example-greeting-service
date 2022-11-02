@@ -12,23 +12,11 @@ data:
         protocols:
           grpc:
           http:
-
-      zipkin: {}
-
-      jaeger:
-        protocols:
-          grpc:
-          thrift_binary:
-          thrift_compact:
-          thrift_http:
+      opencensus:
+        endpoint: 0.0.0.0:55678
 
     processors:
       batch:
-      attributes:
-        actions:
-          - key: "from.collector"
-            value: true
-            action: insert
 
     exporters:
       logging:
@@ -43,8 +31,8 @@ data:
     service:
       pipelines:
         traces:
-          receivers: [otlp, zipkin, jaeger]
-          processors: [batch, attributes]
+          receivers: [otlp,opencensus]
+          processors: [batch]
           exporters: [logging,otlphttp]
 ---
 apiVersion: apps/v1
@@ -104,6 +92,9 @@ spec:
             - name: zipkin
               containerPort: 9411
               protocol: TCP
+            - name: opencensus
+              containerPort: 55678
+              protocol: TCP
           resources:
             limits:
               cpu: "2"
@@ -154,6 +145,10 @@ spec:
   - name: zipkin
     port: 9411
     targetPort: zipkin
+    protocol: TCP
+  - name: opencensus
+    port: 55678
+    targetPort: opencensus
     protocol: TCP
   selector:
     app: otel-collector

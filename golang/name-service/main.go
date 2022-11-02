@@ -12,10 +12,10 @@ import (
 	"time"
 
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
-	"go.opentelemetry.io/contrib/propagators/b3"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
+	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.7.0"
@@ -56,8 +56,10 @@ func main() {
 	defer func() { _ = tp.Shutdown(ctx) }()
 
 	otel.SetTracerProvider(tp)
-	b3 := b3.New(b3.WithInjectEncoding(b3.B3MultipleHeader))
-	otel.SetTextMapPropagator(b3)
+
+	otel.SetTextMapPropagator(
+		propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}),
+	)
 
 	tracer = tp.Tracer("greeting-service/year-service")
 

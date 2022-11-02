@@ -8,7 +8,11 @@ spec:
     enableTracing: true
     defaultConfig:
       tracing:
-        zipkin:
-          address: otel-collector.default:9411
+        # zipkin for b3 propagation
+        # zipkin:
+        #   address: otel-collector.default:9411
+        # openCensusAgent for w3c propagation
+        openCensusAgent:
+            address: otel-collector.default:55678
         sampling: 100
 ---
