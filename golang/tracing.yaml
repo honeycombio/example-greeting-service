@@ -8,10 +8,6 @@ spec:
     enableTracing: true
     defaultConfig:
       tracing:
-        custom_tags:
-          net.component:
-            literal:
-              value: proxy
         zipkin:
           address: otel-collector.default:9411
         sampling: 100
