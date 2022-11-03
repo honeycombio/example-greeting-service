@@ -1,7 +1,5 @@
 # readme - go services with kubernetes and istio
 
-WIP
-
 note: dataset is only needed for classic but since it's still in some code, add it just in case wherever referenced
 
 ## setup
@@ -46,13 +44,21 @@ anywhere that says <API_KEY> should be replaced with actual api key
 
 ## setup istio service mesh and sidecars
 
-follow instructions to download istio <https://istio.io/latest/docs/setup/getting-started/#download>
+follow instructions to [download istio](https://istio.io/latest/docs/setup/getting-started/#download):
+
+```sh
+curl -L https://istio.io/downloadIstio | sh -
+cd istio-1.15.3
+export PATH=$PWD/bin:$PATH
+```
 
 install istio, enable tracing to send to collector: `istioctl install --set profile=demo -y -f ./tracing.yaml`
 
 auto inject sidecar proxies: `kubectl label namespace default istio-injection=enabled`
 
-kill pods to get sidecars enabled: `kubectl delete pod <pod-here>`
+get pods to kill for next step: `kubectl get pods`
+
+kill pods to get sidecars enabled: `kubectl delete pod <pod-here> <pod-here> <pod-here> <pod-here> <pod-here>`
 
 ```shell
 export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
@@ -76,6 +82,7 @@ export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -
 ``` shell
 kubectl delete -f otel-collector.yaml
 kubectl delete -f greetings.yaml
+kubectl delete -f greetings-gateway.yaml
 istioctl manifest generate --set profile=demo | kubectl delete --ignore-not-found=true -f -
 istioctl tag remove default
 kubectl delete namespace istio-system
