@@ -5,12 +5,14 @@
   "main": "main.js",
   "scripts": {
     "dev": "nodemon main.js",
-    "start": "node main.js",
+    "start": "node -r ./tracing.js main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@honeycombio/opentelemetry-node": "^0.1.0-beta",
+    "@opentelemetry/auto-instrumentations-node": "^0.34.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "node-fetch": "^2.6.1"
