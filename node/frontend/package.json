@@ -11,7 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@honeycombio/opentelemetry-node": "^0.1.1-beta",
+    "@honeycombio/opentelemetry-node": "^0.1.2-beta",
+
     "@opentelemetry/auto-instrumentations-node": "^0.34.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
