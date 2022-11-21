@@ -1,4 +1,5 @@
 'use strict';
+const opentelemetry = require('@opentelemetry/api');
 
 const express = require('express');
 const fetch = require('node-fetch');
@@ -24,10 +25,27 @@ const corsOptions = {
 
 app.use(cors(corsOptions))
 
+const tracer = opentelemetry.trace.getTracer(
+  'default'
+);
+
 app.get('/greeting', async (req, res) => {
+  const greetingSpan = tracer.startSpan('✨ preparing greeting ✨');
+  greetingSpan.end()
+
+  const nameSpan = tracer.startSpan('✨ call /name ✨');
   const name = await getName(nameUrl);
+  nameSpan.setAttribute("app.user_name", name);
+  nameSpan.end()
+
+  const messageSpan = tracer.startSpan('✨ call /message ✨');
   const message = await getMessage(messageUrl);
+  messageSpan.setAttribute("app.user_message", message);
+  messageSpan.end()
+
+  const responseSpan = tracer.startSpan('✨ post response ✨');
   res.send(`Hello ${name}, ${message}`);
+  responseSpan.end()
 });
 
 const getName = (url) =>
