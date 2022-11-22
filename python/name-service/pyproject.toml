@@ -7,7 +7,7 @@ authors = ["Douglas Soo <dsoo@alum.mit.edu>"]
 [tool.poetry.dependencies]
 python = "^3.8"
 flask = "^1.1.2"
-python-dotenv = "^0.14.0"
+python-dotenv = "^0.21.0"
 requests = "^2.24.0"
 opentelemetry-api = "^1.11.1"
 opentelemetry-sdk = "^1.11.1"
