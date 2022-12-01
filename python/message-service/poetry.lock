@@ -18,7 +18,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 dev = ["cloudpickle", "coverage[toml] (>=5.0.2)", "furo", "hypothesis", "mypy", "pre-commit", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins", "six", "sphinx", "sphinx-notfound-page", "zope.interface"]
 docs = ["furo", "sphinx", "sphinx-notfound-page", "zope.interface"]
 tests = ["cloudpickle", "coverage[toml] (>=5.0.2)", "hypothesis", "mypy", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins", "six", "zope.interface"]
-tests_no_zope = ["cloudpickle", "coverage[toml] (>=5.0.2)", "hypothesis", "mypy", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins", "six"]
+tests-no-zope = ["cloudpickle", "coverage[toml] (>=5.0.2)", "hypothesis", "mypy", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins", "six"]
 
 [[package]]
 name = "backoff"
@@ -53,7 +53,7 @@ optional = false
 python-versions = ">=3.6.0"
 
 [package.extras]
-unicode_backport = ["unicodedata2"]
+unicode-backport = ["unicodedata2"]
 
 [[package]]
 name = "colorama"
@@ -135,7 +135,7 @@ setuptools = ">=16.0"
 
 [[package]]
 name = "opentelemetry-exporter-otlp-proto-grpc"
-version = "1.13.0"
+version = "1.14.0"
 description = "OpenTelemetry Collector Protobuf over gRPC Exporter"
 category = "main"
 optional = false
@@ -146,7 +146,7 @@ backoff = {version = ">=1.10.0,<3.0.0", markers = "python_version >= \"3.7\""}
 googleapis-common-protos = ">=1.52,<2.0"
 grpcio = ">=1.0.0,<2.0.0"
 opentelemetry-api = ">=1.12,<2.0"
-opentelemetry-proto = "1.13.0"
+opentelemetry-proto = "1.14.0"
 opentelemetry-sdk = ">=1.12,<2.0"
 
 [package.extras]
@@ -202,7 +202,7 @@ test = ["opentelemetry-test-utils (==0.33b0)"]
 
 [[package]]
 name = "opentelemetry-proto"
-version = "1.13.0"
+version = "1.14.0"
 description = "OpenTelemetry Python Proto"
 category = "main"
 optional = false
@@ -328,7 +328,7 @@ urllib3 = ">=1.21.1,<1.27"
 
 [package.extras]
 socks = ["PySocks (>=1.5.6,!=1.5.7)"]
-use_chardet_on_py3 = ["chardet (>=3.0.2,<6)"]
+use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
 name = "setuptools"
@@ -391,7 +391,7 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "5c870de26f0cfa5b3407ce27793cdd3c751684106d3373e7b607ccd342c5710f"
+content-hash = "89af23024af60a098a3c2782da66a15d6630e378ecfdd9e4b6bba1aa7caaa62d"
 
 [metadata.files]
 atomicwrites = [
@@ -491,8 +491,8 @@ opentelemetry-api = [
     {file = "opentelemetry_api-1.12.0-py3-none-any.whl", hash = "sha256:2e1cef8ce175be6464f240422babfe1dfb581daec96f0daad5d0d0e951b38f7b"},
 ]
 opentelemetry-exporter-otlp-proto-grpc = [
-    {file = "opentelemetry_exporter_otlp_proto_grpc-1.13.0-py3-none-any.whl", hash = "sha256:75313f9924070c91be620f25775fb10ee4c409b99ce11dd89a029f353c3dc165"},
-    {file = "opentelemetry_exporter_otlp_proto_grpc-1.13.0.tar.gz", hash = "sha256:67460c2aa34e61f9c2ab4d8c6c28e3a7c917aeec3c585187c8c3fab980e33da0"},
+    {file = "opentelemetry_exporter_otlp_proto_grpc-1.14.0-py3-none-any.whl", hash = "sha256:cf8f59c3d243f6937c9d5101ed538bdac619d76fc7d4f4919896c3816b30fc88"},
+    {file = "opentelemetry_exporter_otlp_proto_grpc-1.14.0.tar.gz", hash = "sha256:00b8317d872d02b4b1ff45f22888cdbe91d532786d086e191baf185afc4c1ae0"},
 ]
 opentelemetry-instrumentation = [
     {file = "opentelemetry-instrumentation-0.33b0.tar.gz", hash = "sha256:763eb288b1c0fff9f6baa5494752cc9997f1f03ae3b03dd1fe0d667b1a04eecf"},
@@ -507,8 +507,8 @@ opentelemetry-instrumentation-wsgi = [
     {file = "opentelemetry_instrumentation_wsgi-0.33b0-py3-none-any.whl", hash = "sha256:baa6155d4c873af3c3e4880cf8a29d86fba29d2929b9315a6abfc00a6aee154a"},
 ]
 opentelemetry-proto = [
-    {file = "opentelemetry_proto-1.13.0-py3-none-any.whl", hash = "sha256:6df48b64e108018e42c48eb33fe37d9a8489598226043a6917dd936796becdaa"},
-    {file = "opentelemetry_proto-1.13.0.tar.gz", hash = "sha256:8f5e9cd4e930270822f3fe30d6d3420b2f843fc1d3fe789db622b88869bc8be1"},
+    {file = "opentelemetry_proto-1.14.0-py3-none-any.whl", hash = "sha256:8f2c4f39ce625fd349af572bbf7a8f801b4ea0a55a8ba3a32b76d912489b9f27"},
+    {file = "opentelemetry_proto-1.14.0.tar.gz", hash = "sha256:1e3b379fef66e3ed46d5d67f0b61cca9db789e69d3a434fdf62d65fed4e091d5"},
 ]
 opentelemetry-sdk = [
     {file = "opentelemetry-sdk-1.12.0.tar.gz", hash = "sha256:bf37830ca4f93d0910cf109749237c5cb4465e31a54dfad8400011e9822a2a14"},
