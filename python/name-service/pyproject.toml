@@ -17,5 +17,5 @@ opentelemetry-instrumentation-requests = "^0.30b0"
 MarkupSafe = "2.0.1"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
+pytest = "^7.2"
 autopep8 = "^1.5.4"
