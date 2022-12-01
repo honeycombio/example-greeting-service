@@ -11,5 +11,5 @@ django = "^3.2"
 python-dotenv = "^0.14.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
+pytest = "^7.2"
 autopep8 = "^1.7.0"
