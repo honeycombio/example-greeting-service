@@ -9,7 +9,7 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 ext {
-    distroVersion = '0.10.0'
+    distroVersion = '1.4.0'
 }
 
 configurations {
