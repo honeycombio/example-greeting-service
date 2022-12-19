@@ -1,7 +1,6 @@
 package io.honeycomb.examples.name;
 
 import java.io.IOException;
-import java.net.ConnectException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
