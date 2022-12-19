@@ -14,6 +14,14 @@ docker_compose("./docker-compose.yml", project_name="root")
 dc_resource("collector", labels="core", auto_init=True)
 dc_resource("redis", labels="core", auto_init=True)
 
+# seed redis with greeting messages
+local_resource(
+  'load messages into redis',
+  cmd='docker-compose exec  -T redis redis-cli -n 0 SADD messages "how are you?" "how are you doing?" "what\'s good?" "what\'s up?" "how do you do?" "sup?" "good day to you" "how are things?" "howzit?" "woohoo"',
+  resource_deps=['redis'],
+  labels="core"
+)
+
 # curl greeting service, language / ecosystem agnostic
 local_resource(
   'curl greeting',
@@ -22,17 +30,12 @@ local_resource(
   trigger_mode=TRIGGER_MODE_MANUAL,
   auto_init=False)
 
-local_resource(
-  'load messages into redis',
-  cmd='docker-compose exec  -T redis redis-cli -n 0 SADD messages "how are you?" "how are you doing?" "what\'s good?" "what\'s up?" "how do you do?" "sup?" "good day to you" "how are things?" "howzit?" "woohoo"',
-  resource_deps=['redis'])
-
 # Dotnet services
 docker_compose(["./dotnet/docker-compose.yml"])
-# dc_resource("frontend-dotnet", labels="dotnet")
-# dc_resource("message-dotnet", labels="dotnet")
-# dc_resource("name-dotnet", labels="dotnet")
-# dc_resource("year-dotnet", labels="dotnet")
+dc_resource("frontend-dotnet", labels="dotnet")
+dc_resource("message-dotnet", labels="dotnet")
+dc_resource("name-dotnet", labels="dotnet")
+dc_resource("year-dotnet", labels="dotnet")
 
 def launch_go_svc(name, dirname="", flags="", auto_init=True):
     '''
