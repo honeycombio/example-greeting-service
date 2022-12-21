@@ -1,4 +1,4 @@
-version: "2.4"
+version: "3.5"
 
 services:
   collector:
@@ -12,7 +12,19 @@ services:
     ports:
       - "127.0.0.1:55680:55680"
       - "127.0.0.1:55681:55681"
+    networks:
+      - egs
   redis:
     image: redis:latest
     ports:
       - "127.0.0.1:6379:6379"
+    networks:
+      - egs
+  load-redis:
+    image: redis:latest
+    command: redis-cli -h redis -p 6379 SADD messages "how are you?" "how are you doing?" "what\'s good?" "what\'s up?" "how do you do?" "sup?" "good day to you" "how are things?" "howzit?" "woohoo"
+    networks:
+      - egs
+networks:
+  egs:
+    name: egs_network

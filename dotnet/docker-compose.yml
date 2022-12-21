@@ -1,4 +1,4 @@
-version: "2.4"
+version: "3.5"
 
 x-common-env: &common-env
   HONEYCOMB_API_KEY:
@@ -16,39 +16,44 @@ x-common-env: &common-env
   YEAR_ENDPOINT: year-dotnet:6001
   REDIS_URL: redis
 
+
 services:
   frontend-dotnet:
-    build:
-      context: ./dotnet/frontend
+    build: ./frontend
     image: hnyexample/frontend-dotnet
     environment:
       <<: *common-env
     ports:
       - 7000:7000
-
+    networks:
+      - egs
   message-dotnet:
-    build:
-      context: ./dotnet/message-service
+    build: ./message-service
     image: hnyexample/message-dotnet
     environment:
       <<: *common-env
     ports:
       - 9000:9000
-
+    networks:
+      - egs
   name-dotnet:
-    build:
-      context: ./dotnet/name-service
+    build: ./name-service
     image: hnyexample/name-dotnet
     environment:
       <<: *common-env
     ports:
       - 8000:8000
-
+    networks:
+      - egs
   year-dotnet:
-    build:
-      context: ./dotnet/year-service
+    build: ./year-service
     image: hnyexample/year-dotnet
     environment:
       <<: *common-env
     ports:
       - 6001:6001
+    networks:
+      - egs
+networks:
+  egs:
+    name: egs_network

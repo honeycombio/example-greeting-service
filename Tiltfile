@@ -13,14 +13,7 @@ to_run = cfg.get('to-run', []) or ["go"]
 docker_compose("./docker-compose.yml", project_name="root")
 dc_resource("collector", labels="core", auto_init=True)
 dc_resource("redis", labels="core", auto_init=True)
-
-# seed redis with greeting messages
-local_resource(
-  'load messages into redis',
-  cmd='docker-compose exec  -T redis redis-cli -n 0 SADD messages "how are you?" "how are you doing?" "what\'s good?" "what\'s up?" "how do you do?" "sup?" "good day to you" "how are things?" "howzit?" "woohoo"',
-  resource_deps=['redis'],
-  labels="core"
-)
+dc_resource("load-redis", labels="core", auto_init=True, resource_deps=["redis"])
 
 # curl greeting service, language / ecosystem agnostic
 local_resource(
@@ -31,11 +24,12 @@ local_resource(
   auto_init=False)
 
 # Dotnet services
-docker_compose(["./dotnet/docker-compose.yml"])
+docker_compose("./dotnet/docker-compose.yml")
 dc_resource("frontend-dotnet", labels="dotnet")
 dc_resource("message-dotnet", labels="dotnet")
 dc_resource("name-dotnet", labels="dotnet")
 dc_resource("year-dotnet", labels="dotnet")
+
 
 def launch_go_svc(name, dirname="", flags="", auto_init=True):
     '''
@@ -317,7 +311,7 @@ groups = { i: append_lang(i) for i in supported_languages }
 groups["web"] = ["vanillajs-web"]
 
 # Common resources we always want to run
-resources = ['collector', 'redis', 'load messages into redis', 'curl greeting']
+resources = ['collector', 'redis', 'load-redis', 'curl greeting']
 
 # Create the final list of services to run
 for arg in to_run:
