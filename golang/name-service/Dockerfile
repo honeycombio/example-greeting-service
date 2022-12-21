@@ -2,6 +2,7 @@ FROM golang:1.16-alpine AS build
 WORKDIR /src
 ENV CGO_ENABLED=0
 COPY . .
+RUN go get
 RUN go build -o /out/name-service ./main.go
 
 FROM scratch AS bin
