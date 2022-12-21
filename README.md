@@ -105,7 +105,9 @@ If using Classic Honeycomb, you'll also need a dataset and must include in the O
 There is a `Tiltfile` to run these services on a local host using <https://tilt.dev/>.
 After installing Tilt, running `tilt up` should spin up all of the services.
 
-This tiltfile utilizes [docker](https://docs.docker.com/desktop/install/mac-install/) and docker compose. You can verify they are installed first by checking `docker version` and `docker compose version` 
+**Note: The minimum required Tilt version is v0.30.13.**
+
+This tiltfile utilizes [docker](https://docs.docker.com/desktop/install/mac-install/) and docker compose. You can verify they are installed first by checking `docker version` and `docker compose version`
 
 The default tilt setup runs the go services.
 
