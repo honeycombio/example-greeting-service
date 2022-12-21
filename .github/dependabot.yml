@@ -14,6 +14,9 @@ updates:
         - "type: dependencies"
     reviewers:
         - "honeycombio/telemetry-team"
+    commit-message:
+        prefix: "maint"
+        include: "scope"
 # ELIXIR
   - package-ecosystem: "mix"
     directory: "/elixir/frontend"
@@ -23,7 +26,10 @@ updates:
         - "type: dependencies"
     reviewers:
         - "honeycombio/telemetry-team"
-  - package-ecosystem: "mix"
+    commit-message:
+        prefix: "maint"
+        include: "scope"
+- package-ecosystem: "mix"
     directory: "/elixir/message"
     schedule:
         interval: "monthly"
@@ -31,7 +37,10 @@ updates:
         - "type: dependencies"
     reviewers:
         - "honeycombio/telemetry-team"
-  - package-ecosystem: "mix"
+    commit-message:
+        prefix: "maint"
+        include: "scope"
+- package-ecosystem: "mix"
     directory: "/elixir/name"
     schedule:
         interval: "monthly"
@@ -39,7 +48,10 @@ updates:
         - "type: dependencies"
     reviewers:
         - "honeycombio/telemetry-team"
-  - package-ecosystem: "mix"
+    commit-message:
+        prefix: "maint"
+        include: "scope"
+- package-ecosystem: "mix"
     directory: "/elixir/year"
     schedule:
         interval: "monthly"
@@ -47,6 +59,9 @@ updates:
         - "type: dependencies"
     reviewers:
         - "honeycombio/telemetry-team"
+    commit-message:
+        prefix: "maint"
+        include: "scope"
 # GOLANG
   - package-ecosystem: "gomod"
     directory: "/golang"
@@ -56,6 +71,9 @@ updates:
         - "type: dependencies"
     reviewers:
         - "honeycombio/telemetry-team"
+    commit-message:
+        prefix: "maint"
+        include: "scope"
 # JAVA
   - package-ecosystem: "gradle"
     directory: "/java/frontend"
@@ -65,7 +83,10 @@ updates:
         - "type: dependencies"
     reviewers:
         - "honeycombio/telemetry-team"
-  - package-ecosystem: "gradle"
+    commit-message:
+        prefix: "maint"
+        include: "scope"
+- package-ecosystem: "gradle"
     directory: "/java/message-service"
     schedule:
         interval: "monthly"
@@ -73,7 +94,10 @@ updates:
         - "type: dependencies"
     reviewers:
         - "honeycombio/telemetry-team"
-  - package-ecosystem: "gradle"
+    commit-message:
+        prefix: "maint"
+        include: "scope"
+- package-ecosystem: "gradle"
     directory: "/java/name-service"
     schedule:
         interval: "monthly"
@@ -81,7 +105,10 @@ updates:
         - "type: dependencies"
     reviewers:
         - "honeycombio/telemetry-team"
-  - package-ecosystem: "gradle"
+    commit-message:
+        prefix: "maint"
+        include: "scope"
+- package-ecosystem: "gradle"
     directory: "/java/year-service"
     schedule:
         interval: "monthly"
@@ -89,6 +116,9 @@ updates:
         - "type: dependencies"
     reviewers:
         - "honeycombio/telemetry-team"
+    commit-message:
+        prefix: "maint"
+        include: "scope"
 # NODE
   - package-ecosystem: "npm"
     directory: "/node/frontend"
@@ -98,7 +128,10 @@ updates:
         - "type: dependencies"
     reviewers:
         - "honeycombio/telemetry-team"
-  - package-ecosystem: "npm"
+    commit-message:
+        prefix: "maint"
+        include: "scope"
+- package-ecosystem: "npm"
     directory: "/node/message-service"
     schedule:
         interval: "monthly"
@@ -106,7 +139,10 @@ updates:
         - "type: dependencies"
     reviewers:
         - "honeycombio/telemetry-team"
-  - package-ecosystem: "npm"
+    commit-message:
+        prefix: "maint"
+        include: "scope"
+- package-ecosystem: "npm"
     directory: "/node/name-service"
     schedule:
         interval: "monthly"
@@ -114,7 +150,10 @@ updates:
         - "type: dependencies"
     reviewers:
         - "honeycombio/telemetry-team"
-  - package-ecosystem: "npm"
+    commit-message:
+        prefix: "maint"
+        include: "scope"
+- package-ecosystem: "npm"
     directory: "/node/year-service"
     schedule:
         interval: "monthly"
@@ -122,6 +161,9 @@ updates:
         - "type: dependencies"
     reviewers:
         - "honeycombio/telemetry-team"
+    commit-message:
+        prefix: "maint"
+        include: "scope"
 # PYTHON
   - package-ecosystem: "pip"
     directory: "/python/frontend"
@@ -131,7 +173,10 @@ updates:
         - "type: dependencies"
     reviewers:
         - "honeycombio/telemetry-team"
-  - package-ecosystem: "pip"
+    commit-message:
+        prefix: "maint"
+        include: "scope"
+- package-ecosystem: "pip"
     directory: "/python/message-service"
     schedule:
         interval: "monthly"
@@ -139,7 +184,10 @@ updates:
         - "type: dependencies"
     reviewers:
         - "honeycombio/telemetry-team"
-  - package-ecosystem: "pip"
+    commit-message:
+        prefix: "maint"
+        include: "scope"
+- package-ecosystem: "pip"
     directory: "/python/name-service"
     schedule:
         interval: "monthly"
@@ -147,7 +195,10 @@ updates:
         - "type: dependencies"
     reviewers:
         - "honeycombio/telemetry-team"
-  - package-ecosystem: "pip"
+    commit-message:
+        prefix: "maint"
+        include: "scope"
+- package-ecosystem: "pip"
     directory: "/python/year-service"
     schedule:
         interval: "monthly"
@@ -155,6 +206,9 @@ updates:
         - "type: dependencies"
     reviewers:
         - "honeycombio/telemetry-team"
+    commit-message:
+        prefix: "maint"
+        include: "scope"
 # RUBY
   - package-ecosystem: "bundler"
     directory: "/ruby/frontend"
@@ -164,7 +218,10 @@ updates:
         - "type: dependencies"
     reviewers:
         - "honeycombio/telemetry-team"
-  - package-ecosystem: "bundler"
+    commit-message:
+        prefix: "maint"
+        include: "scope"
+- package-ecosystem: "bundler"
     directory: "/ruby/message-service"
     schedule:
         interval: "monthly"
@@ -172,7 +229,10 @@ updates:
         - "type: dependencies"
     reviewers:
         - "honeycombio/telemetry-team"
-  - package-ecosystem: "bundler"
+    commit-message:
+        prefix: "maint"
+        include: "scope"
+- package-ecosystem: "bundler"
     directory: "/ruby/name-service"
     schedule:
         interval: "monthly"
@@ -180,7 +240,10 @@ updates:
         - "type: dependencies"
     reviewers:
         - "honeycombio/telemetry-team"
-  - package-ecosystem: "bundler"
+    commit-message:
+        prefix: "maint"
+        include: "scope"
+- package-ecosystem: "bundler"
     directory: "/ruby/year-service"
     schedule:
         interval: "monthly"
@@ -188,6 +251,9 @@ updates:
         - "type: dependencies"
     reviewers:
         - "honeycombio/telemetry-team"
+    commit-message:
+        prefix: "maint"
+        include: "scope"
 # WEB
   - package-ecosystem: "npm"
     directory: "/web"
@@ -197,3 +263,6 @@ updates:
         - "type: dependencies"
     reviewers:
         - "honeycombio/telemetry-team"
+    commit-message:
+        prefix: "maint"
+        include: "scope"
