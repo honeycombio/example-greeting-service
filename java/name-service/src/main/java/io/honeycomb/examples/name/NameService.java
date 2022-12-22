@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.Tracer;
-import io.opentelemetry.extension.annotations.WithSpan;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
 
 @Component
 public class NameService {
