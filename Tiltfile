@@ -30,46 +30,52 @@ dc_resource("message-dotnet", labels="dotnet")
 dc_resource("name-dotnet", labels="dotnet")
 dc_resource("year-dotnet", labels="dotnet")
 
+# Golang services
+docker_compose("./golang/docker-compose.yml")
+dc_resource("frontend-go", labels="go")
+dc_resource("message-go", labels="go")
+dc_resource("name-go", labels="go")
+dc_resource("year-go", labels="go")
 
-def launch_go_svc(name, dirname="", flags="", auto_init=True):
-    '''
-    Starts a single go service.
+# def launch_go_svc(name, dirname="", flags="", auto_init=True):
+#     '''
+#     Starts a single go service.
 
-    Parameters:
-    name: used to display the name of the process in the tilt tab
-    dirname: (optional) directory name in which to run `go run main.go` defaults to 'name'
-    flags: (optional) any additional flags to add to the command line
-    '''
+#     Parameters:
+#     name: used to display the name of the process in the tilt tab
+#     dirname: (optional) directory name in which to run `go run main.go` defaults to 'name'
+#     flags: (optional) any additional flags to add to the command line
+#     '''
 
-    cmd = "cd {} && go run main.go -debug {}".format(
-        dirname if dirname else name,
-        flags if flags else ""
-    )
-    env = {
-        'OTEL_SERVICE_NAME': name,
-        'NAME_ENDPOINT': 'http://localhost:8000',
-        'YEAR_ENDPOINT': 'http://localhost:6001',
-        'MESSAGE_ENDPOINT': 'http://localhost:9000',
-    }
-    if "go" in to_run or name in to_run:
-        print("About to start {} with command {}".format(name, cmd))
-    local_resource(name, "", auto_init=auto_init, serve_cmd=cmd, serve_env=env)
-
-
-def launch_go_frontend(auto_init=True):
-    launch_go_svc("frontend-go", dirname="golang/frontend")
-
-
-def launch_go_message_service(auto_init=True):
-    launch_go_svc("message-go", dirname="golang/message-service")
+#     cmd = "cd {} && go run main.go -debug {}".format(
+#         dirname if dirname else name,
+#         flags if flags else ""
+#     )
+#     env = {
+#         'OTEL_SERVICE_NAME': name,
+#         'NAME_ENDPOINT': 'http://localhost:8000',
+#         'YEAR_ENDPOINT': 'http://localhost:6001',
+#         'MESSAGE_ENDPOINT': 'http://localhost:9000',
+#     }
+#     if "go" in to_run or name in to_run:
+#         print("About to start {} with command {}".format(name, cmd))
+#     local_resource(name, "", auto_init=auto_init, serve_cmd=cmd, serve_env=env)
 
 
-def launch_go_name_service(auto_init=True):
-    launch_go_svc("name-go", dirname="golang/name-service")
+# def launch_go_frontend(auto_init=True):
+#     launch_go_svc("frontend-go", dirname="golang/frontend")
 
 
-def launch_go_year_service(auto_init=True):
-    launch_go_svc("year-go", dirname="golang/year-service")
+# def launch_go_message_service(auto_init=True):
+#     launch_go_svc("message-go", dirname="golang/message-service")
+
+
+# def launch_go_name_service(auto_init=True):
+#     launch_go_svc("name-go", dirname="golang/name-service")
+
+
+# def launch_go_year_service(auto_init=True):
+#     launch_go_svc("year-go", dirname="golang/year-service")
 
 def launch_python_svc(name, dirname, run_cmd, auto_init=True):
     '''
@@ -83,10 +89,10 @@ def launch_python_svc(name, dirname, run_cmd, auto_init=True):
 
     setup_cmd = "cd {} && poetry install --no-root".format(dirname)
     serve_cmd = "cd {} && poetry run {}".format(dirname,run_cmd)
-    
+
     if "py" in to_run or name in to_run:
         print("About to start {} with command {}".format(name, serve_cmd))
-    
+
     local_resource(name, setup_cmd, auto_init=auto_init, serve_cmd=serve_cmd)
 
 
@@ -126,10 +132,10 @@ def launch_ruby_svc(name, dirname, run_cmd, auto_init=True):
     }
     setup_cmd = "cd {} && bundle install".format(dirname)
     serve_cmd = "cd {} && bundle exec {}".format(dirname,run_cmd)
-    
+
     if "rb" in to_run or name in to_run:
         print("About to start {} with command {}".format(name, serve_cmd))
-    
+
     local_resource(name, setup_cmd, env=env, auto_init=auto_init, serve_cmd=serve_cmd, serve_env=env)
 
 def launch_ruby_frontend(auto_init=True):
@@ -189,7 +195,7 @@ def launch_node_svc(name, dirname="", flags="", auto_init=True):
     dirname: (optional) directory name in which to run `npm start` defaults to 'name'
     flags: (optional) any additional flags to add to the command line
     '''
-    
+
     env = {'SERVICE_NAME': name}
 
     cmd = "cd {} && npm install && npm start".format(
@@ -223,7 +229,7 @@ def launch_elixir_svc(name, dirname="", cmd="", auto_init=True):
     flags: (optional) any additional flags to add to the command line
 
     '''
-    
+
     # env = {'SERVICE_NAME': name}
 
     setup_cmd = "cd {} && mix local.hex --force && mix local.rebar --force && mix deps.get && mix deps.compile".format(
@@ -262,33 +268,33 @@ def launch_web_service(name, dirname="", flags="", auto_init=True):
     local_resource(name, "", auto_init=auto_init, serve_cmd=cmd, serve_env=env)
 
 def launch_web_vanillajs_service(auto_init=True):
-    launch_web_service("vanillajs-web", dirname="web", auto_init=auto_init)  
+    launch_web_service("vanillajs-web", dirname="web", auto_init=auto_init)
 
 # Launch all services so that all service resources are registered with Tilt
 
 # Server services
-launch_go_frontend()
+# launch_go_frontend()
 launch_python_frontend()
 launch_ruby_frontend()
 launch_java_frontend()
 launch_node_frontend()
 launch_elixir_frontend()
 
-launch_go_message_service()
+# launch_go_message_service()
 launch_python_message_service()
 launch_ruby_message_service()
 launch_java_message_service()
 launch_node_message_service()
 launch_elixir_message_service()
 
-launch_go_name_service()
+# launch_go_name_service()
 launch_python_name_service()
 launch_ruby_name_service()
 launch_java_name_service()
 launch_node_name_service()
 launch_elixir_name_service()
 
-launch_go_year_service()
+# launch_go_year_service()
 launch_python_year_service()
 launch_ruby_year_service()
 launch_java_year_service()
