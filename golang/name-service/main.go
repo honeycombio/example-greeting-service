@@ -80,6 +80,9 @@ func newTraceProvider(exp *otlptrace.Exporter) *sdktrace.TracerProvider {
 }
 
 func main() {
+	// initialize the random number generator
+	rand.Seed(time.Now().UnixNano())
+
 	ctx := context.Background()
 
 	exp, err := newExporter(ctx)
@@ -107,7 +110,6 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/name", func(w http.ResponseWriter, r *http.Request) {
-		rand.Seed(time.Now().UnixNano())
 		time.Sleep(time.Duration(rand.Intn(5)) * time.Millisecond)
 		year, _ := getYear(r.Context())
 		names := namesByYear[year]
