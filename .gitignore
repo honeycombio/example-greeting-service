@@ -461,3 +461,9 @@ $RECYCLE.BIN/
 
 # User specific Tilt config
 tilt_config.json
+
+# Go compiled binaries
+golang/frontend/frontend
+golang/message-service/message-service
+golang/name-service/name-service
+golang/year-service/year-service
