@@ -20,5 +20,5 @@ RUN poetry config virtualenvs.create false \
 
 COPY ./frontend ./frontend
 
-EXPOSE 7000
+EXPOSE 7007
 CMD ["poetry", "run", "python", "-m", "frontend"]

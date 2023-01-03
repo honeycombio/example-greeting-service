@@ -13,7 +13,7 @@ secret_key_base =
 
 config :frontend, FrontendWeb.Endpoint,
   http: [
-    port: String.to_integer(System.get_env("PORT") || "7000"),
+    port: String.to_integer(System.get_env("PORT") || "7007"),
     transport_options: [socket_opts: [:inet6]]
   ],
   secret_key_base: secret_key_base

@@ -70,7 +70,7 @@ The motivating use case is testing trace context header compatibility between Ho
 
 Port and host names are hardcoded.
 
-- Frontend: Port 7000
+- Frontend: Port 7007
 - Name: Port 8000
 - Year: Port 6001
 - Message: Port 9000
@@ -151,7 +151,7 @@ Example `tilt_config.json` to override the default with multiple services
 }
 ```
 
-Once running, `curl localhost:7000/greeting` to get a greeting and a trace!
+Once running, `curl localhost:7007/greeting` to get a greeting and a trace!
 
 ctrl+c to kill the session, and `tilt down` to spin down all services.
 
@@ -163,4 +163,4 @@ To run the browser app inside of `/web` run
 tilt up web node 
 ```
 
-This will start up the browser app as well as all node backend services. The browser app makes requests to `http://localhost:7000/greeting` so there has to be a set of backend services running. It could also be any one of our other supported languages (e.g. `py`, `go` etc.)
+This will start up the browser app as well as all node backend services. The browser app makes requests to `http://localhost:7007/greeting` so there has to be a set of backend services running. It could also be any one of our other supported languages (e.g. `py`, `go` etc.)

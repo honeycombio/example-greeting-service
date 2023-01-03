@@ -17,7 +17,7 @@ services:
     environment:
       <<: *common-env
     ports:
-      - 7000:7000
+      - 7007:7007
 
   message:
     build: ./message-service
