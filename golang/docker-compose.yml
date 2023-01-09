@@ -1,9 +1,8 @@
 version: "2.4"
 
 x-common-env: &common-env
-  HONEYCOMB_API_KEY:
-  HONEYCOMB_DATASET:
-  OTEL_EXPORTER_OTLP_ENDPOINT:
+  HONEYCOMB_API_KEY: ${HONEYCOMB_API_KEY}
+  OTEL_EXPORTER_OTLP_ENDPOINT: api.honeycomb.io
   OTEL_RESOURCE_ATTRIBUTES: app.running-in=docker
   MESSAGE_ENDPOINT: http://message:9000
   NAME_ENDPOINT: http://name:8000
@@ -12,34 +11,46 @@ x-common-env: &common-env
 
 services:
   frontend:
-    build: ./frontend
+    build:
+        context: .
+        dockerfile: ./frontend/Dockerfile
     image: hnyexample/frontend-golang
     environment:
       <<: *common-env
+      OTEL_SERVICE_NAME: frontend-go
     ports:
       - 7000:7000
 
   message:
-    build: ./message-service
+    build:
+        context: .
+        dockerfile: ./message-service/Dockerfile
     image: hnyexample/message-golang
     environment:
       <<: *common-env
+      OTEL_SERVICE_NAME: message-go
     ports:
       - 9000:9000
 
   name:
-    build: ./name-service
+    build:
+        context: .
+        dockerfile: ./name-service/Dockerfile
     image: hnyexample/name-golang
     environment:
       <<: *common-env
+      OTEL_SERVICE_NAME: name-go
     ports:
       - 8000:8000
 
   year:
-    build: ./year-service
+    build:
+        context: .
+        dockerfile: ./year-service/Dockerfile
     image: hnyexample/year-golang
     environment:
       <<: *common-env
+      OTEL_SERVICE_NAME: year-go
     ports:
       - 6001:6001
 
