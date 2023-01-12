@@ -109,8 +109,8 @@ func main() {
 
 	wrappedHandler := otelhttp.NewHandler(mux, "frontend")
 
-	log.Println("Listening on http://localhost:7000/greeting")
-	log.Fatal(http.ListenAndServe(":7000", wrappedHandler))
+	log.Println("Listening on http://localhost:7007/greeting")
+	log.Fatal(http.ListenAndServe(":7007", wrappedHandler))
 }
 
 func getName(ctx context.Context) string {

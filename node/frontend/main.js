@@ -6,7 +6,7 @@ const fetch = require('node-fetch');
 const cors = require('cors');
 
 // Constants
-const PORT = 7000;
+const PORT = 7007;
 const HOST = '0.0.0.0';
 const MESSAGE_ENDPOINT = process.env.MESSAGE_ENDPOINT || 'localhost:9000';
 const NAME_ENDPOINT = process.env.NAME_ENDPOINT || 'localhost:8000';

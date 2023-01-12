@@ -18,7 +18,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:6.0
 WORKDIR /app
 COPY --from=build /app ./
 
-ENV ASPNETCORE_URLS=http://+:7000
+ENV ASPNETCORE_URLS=http://+:7007
 ENV ASPNETCORE_ENVIRONMENT="development"
-EXPOSE 7000
+EXPOSE 7007
 ENTRYPOINT ["dotnet", "frontend.dll"]

@@ -1,6 +1,6 @@
 # Browser greeting service
 
-A browser app that sends OTel traces to a collector that passes it through to Honeycomb. The browser app makes a request to `http://localhost:7000/greeting` to trace HTTP requests from the frontend through to the backend.
+A browser app that sends OTel traces to a collector that passes it through to Honeycomb. The browser app makes a request to `http://localhost:7007/greeting` to trace HTTP requests from the frontend through to the backend.
 
 ## Running the app
 

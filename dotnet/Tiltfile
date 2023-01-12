@@ -7,6 +7,6 @@ local_resource(
 
 local_resource(
   'curl greeting',
-  cmd='curl localhost:7000/greeting',
+  cmd='curl localhost:7007/greeting',
   trigger_mode=TRIGGER_MODE_MANUAL,
   auto_init=False)

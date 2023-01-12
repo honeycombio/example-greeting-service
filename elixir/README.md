@@ -1,7 +1,7 @@
 # Elixir Greeting Services
 
 ## Services
-- Frontend: Service that calls the message, name and year services to create a greeting message served at `localhost:7000/greeting`. Sends data through `opentelemetry_phoenix`.
+- Frontend: Service that calls the message, name and year services to create a greeting message served at `localhost:7007/greeting`. Sends data through `opentelemetry_phoenix`.
 - Message: Service that chooses a random greeting message. Sends data through `opentelemetry_honeycomb`.
 - Name: Service that chooses a random name. Sends data through `opentelemetry_api`.
 - Year: Service that returns a random year. Sends data through `opentelemetry_api`.
@@ -58,7 +58,7 @@ In the top level directory run `tilt up elixir`
 
 ## See it in action
 
-`curl localhost:7000/greeting` for greeting
+`curl localhost:7007/greeting` for greeting
 
 `curl localhost:9000/message` for message only
 

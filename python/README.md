@@ -15,7 +15,7 @@ In the top level directory run `tilt up py`
 In each service directory, run the Docker commands that build and start the service with the corresponding service names and ports.
 
 ` docker build -t frontend .`
-` docker run -dp 7000:7000 frontend`
+` docker run -dp 7007:7007 frontend`
 
 Or however it is you prefer to Docker. :) 
 TODO: run this in a way that the services are configured to export the traces
