@@ -54,27 +54,48 @@ class FrontendGreetingApp < Rails::Application
 end
 
 class GreetingsController < ActionController::Base
+  around_action :context_for_named_visitor
+
   def index
+    # a span event!
+    OpenTelemetry::Trace
+      .current_span
+      .add_event("GreetingsController#index starts it's specific behavior! ᕕ( ᐛ )ᕗ")
+
+
     # set something in CarryOn that will appear in all child spans from the frontend,
     # but will NOT appear on child spans from other services
     O11yWrapper::CarryOn.with_attributes({"app.carry_on" => "my wayward son"}) do
 
-      # a span event!
-      OpenTelemetry::Trace
-        .current_span
-        .add_event("Emoji are fun! ᕕ( ᐛ )ᕗ")
 
-      @name = NameClient.get_name
+      @message = MessageClient.get_message
 
-      # set name in Baggage for child spans, both frontend and other services from
-      # this point in the trace forward
-      OpenTelemetry::Context.with_current(OpenTelemetry::Baggage.set_value("app.visitor_name", @name)) do
-        @message = MessageClient.get_message
-
-        Tracer.in_span("🎨 render greeting ✨") do |span|
-          render inline: "Hello <%= @name %>, <%= @message %>"
-        end
+      Tracer.in_span("🎨 render greeting ✨") do |span|
+        render inline: "Hello <%= @name %>, <%= @message %>"
       end
+    end
+  end
+
+  private
+
+  # an around filter to retrieve a name for the greeting and
+  # store that name (once known) in Baggage
+  def context_for_named_visitor
+    # get a name from the Name service
+    @name = NameClient.get_name
+
+    # add the name as an attribute to the current span
+    OpenTelemetry::Trace
+      .current_span
+      .set_attribute("app.visitor_name", @name)
+
+    # store that name in Baggage (which is in Context) to be applied by
+    # the BaggageSpanProcessor as an attribute on child spans
+    named_visitor_context = OpenTelemetry::Baggage.set_value("app.visitor_name", @name)
+
+    # set that Context as current for the activity within a controller action
+    OpenTelemetry::Context.with_current(named_visitor_context) do
+      yield
     end
   end
 end
