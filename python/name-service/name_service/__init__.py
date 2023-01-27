@@ -14,6 +14,18 @@ from opentelemetry.sdk.resources import Resource, SERVICE_NAME
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
 
+
+import logging
+from opentelemetry.exporter.otlp.proto.grpc._log_exporter import (
+    OTLPLogExporter,
+)
+from opentelemetry._logs import set_logger_provider
+from opentelemetry.sdk._logs import (
+    LoggerProvider,
+    LoggingHandler,
+)
+from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
+
 names_by_year = {
     2015: ['sophia', 'jackson', 'emma', 'aiden', 'olivia', 'liam', 'ava',
            'lucas', 'mia', 'noah'],
@@ -38,18 +50,31 @@ def get_year():
         r = requests.get(YEAR_ENDPOINT)
         return int(r.text)
 
+# shared resource service name
+myResource = Resource.create({"service.name": "name-python"})
 
-trace.set_tracer_provider(TracerProvider(
-    resource=Resource.create({SERVICE_NAME: "name-python"})
-))
+# tracing pipeline
+trace.set_tracer_provider(TracerProvider(resource=myResource))
 tracer = trace.get_tracer_provider().get_tracer(__name__)
-
-trace.get_tracer_provider().add_span_processor(
-    BatchSpanProcessor(OTLPSpanExporter(
+trace_exporter = OTLPSpanExporter(
         headers=(("x-honeycomb-team", os.environ.get("HONEYCOMB_API_KEY")),),
         endpoint=os.environ.get("HONEYCOMB_API_ENDPOINT",
                                 "https://api.honeycomb.io")
-    )))
+    )
+trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(trace_exporter))
+
+# logging pipeline
+logger_provider = LoggerProvider(resource=myResource)
+set_logger_provider(logger_provider)
+log_exporter = OTLPLogExporter(
+        headers=(("x-honeycomb-team", os.environ.get("HONEYCOMB_API_KEY")),),
+        endpoint=os.environ.get("HONEYCOMB_API_ENDPOINT",
+                                "https://api.honeycomb.io")
+   )
+logger_provider.add_log_record_processor(BatchLogRecordProcessor(log_exporter))
+handler = LoggingHandler(level=logging.NOTSET, logger_provider=logger_provider)
+logging.getLogger().addHandler(handler)
+logger = logging.getLogger("my-logger")
 
 app = Flask(__name__)
 FlaskInstrumentor().instrument_app(app)
@@ -58,6 +83,9 @@ RequestsInstrumentor().instrument()
 
 @app.route('/name')
 def get_name():
+    logger.error("oh neat log error")
+    logger.info("oh neat log info")
+    logger.warning("oh neat log warning")
     year = get_year()
     with tracer.start_as_current_span("📖 look up name based on year ✨"):
         names = names_by_year[year]
