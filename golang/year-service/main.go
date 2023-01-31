@@ -10,7 +10,7 @@ import (
 
 	_ "github.com/honeycombio/honeycomb-opentelemetry-go"
 
-	"github.com/honeycombio/opentelemetry-go-contrib/launcher"
+	"github.com/honeycombio/otel-launcher-go/launcher"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/trace"
