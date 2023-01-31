@@ -9,7 +9,7 @@ require 'faraday'
 
 Honeycomb.configure do |config|
   config.write_key = ENV['HONEYCOMB_API_KEY']
-  config.service_name = ENV['SERVICE_NAME'] || "frontend-ruby"
+  config.service_name = ENV['SERVICE_NAME'] || "message-ruby"
   config.api_host = ENV['HONEYCOMB_API_ENDPOINT']
 
   config.http_trace_parser_hook do |env|

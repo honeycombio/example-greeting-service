@@ -10,7 +10,7 @@
 # in the order they were read, so properties in closer files take precedence.
 
 # Ruby files
-[*.rb]
+[*.{rb,ru}]
 
 indent_size = 2
 
