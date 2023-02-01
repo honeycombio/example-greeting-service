@@ -10,22 +10,22 @@ from opentelemetry.instrumentation.wsgi import OpenTelemetryMiddleware
 from opentelemetry.sdk.resources import Resource, SERVICE_NAME
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from honeycomb.opentelemetry import configure_opentelemetry, HoneycombOptions
+
+configure_opentelemetry(
+    HoneycombOptions(
+        debug=True,
+        apikey=os.getenv("HONEYCOMB_API_KEY"),
+        service_name="otel-python-example"
+    )
+)
 
 messages = [
     "how are you?", "how are you doing?", "what's good?", "what's up?", "how do you do?",
     "sup?", "good day to you", "how are things?", "howzit?", "woohoo",
 ]
-trace.set_tracer_provider(TracerProvider(
-    resource=Resource.create({SERVICE_NAME: "message-python"})
-))
-tracer = trace.get_tracer_provider().get_tracer(__name__)
 
-trace.get_tracer_provider().add_span_processor(
-    BatchSpanProcessor(OTLPSpanExporter(
-        headers=(("x-honeycomb-team", os.environ.get("HONEYCOMB_API_KEY")),),
-        endpoint=os.environ.get("HONEYCOMB_API_ENDPOINT",
-                                "https://api.honeycomb.io")
-    )))
+tracer = trace.get_tracer(__name__)
 
 app = Bottle()
 app.wsgi = OpenTelemetryMiddleware(app.wsgi)
