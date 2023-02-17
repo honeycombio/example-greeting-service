@@ -75,6 +75,7 @@ logger_provider.add_log_record_processor(BatchLogRecordProcessor(log_exporter))
 handler = LoggingHandler(level=logging.NOTSET, logger_provider=logger_provider)
 logging.getLogger().addHandler(handler)
 logger = logging.getLogger("my-logger")
+logger.setLevel(logging.INFO)
 
 app = Flask(__name__)
 FlaskInstrumentor().instrument_app(app)
@@ -83,10 +84,14 @@ RequestsInstrumentor().instrument()
 
 @app.route('/name')
 def get_name():
-    logger.error("oh neat log error")
-    logger.info("oh neat log info")
-    logger.warning("oh neat log warning")
     year = get_year()
+    current_span = trace.get_current_span()
+    logger.info("Selected year: %s", year)
+    current_span.set_attribute("app.year_selected", year)
+
     with tracer.start_as_current_span("📖 look up name based on year ✨"):
+        span = trace.get_current_span()
         names = names_by_year[year]
-    return random.choice(names)
+        name = random.choice(names)
+        span.set_attribute("app.name_selected", name)
+    return name
