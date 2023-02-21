@@ -54,18 +54,18 @@ def get_year():
 myResource = Resource.create({"service.name": "name-python"})
 
 # tracing pipeline
-trace.set_tracer_provider(TracerProvider(resource=myResource))
-tracer = trace.get_tracer_provider().get_tracer(__name__)
+tracer_provider = TracerProvider(resource=myResource)
 trace_exporter = OTLPSpanExporter(
         headers=(("x-honeycomb-team", os.environ.get("HONEYCOMB_API_KEY")),),
         endpoint=os.environ.get("HONEYCOMB_API_ENDPOINT",
                                 "https://api.honeycomb.io")
     )
+trace.set_tracer_provider(tracer_provider)
 trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(trace_exporter))
+tracer = trace.get_tracer_provider().get_tracer(__name__)
 
 # logging pipeline
 logger_provider = LoggerProvider(resource=myResource)
-set_logger_provider(logger_provider)
 log_exporter = OTLPLogExporter(
         headers=(("x-honeycomb-team", os.environ.get("HONEYCOMB_API_KEY")),),
         endpoint=os.environ.get("HONEYCOMB_API_ENDPOINT",
@@ -74,6 +74,7 @@ log_exporter = OTLPLogExporter(
 logger_provider.add_log_record_processor(BatchLogRecordProcessor(log_exporter))
 handler = LoggingHandler(level=logging.NOTSET, logger_provider=logger_provider)
 logging.getLogger().addHandler(handler)
+set_logger_provider(logger_provider)
 logger = logging.getLogger("my-logger")
 logger.setLevel(logging.INFO)
 
