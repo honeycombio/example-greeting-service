@@ -60,9 +60,9 @@ trace_exporter = OTLPSpanExporter(
         endpoint=os.environ.get("HONEYCOMB_API_ENDPOINT",
                                 "https://api.honeycomb.io")
     )
+tracer_provider.add_span_processor(BatchSpanProcessor(trace_exporter))
 trace.set_tracer_provider(tracer_provider)
-trace.get_tracer_provider().add_span_processor(BatchSpanProcessor(trace_exporter))
-tracer = trace.get_tracer_provider().get_tracer(__name__)
+tracer = tracer_provider.get_tracer(__name__)
 
 # logging pipeline
 logger_provider = LoggerProvider(resource=myResource)
