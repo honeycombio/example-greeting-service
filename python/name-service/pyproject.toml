@@ -16,5 +16,5 @@ opentelemetry-instrumentation-flask = "^0.36b0"
 opentelemetry-instrumentation-requests = "^0.36b0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
+pytest = "^7.2"
 autopep8 = "^1.5.4"
