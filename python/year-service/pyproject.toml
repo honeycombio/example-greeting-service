@@ -12,4 +12,4 @@ python-dotenv = "^0.14.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
-autopep8 = "^1.7.0"
+autopep8 = "^2.0.1"
