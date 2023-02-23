@@ -1,3 +1,4 @@
+# not used by Tilt (yet)
 FROM python:alpine
 
 WORKDIR /app
