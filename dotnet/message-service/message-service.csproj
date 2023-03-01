@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="Honeycomb.OpenTelemetry" Version="0.19.0-beta" />
-    <PackageReference Include="StackExchange.Redis" Version="2.2.62" />
+    <PackageReference Include="StackExchange.Redis" Version="2.6.96" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 
