@@ -8,7 +8,7 @@ authors = ["Douglas Soo <dsoo@alum.mit.edu>"]
 python = "^3.8"
 honeycomb-beeline = "^3.5.0"
 django = "^3.2"
-python-dotenv = "^0.14.0"
+python-dotenv = "^1.0.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
