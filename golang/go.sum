@@ -152,8 +152,8 @@ github.com/hashicorp/golang-lru v0.5.0/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ
 github.com/hashicorp/golang-lru v0.5.1/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ4Ao+sR/qLZy8=
 github.com/honeycombio/beeline-go v1.11.1 h1:cyrfwgxM32DKzUhZFJ0KLbPkoyf5lHOyn+7GISwEVZQ=
 github.com/honeycombio/beeline-go v1.11.1/go.mod h1:VTUrnK49oSsWme20E+94XTn1qofDYR56drIJ2bRsJBo=
-github.com/honeycombio/honeycomb-opentelemetry-go v0.4.2 h1:JrseS+TTofcLFv3invPApJrCZVN+TLhqiRNe9WfXYVA=
-github.com/honeycombio/honeycomb-opentelemetry-go v0.4.2/go.mod h1:O9ysjsm4A2dUdCGzMjNB45C6X0o0B4JPXEeMcBQUuwE=
+github.com/honeycombio/honeycomb-opentelemetry-go v0.5.0 h1:1Uog4MmnBqaLqFusGuxziC1dnQbdWcq4Muk3uugxWJ4=
+github.com/honeycombio/honeycomb-opentelemetry-go v0.5.0/go.mod h1:N+7ddZTxlKDq0ma83nwxYVWU2XZDHxQCA4uUj0XjChA=
 github.com/honeycombio/libhoney-go v1.18.0 h1:OYHOP381r3Ea76BhUYeza8PUTMDp8MByoOxDn3qtEq8=
 github.com/honeycombio/libhoney-go v1.18.0/go.mod h1:KwbcXkqUbH20x3MpfSt/kdvlog3FFdEnouqYD3XKXLY=
 github.com/honeycombio/otel-launcher-go v0.3.0 h1:vSwYxEDm3ilAHU8vYvauquu27QuSGjAmOvk1ONHfezY=
