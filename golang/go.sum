@@ -152,10 +152,8 @@ github.com/hashicorp/golang-lru v0.5.0/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ
 github.com/hashicorp/golang-lru v0.5.1/go.mod h1:/m3WP610KZHVQ1SGc6re/UDhFvYD7pJ4Ao+sR/qLZy8=
 github.com/honeycombio/beeline-go v1.11.1 h1:cyrfwgxM32DKzUhZFJ0KLbPkoyf5lHOyn+7GISwEVZQ=
 github.com/honeycombio/beeline-go v1.11.1/go.mod h1:VTUrnK49oSsWme20E+94XTn1qofDYR56drIJ2bRsJBo=
-github.com/honeycombio/honeycomb-opentelemetry-go v0.4.1 h1:yvOZ4AUOwPJooYRFFsF85uwdHiWsYfaaY3W9mVdVZ5Q=
-github.com/honeycombio/honeycomb-opentelemetry-go v0.4.1/go.mod h1:SviXC7Hrj5Ma6ihemqpxW59KOs+SiyWG3P4NmuOq2WY=
-github.com/honeycombio/honeycomb-opentelemetry-go v0.4.3-0.20230302185656-2675eb3c5709 h1:mqUdnouHGGnScYeW9hU0H5tAJLm9e/mwMKLbTIaaA/8=
-github.com/honeycombio/honeycomb-opentelemetry-go v0.4.3-0.20230302185656-2675eb3c5709/go.mod h1:N+7ddZTxlKDq0ma83nwxYVWU2XZDHxQCA4uUj0XjChA=
+github.com/honeycombio/honeycomb-opentelemetry-go v0.4.2 h1:JrseS+TTofcLFv3invPApJrCZVN+TLhqiRNe9WfXYVA=
+github.com/honeycombio/honeycomb-opentelemetry-go v0.4.2/go.mod h1:O9ysjsm4A2dUdCGzMjNB45C6X0o0B4JPXEeMcBQUuwE=
 github.com/honeycombio/libhoney-go v1.18.0 h1:OYHOP381r3Ea76BhUYeza8PUTMDp8MByoOxDn3qtEq8=
 github.com/honeycombio/libhoney-go v1.18.0/go.mod h1:KwbcXkqUbH20x3MpfSt/kdvlog3FFdEnouqYD3XKXLY=
 github.com/honeycombio/otel-launcher-go v0.3.0 h1:vSwYxEDm3ilAHU8vYvauquu27QuSGjAmOvk1ONHfezY=
@@ -241,8 +239,6 @@ go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.14.0 h1:ap+y8
 go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.14.0/go.mod h1:5w41DY6S9gZrbjuq6Y+753e96WfPha5IcsOSZTtullM=
 go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp v1.14.0 h1:3jAYbRHQAqzLjd9I4tzxwJ8Pk/N6AqBcF6m1ZHrxG94=
 go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracehttp v1.14.0/go.mod h1:+N7zNjIJv4K+DeX67XXET0P+eIciESgaFDBqh+ZJFS4=
-go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.12.0 h1:FXwvCIXsrMas/reQkSUTPZVCqud1yDy441acn4Fdu6w=
-go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.12.0/go.mod h1:TTDkohPFSX4LMcbmNMYDh0hMXV8YigEjw5WwD+nDn6U=
 go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.14.0 h1:sEL90JjOO/4yhquXl5zTAkLLsZ5+MycAgX99SDsxGc8=
 go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.14.0/go.mod h1:oCslUcizYdpKYyS9e8srZEqM6BB8fq41VJBjLAE6z1w=
 go.opentelemetry.io/otel/metric v0.37.0 h1:pHDQuLQOZwYD+Km0eb657A25NaRzy0a+eLyKfDXedEs=
