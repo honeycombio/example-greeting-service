@@ -2,14 +2,14 @@
 name = "year-service"
 version = "0.1.0"
 description = ""
-authors = ["Douglas Soo <dsoo@alum.mit.edu>"]
+authors = ["Honeycomb"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
-honeycomb-beeline = "^3.5.0"
-django = "^3.2"
-python-dotenv = "^0.14.0"
+python = "^3.10"
+honeycomb-beeline = "^3.5.1"
+django = "^4.1.7"
+python-dotenv = "^1.0.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
-autopep8 = "^1.7.0"
+pytest = "^7.2.1"
+autopep8 = "^2.0.1"
