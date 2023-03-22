@@ -22,11 +22,12 @@ defmodule Year.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:plug_cowboy, "~> 2.5"},
+      {:plug_cowboy, "~> 2.6"},
       {:opentelemetry, "~> 1.0.0-rc"},
       {:opentelemetry_api, "~> 1.0.0-rc"},
       {:opentelemetry_exporter, "~> 1.0.0-rc"},
-      {:opentelemetry_plug, github: "opentelemetry-beam/opentelemetry_plug"}
+      {:opentelemetry_process_propagator, "~> 0.2.2"},
+      {:opentelemetry_cowboy, "~> 0.2"}
     ]
   end
 end

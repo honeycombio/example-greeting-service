@@ -13,6 +13,7 @@ defmodule Year do
   end
 
   defp year do
+    :otel_ctx.attach(:opentelemetry_process_propagator.fetch_parent_ctx())
     Tracer.with_span "🗓 get-a-year ✨" do
       :timer.sleep(Enum.random(0..5))
       Enum.random(2015..2020)
