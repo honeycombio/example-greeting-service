@@ -11,7 +11,7 @@ defmodule Name.Application do
       {Plug.Cowboy, scheme: :http, plug: Name, options: [port: 8000]}
     ]
 
-    OpentelemetryPlug.setup()
+    :opentelemetry_cowboy.setup()
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
