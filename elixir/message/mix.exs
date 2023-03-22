@@ -25,7 +25,7 @@ defmodule Message.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:opentelemetry_honeycomb, "~> 0.5.0-rc.1"},
       {:hackney, "~> 1.17"},
-      {:poison, "~> 4.0"}
+      {:poison, "~> 5.0"}
     ]
   end
 end
