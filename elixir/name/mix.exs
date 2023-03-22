@@ -27,7 +27,7 @@ defmodule Name.MixProject do
       {:opentelemetry_api, "~> 1.0.0-rc"},
       {:opentelemetry_exporter, "~> 1.0.0-rc"},
       {:opentelemetry_plug, github: "opentelemetry-beam/opentelemetry_plug"},
-      {:httpoison, "~> 1.8"}
+      {:httpoison, "~> 2.1"}
     ]
   end
 end
