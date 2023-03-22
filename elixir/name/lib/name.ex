@@ -22,6 +22,7 @@ defmodule Name do
   end
 
   defp name_by(year) do
+    :otel_ctx.attach(:opentelemetry_process_propagator.fetch_parent_ctx())
     Tracer.with_span "📖 look up name based on year ✨" do
       :timer.sleep(Enum.random(1..5))
       Map.get(@names, year) |> Enum.random()
@@ -29,9 +30,10 @@ defmodule Name do
   end
 
   defp year do
+    :otel_ctx.attach(:opentelemetry_process_propagator.fetch_parent_ctx())
     Tracer.with_span "✨ call /year ✨" do
       endpoint = System.get_env("YEAR_ENDPOINT", "http://localhost:6001")
-      headers = :otel_propagator.text_map_inject([])
+      headers = :otel_propagator_text_map.inject([])
       HTTPoison.get!("#{endpoint}/year", headers).body |> String.to_integer()
     end
   end
