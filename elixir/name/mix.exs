@@ -25,7 +25,7 @@ defmodule Name.MixProject do
       {:plug_cowboy, "~> 2.6"},
       {:opentelemetry, "~> 1.0.0-rc"},
       {:opentelemetry_api, "~> 1.0.0-rc"},
-      {:opentelemetry_exporter, "~> 1.0.0-rc"},
+      {:opentelemetry_exporter, "~> 1.1.0"},
       {:opentelemetry_process_propagator, "~> 0.2.2"},
       {:opentelemetry_cowboy, "~> 0.2"},
       {:httpoison, "~> 2.1"}
