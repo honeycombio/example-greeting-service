@@ -38,7 +38,7 @@ defmodule Frontend.MixProject do
       {:telemetry_poller, "~> 0.4"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:httpoison, "~> 1.8"},
+      {:httpoison, "~> 2.1"},
       {:opentelemetry_phoenix, "~> 0.2.0"},
       {:opentelemetry_exporter, "~> 0.5.0"}
     ]
