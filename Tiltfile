@@ -71,11 +71,16 @@ def launch_python_svc(name, dirname, run_cmd, auto_init=True):
 
     setup_cmd = "cd {} && poetry install --no-root".format(dirname)
     serve_cmd = "cd {} && poetry run {}".format(dirname,run_cmd)
+
+    env = {
+        'SERVICE_NAME': name,
+        'OTEL_SERVICE_NAME': name,
+    }
     
     if "py" in to_run or name in to_run:
         print("About to start {} with command {}".format(name, serve_cmd))
     
-    local_resource(name, setup_cmd, auto_init=auto_init, serve_cmd=serve_cmd)
+    local_resource(name, setup_cmd, auto_init=auto_init, serve_cmd=serve_cmd, serve_env=env)
 
 
 def launch_python_frontend(auto_init=True):
@@ -88,7 +93,7 @@ def launch_python_message_service(auto_init=True):
 
 
 def launch_python_name_service(auto_init=True):
-    launch_python_svc("name-py", dirname="python/name-service", run_cmd="flask run", auto_init=auto_init)
+    launch_python_svc("name-py", dirname="python/name-service", run_cmd="opentelemetry-instrument flask run", auto_init=auto_init)
 
 
 
