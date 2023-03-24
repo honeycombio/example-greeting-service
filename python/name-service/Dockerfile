@@ -23,4 +23,4 @@ COPY ./.flaskenv ./
 COPY ./name_service ./name_service
 
 EXPOSE 8000
-CMD ["poetry", "run", "flask", "run", "--host", "0.0.0.0"]
+CMD ["poetry", "run", "opentelemetry-instrument", "flask", "run", "--host", "0.0.0.0"]
