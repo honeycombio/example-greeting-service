@@ -1,3 +1,2 @@
 FLASK_APP=name_service
-FLASK_DEBUG=true
 FLASK_RUN_PORT=8000
