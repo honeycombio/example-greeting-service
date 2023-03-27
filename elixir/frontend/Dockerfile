@@ -1,4 +1,4 @@
-FROM elixir:1.12
+FROM elixir:1.14
 WORKDIR /app
 COPY mix.* /app
 COPY lib /app/lib
