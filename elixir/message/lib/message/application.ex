@@ -11,6 +11,8 @@ defmodule Message.Application do
       {Plug.Cowboy, scheme: :http, plug: Message, options: [port: 9000]}
     ]
 
+    :opentelemetry_cowboy.setup()
+
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Message.Supervisor]

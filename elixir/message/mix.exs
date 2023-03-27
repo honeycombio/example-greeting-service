@@ -22,8 +22,12 @@ defmodule Message.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:plug_cowboy, "~> 2.5"},
-      {:opentelemetry_honeycomb, "~> 0.5.0-rc.1"},
+      {:plug_cowboy, "~> 2.6"},
+      {:opentelemetry, "~> 1.2.0"},
+      {:opentelemetry_api, "~> 1.2.1"},
+      {:opentelemetry_exporter, "~> 1.4.0"},
+      {:opentelemetry_process_propagator, "~> 0.2.2"},
+      {:opentelemetry_cowboy, "~> 0.2"},
       {:hackney, "~> 1.17"},
       {:poison, "~> 5.0"}
     ]
