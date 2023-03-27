@@ -34,13 +34,15 @@ defmodule Frontend.MixProject do
     [
       {:phoenix, "~> 1.7.2"},
       {:phoenix_view, "~> 2.0"},
-      {:telemetry_metrics, "~> 0.4"},
-      {:telemetry_poller, "~> 0.4"},
+      {:telemetry_metrics, "~> 0.6.1"},
+      {:telemetry_poller, "~> 1.0.0"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"},
+      {:plug_cowboy, "~> 2.6.1"},
       {:httpoison, "~> 2.1"},
-      {:opentelemetry_phoenix, "~> 0.2.0"},
-      {:opentelemetry_exporter, "~> 0.5.0"}
+      {:opentelemetry, "~> 1.2.1"},
+      {:opentelemetry_api, "~> 1.2.1"},
+      {:opentelemetry_phoenix, "~> 1.1.0"},
+      {:opentelemetry_exporter, "~> 1.4.0"}
     ]
   end
 
