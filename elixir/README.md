@@ -1,10 +1,10 @@
 # Elixir Greeting Services
 
 ## Services
-- Frontend: Service that calls the message, name and year services to create a greeting message served at `localhost:7007/greeting`. Sends data through `opentelemetry_phoenix`.
-- Message: Service that chooses a random greeting message. Sends data through `opentelemetry_honeycomb`.
-- Name: Service that chooses a random name. Sends data through `opentelemetry_api`.
-- Year: Service that returns a random year. Sends data through `opentelemetry_api`.
+- Frontend: Service that calls the message, name and year services to create a greeting message served at `localhost:7007/greeting`.
+- Message: Service that chooses a random greeting message.
+- Name: Service that chooses a random name.
+- Year: Service that returns a random year.
 
 ## How to run
 
