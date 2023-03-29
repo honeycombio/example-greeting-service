@@ -31,7 +31,6 @@ services:
   message:
     build: message
     environment:
-      - HONEYCOMB_API_KEY
-      - HONEYCOMB_DATASET
+      - OTEL_COLLECTOR_HOST=collector
     ports:
       - "9000:9000"

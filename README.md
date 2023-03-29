@@ -28,10 +28,10 @@ The motivating use case is testing trace context header compatibility between Ho
 - [year-service](/dotnet/year-service) using [OpenTelemetry](https://github.com/open-telemetry/opentelemetry-dotnet)
 
 **Elixir**
-- [frontend](/elixir/frontend) using [opentelemetry_phoenix](https://github.com/open-telemetry/opentelemetry-erlang-contrib/tree/main/instrumentation/opentelemetry_phoenix)
-- [message](/elixir/message) using [opentelemetry_honeycomb](https://github.com/garthk/opentelemetry_honeycomb)
-- [name](/elixir/name) using [opentelemetry_api](https://github.com/open-telemetry/opentelemetry-erlang)
-- [year](/elixir/year) using [opentelemetry_api](https://github.com/open-telemetry/opentelemetry-erlang)
+- [frontend](/elixir/frontend) using [opentelemetry-erlang](https://github.com/open-telemetry/opentelemetry-erlang)
+- [message](/elixir/message) using [opentelemetry-erlang](https://github.com/open-telemetry/opentelemetry-erlang)
+- [name](/elixir/name) using [opentelemetry-erlang](https://github.com/open-telemetry/opentelemetry-erlang)
+- [year](/elixir/year) using [opentelemetry-erlang](https://github.com/open-telemetry/opentelemetry-erlang)
 
 **Go**
 - [frontend](/golang/frontend) using [opentelemetry-go](https://github.com/open-telemetry/opentelemetry-go)

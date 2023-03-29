@@ -20,7 +20,7 @@ defmodule Message do
   ]
 
   get "/message" do
-    :otel_propagator.text_map_extract(conn.req_headers)
+    :otel_ctx.attach(:opentelemetry_process_propagator.fetch_parent_ctx())
 
     Tracer.with_span "/message" do
       Tracer.set_attributes(
