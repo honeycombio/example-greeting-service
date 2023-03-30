@@ -32,7 +32,7 @@ app.wsgi = OpenTelemetryMiddleware(app.wsgi)
 RequestsInstrumentor().instrument()
 
 @app.route('/message')
-@tracer.start_as_current_span("🤖 choosing tha message ✨")
+@tracer.start_as_current_span("🤖 choosing message ✨")
 def message():
     return random.choice(messages)
 
