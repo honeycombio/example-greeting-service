@@ -18,7 +18,7 @@ messages = [
 trace.set_tracer_provider(TracerProvider(
     resource=Resource.create({SERVICE_NAME: "message-python"})
 ))
-tracer = trace.get_tracer_provider().get_tracer(__name__)
+tracer = trace.get_tracer_provider().get_tracer("message-tracer")
 
 trace.get_tracer_provider().add_span_processor(
     BatchSpanProcessor(OTLPSpanExporter(
@@ -32,7 +32,7 @@ app.wsgi = OpenTelemetryMiddleware(app.wsgi)
 RequestsInstrumentor().instrument()
 
 @app.route('/message')
-@tracer.start_as_current_span("🤖 choosing message ✨")
+@tracer.start_as_current_span("🤖 choosing tha message ✨")
 def message():
     return random.choice(messages)
 
