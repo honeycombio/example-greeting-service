@@ -18,7 +18,7 @@ messages = [
 trace.set_tracer_provider(TracerProvider(
     resource=Resource.create({SERVICE_NAME: "message-python"})
 ))
-tracer = trace.get_tracer_provider().get_tracer("message-tracer")
+tracer = trace.get_tracer(os.getenv("OTEL_SERVICE_NAME", "message-tracer"))
 
 trace.get_tracer_provider().add_span_processor(
     BatchSpanProcessor(OTLPSpanExporter(

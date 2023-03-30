@@ -32,7 +32,7 @@ def get_year():
         r = requests.get(YEAR_ENDPOINT)
         return int(r.text)
 
-tracer = trace.get_tracer("year-tracer")
+tracer = trace.get_tracer(os.getenv("OTEL_SERVICE_NAME", "year-tracer"))
 
 logger = logging.getLogger("my-logger")
 logger.setLevel(logging.INFO)
