@@ -6,7 +6,11 @@ const {
 } = require('@opentelemetry/auto-instrumentations-node');
 
 const sdk = new HoneycombSDK({
-  instrumentations: [getNodeAutoInstrumentations()],
+  instrumentations: [getNodeAutoInstrumentations({
+    '@opentelemetry/instrumentation-fs': {
+      enabled: false,
+    },
+  })],
   serviceName: "frontend-node",
 });
 
