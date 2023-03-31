@@ -12,7 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
-    "honeycomb-beeline": "^3.4.0"
+    "honeycomb-beeline": "^4.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.22",
