@@ -28,13 +28,14 @@ const sdk = new NodeSDK({
     [SemanticResourceAttributes.SERVICE_NAME]: SERVICE_NAME,
   }),
   traceExporter,
-  instrumentations: [getNodeAutoInstrumentations()],
+  instrumentations: [getNodeAutoInstrumentations({
+    '@opentelemetry/instrumentation-fs': {
+      enabled: false,
+    },
+  })],
 });
 
-sdk
-  .start()
-  .then(() => console.log('Tracing initialized'))
-  .catch((error) => console.log('Error initializing tracing', error));
+sdk.start();
 
 process.on('SIGTERM', () => {
   sdk
