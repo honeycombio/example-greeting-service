@@ -136,7 +136,7 @@ def launch_ruby_name_service(auto_init=True):
     launch_ruby_svc("name-rb", "ruby/name-service", "ruby name.rb", auto_init=auto_init)
 
 def launch_ruby_year_service(auto_init=True):
-    launch_ruby_svc("year-rb", "ruby/year-service", "rackup --port 6001", auto_init=auto_init)
+    launch_ruby_svc("year-rb", "ruby/year-service", "puma --port 6001", auto_init=auto_init)
 
 def launch_java_svc(name, dirname="", flags="", auto_init=True):
     '''
