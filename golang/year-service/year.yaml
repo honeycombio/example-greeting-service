@@ -10,8 +10,8 @@ metadata:
     service: year-go
 spec:
   ports:
-  - port: 6001
-    name: http
+    - port: 6001
+      name: http
   selector:
     app: year-go
   type: LoadBalancer
@@ -40,20 +40,67 @@ spec:
         app: year-go
     spec:
       serviceAccountName: year-go
+    #   initContainers:
+    #     - name: copy-launcher
+    #       image: keyval/launcher:v0.1
+    #       command:
+    #         - cp
+    #         - -a
+    #         - /kv-launcher/.
+            # - /odigos-launcher/
+        #   volumeMounts:
+            # - name: launcherdir
+            #   mountPath: /odigos-launcher
+
       containers:
-      - name: year-go
-        image: year-go:local
-        imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: 6001
-        env:
-          - name: OTEL_SERVICE_NAME
-            value: year-go
-          - name: DEBUG
-            value: "true"
-          - name: HONEYCOMB_API_KEY
-            valueFrom:
-              secretKeyRef:
-                key: api-key
-                name: honeycomb
+        - name: year-go
+          image: year-go:local
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 6001
+          env:
+            - name: OTEL_SERVICE_NAME
+              value: year-go
+            - name: DEBUG
+              value: "true"
+            - name: HONEYCOMB_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: api-key
+                  name: honeycomb
+        #   command:
+            # - /odigos-launcher/launch
+            # - /usr/local/bin/year-go
+            # - /var/lib/docker/year-go
+            # - /usr/local/sbin
+            # - /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+            # - /app/year-service
+        #   volumeMounts:
+        #     - mountPath: /odigos-launcher
+        #       name: launcherdir
+        - name: year-go-auto-instrumentation
+          image: keyval/otel-go-agent:v0.6.0
+          env:
+            - name: OTEL_TARGET_EXE
+              value: /app/year-service
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "api.honeycomb.io:443"
+            - name: OTEL_SERVICE_NAME
+              value: year-go-auto
+            - name: HONEYCOMB_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: api-key
+                  name: honeycomb
+            - name: OTEL_EXPORTER_OTLP_HEADERS
+              value: "x-honeycomb-team=$HONEYCOMB_API_KEY"
+          securityContext:
+            runAsUser: 0
+            capabilities:
+              add:
+                - SYS_PTRACE
+            privileged: true
+        #   volumeMounts:
+        #     - mountPath: /sys/kernel/debug
+        #       name: kernel-debug
 ---
