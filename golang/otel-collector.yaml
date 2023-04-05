@@ -16,8 +16,8 @@ data:
     exporters:
       logging:
         loglevel: debug
-      otlphttp:
-        endpoint: "https://api.honeycomb.io"
+      otlp:
+        endpoint: "api.honeycomb.io:443"
         headers:
           "x-honeycomb-team": "<APIKEY>"
           "x-honeycomb-dataset": "greetings"
@@ -26,7 +26,7 @@ data:
         traces:
           receivers: [otlp]
           processors: [batch]
-          exporters: [logging,otlphttp]
+          exporters: [logging,otlp]
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -69,7 +69,7 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.namespace
-          image: otel/opentelemetry-collector-contrib:0.52.0
+          image: otel/opentelemetry-collector-contrib:0.75.0
           imagePullPolicy: IfNotPresent
           name: otel-collector
           ports:
