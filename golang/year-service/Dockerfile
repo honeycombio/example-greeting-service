@@ -1,12 +1,9 @@
-FROM golang:1.18 AS build
+FROM golang:1.20 AS build
 WORKDIR /src
 ENV CGO_ENABLED=0
-
-COPY go.mod .
-COPY go.sum .
-COPY year-service/. .
-
-RUN go build -o /out/year-service ./main.go
+COPY . .
+RUN go get
+RUN go build -o /out/year-service
 
 FROM scratch AS bin
 WORKDIR /app

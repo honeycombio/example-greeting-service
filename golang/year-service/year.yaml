@@ -1,0 +1,59 @@
+##################################################################################################
+# year-go services
+##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: year-go
+  labels:
+    app: year-go
+    service: year-go
+spec:
+  ports:
+  - port: 6001
+    name: http
+  selector:
+    app: year-go
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: year-go
+  labels:
+    account: year-go
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: year-go
+  labels:
+    app: year-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: year-go
+  template:
+    metadata:
+      labels:
+        app: year-go
+    spec:
+      serviceAccountName: year-go
+      containers:
+      - name: year-go
+        image: year-go:local
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 6001
+        env:
+          - name: OTEL_SERVICE_NAME
+            value: year-go
+          - name: DEBUG
+            value: "true"
+          - name: HONEYCOMB_API_KEY
+            valueFrom:
+              secretKeyRef:
+                key: api-key
+                name: honeycomb
+---
