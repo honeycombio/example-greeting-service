@@ -19,7 +19,7 @@ data:
       otlp:
         endpoint: "api.honeycomb.io:443"
         headers:
-          "x-honeycomb-team": "<APIKEY>"
+          "x-honeycomb-team": "AeAccGTH1jk5JIY8CC9MtF"
           "x-honeycomb-dataset": "greetings"
     service:
       pipelines:
