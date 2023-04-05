@@ -40,17 +40,19 @@ spec:
         app: year-go
     spec:
       serviceAccountName: year-go
-    #   initContainers:
-    #     - name: copy-launcher
-    #       image: keyval/launcher:v0.1
-    #       command:
-    #         - cp
-    #         - -a
-    #         - /kv-launcher/.
-            # - /odigos-launcher/
-        #   volumeMounts:
-            # - name: launcherdir
-            #   mountPath: /odigos-launcher
+      shareProcessNamespace: true
+      terminationGracePeriodSeconds: 0
+      initContainers:
+        - name: copy-launcher
+          image: keyval/launcher:v0.1
+          command:
+            - cp
+            - -a
+            - /kv-launcher/.
+            - /odigos-launcher/
+          volumeMounts:
+          - name: launcherdir
+            mountPath: /odigos-launcher
 
       containers:
         - name: year-go
@@ -68,16 +70,15 @@ spec:
                 secretKeyRef:
                   key: api-key
                   name: honeycomb
-        #   command:
-            # - /odigos-launcher/launch
-            # - /usr/local/bin/year-go
-            # - /var/lib/docker/year-go
-            # - /usr/local/sbin
-            # - /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-            # - /app/year-service
-        #   volumeMounts:
-        #     - mountPath: /odigos-launcher
-        #       name: launcherdir
+          command:
+            - /odigos-launcher/launch
+            - /app/year-service
+          volumeMounts:
+             - name: launcherdir
+               mountPath: /odigos-launcher
+          resources:
+            requests:
+              cpu: 100m
         - name: year-go-auto-instrumentation
           image: keyval/otel-go-agent:v0.6.0
           env:
@@ -100,7 +101,13 @@ spec:
               add:
                 - SYS_PTRACE
             privileged: true
-        #   volumeMounts:
-        #     - mountPath: /sys/kernel/debug
-        #       name: kernel-debug
+          volumeMounts:
+            - mountPath: /sys/kernel/debug
+              name: kernel-debug
+      volumes:
+        - name: launcherdir
+          emptyDir: {}
+        - name: kernel-debug
+          hostPath:
+            path: /sys/kernel/debug
 ---
