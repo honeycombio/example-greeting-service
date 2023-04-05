@@ -1,6 +1,6 @@
-# ##################################################################################################
-# # year-golang services
-# ##################################################################################################
+##################################################################################################
+# year-golang services
+##################################################################################################
 apiVersion: v1
 kind: Service
 metadata:
@@ -55,22 +55,24 @@ spec:
       #         mountPath: /odigos-launcher
       containers:
         - name: year-golang
-          image: hnyexample/year-go
+          image: hnyexample/year-golang
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 6001
           env:
             - name: OTEL_SERVICE_NAME
               value: year-go
             - name: HONEYCOMB_API_KEY
-              value: AeAccGTH1jk5JIY8CC9MtF
-            - name: OTEL_EXPORTER_OTLP_INSECURE
-              value: "true"
+              valueFrom:
+                secretKeyRef:
+                  key: api-key
+                  name: honeycomb
           # command:
           #   - /odigos-launcher/launch
           #   - /app/year-service
           # volumeMounts:
           #   - mountPath: /odigos-launcher
           #     name: launcherdir
-          ports:
-            - containerPort: 6001
         # - name: year-go-instrumentation
         #   image: keyval/otel-go-agent:v0.6.0
         #   env:
@@ -95,3 +97,4 @@ spec:
       #   - name: kernel-debug
       #     hostPath:
       #       path: /sys/kernel/debug
+---

@@ -19,7 +19,7 @@ data:
       otlp:
         endpoint: "api.honeycomb.io:443"
         headers:
-          "x-honeycomb-team": "AeAccGTH1jk5JIY8CC9MtF"
+          "x-honeycomb-team": ${HONEYCOMB_API_KEY}
           "x-honeycomb-dataset": "greetings"
     service:
       pipelines:
@@ -69,7 +69,12 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: metadata.namespace
-          image: otel/opentelemetry-collector-contrib:0.75.0
+            - name: HONEYCOMB_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: api-key
+                  name: honeycomb
+          image: otel/opentelemetry-collector:0.75.0
           imagePullPolicy: IfNotPresent
           name: otel-collector
           ports:

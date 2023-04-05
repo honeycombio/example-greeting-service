@@ -5,6 +5,11 @@
 replace `<APIKEY>` with actual api key
 
 ```sh
+export HONEYCOMB_API_KEY=<APIKEY>
+kubectl create secret generic honeycomb --from-literal=api-key=$HONEYCOMB_API_KEY
+```
+
+```sh
 # build the docker images
 docker-compose build
 
