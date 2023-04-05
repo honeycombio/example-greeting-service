@@ -1,0 +1,173 @@
+# ##################################################################################################
+# # year-golang services
+# ##################################################################################################
+apiVersion: v1
+kind: Service
+metadata:
+  name: year-golang
+  labels:
+    app: year-golang
+    service: year-golang
+spec:
+  ports:
+  - port: 6001
+    name: http
+  selector:
+    app: year-golang
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: year-golang
+  labels:
+    account: year-golang
+---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: year-golang
+#   labels:
+#     app.kubernetes.io/name: year-golang
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: year-golang
+#   template:
+#     metadata:
+#       labels:
+#         app: year-golang
+#     spec:
+#       serviceAccountName: year-golang
+#       shareProcessNamespace: true
+#       terminationGracePeriodSeconds: 0
+#       initContainers:
+#         - name: copy-launcher
+#           image: keyval/launcher:v0.1
+#           command:
+#             - cp
+#             - -a
+#             - /kv-launcher/.
+#             - /odigos-launcher/
+#           volumeMounts:
+#             - name: launcherdir
+#               mountPath: /odigos-launcher
+#       containers:
+#       - name: year-golang
+#         image: hnyexample/year-golang
+#         imagePullPolicy: IfNotPresent
+#         volumeMounts:
+#           - mountPath: /odigos-launcher
+#             name: launcherdir
+#         ports:
+#         - containerPort: 6001
+#         env:
+#           - name: OTEL_SERVICE_NAME
+#             value: year-go
+#           - name: HONEYCOMB_API_KEY
+#             value: <APIKEY>
+#           - name: OTEL_EXPORTER_OTLP_INSECURE
+#             value: "true"
+#       - name: year-golang-instrumentation
+#         image: keyval/otel-go-agent:v0.6.0
+#         env:
+#           - name: OTEL_TARGET_EXE
+#             value: /app/year-service
+#           - name: OTEL_EXPORTER_OTLP_ENDPOINT
+#             value: "http://otel-collector:4317"
+#           - name: OTEL_SERVICE_NAME
+#             value: "year-go-auto"
+#         securityContext:
+#           runAsUser: 0
+#           capabilities:
+#             add:
+#               - SYS_PTRACE
+#           privileged: true
+#         volumeMounts:
+#           - mountPath: /sys/kernel/debug
+#             name: kernel-debug
+#       volumes:
+#         - name: launcherdir
+#           emptyDir: {}
+#         - name: kernel-debug
+#           hostPath:
+#             path: /sys/kernel/debug
+# ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: year-golang
+  labels:
+    app.kubernetes.io/name: year-golang
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: year-golang
+      version: v11
+  template:
+    metadata:
+      labels:
+        app: year-golang
+        version: v11
+    spec:
+      serviceAccountName: year-golang
+      shareProcessNamespace: true
+      terminationGracePeriodSeconds: 0
+      initContainers:
+        - name: copy-launcher
+          image: keyval/launcher:v0.1
+          command:
+            - cp
+            - -a
+            - /kv-launcher/.
+            - /odigos-launcher/
+          volumeMounts:
+            - name: launcherdir
+              mountPath: /odigos-launcher
+      containers:
+        - env:
+            - name: OTEL_SERVICE_NAME
+              value: year-go
+            - name: HONEYCOMB_API_KEY
+              value: <APIKEY>
+            - name: OTEL_EXPORTER_OTLP_INSECURE
+              value: "true"
+          image: hnyexample/year-go
+          name: year-golang
+          command:
+            - /odigos-launcher/launch
+            - /app/year-service
+          volumeMounts:
+            - mountPath: /odigos-launcher
+              name: launcherdir
+          ports:
+            - containerPort: 6001
+          resources:
+            requests:
+              cpu: 100m
+        - name: year-go-instrumentation
+          image: keyval/otel-go-agent:v0.6.0
+          env:
+            - name: OTEL_TARGET_EXE
+              value: /app/year-service
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: "otel-collector:4317"
+            - name: OTEL_SERVICE_NAME
+              value: "year-go-auto"
+          securityContext:
+            runAsUser: 0
+            capabilities:
+              add:
+                - SYS_PTRACE
+            privileged: true
+          volumeMounts:
+            - mountPath: /sys/kernel/debug
+              name: kernel-debug
+      volumes:
+        - name: launcherdir
+          emptyDir: {}
+        - name: kernel-debug
+          hostPath:
+            path: /sys/kernel/debug
