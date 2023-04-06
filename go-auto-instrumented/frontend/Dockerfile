@@ -4,11 +4,11 @@ ENV CGO_ENABLED=0
 
 COPY go.mod .
 
-COPY year-service/. .
-RUN go build -o /out/year-service .
+COPY frontend/. .
+RUN go build -o /out/frontend .
 
 FROM scratch AS bin
 WORKDIR /app
 COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=build /out/year-service /app/
-CMD ["/app/year-service"]
+COPY --from=build /out/frontend /app/
+CMD ["/app/frontend"]

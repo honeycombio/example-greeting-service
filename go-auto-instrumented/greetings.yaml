@@ -1,0 +1,248 @@
+##################################################################################################
+# frontend-go services
+##################################################################################################
+# kind: ServiceAccount
+# apiVersion: v1
+# metadata:
+#   name: frontend-go
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: frontend-go-svc
+#   labels:
+#     app: frontend-go-svc
+#     service: frontend-go-svc
+#     app.kubernetes.io/name: frontend-go
+# spec:
+#   selector:
+#     app: frontend-go-svc
+#   ports:
+#   - name: http
+#     port: 7007
+#     targetPort: 7007
+#   type: LoadBalancer
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: frontend-go
+#   labels:
+#     app: frontend-go
+#     app.kubernetes.io/name: frontend-go
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: frontend-go-svc
+#   template:
+#     metadata:
+#       labels:
+#         app: frontend-go-svc
+#     spec:
+#       serviceAccountName: frontend-go
+#       terminationGracePeriodSeconds: 0
+#       containers:
+#         - name: frontend-go-svc
+#           image: frontend-go-auto:local
+#           imagePullPolicy: IfNotPresent
+#           ports:
+#           - containerPort: 7007
+#             name: http
+#           resources:
+#             requests:
+#               cpu: 100m
+#           env:
+#           - name: MESSAGE_ENDPOINT
+#             value: http://message:9000
+#           - name: NAME_ENDPOINT
+#             value: http://name:8000
+#           - name: YEAR_ENDPOINT
+#             value: http://year:6001
+---
+##################################################################################################
+# message-go services
+##################################################################################################
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: message-go
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: message-go-svc
+  labels:
+    app: message-go-svc
+    service: message-go-svc
+    app.kubernetes.io/name: message-go
+spec:
+  selector:
+    app: message-go-svc
+  ports:
+  - name: http
+    port: 9000
+    targetPort: 9000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: message-go
+  labels:
+    app: message-go
+    app.kubernetes.io/name: message-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: message-go-svc
+  template:
+    metadata:
+      labels:
+        app: message-go-svc
+    spec:
+      serviceAccountName: message-go
+      terminationGracePeriodSeconds: 0
+      containers:
+        - name: message-go-svc
+          image: message-go-auto:local
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 9000
+            name: http
+          resources:
+            requests:
+              cpu: 100m
+          env:
+          - name: MESSAGE_ENDPOINT
+            value: http://message:9000
+          - name: NAME_ENDPOINT
+            value: http://name:8000
+          - name: YEAR_ENDPOINT
+            value: http://year:6001
+---
+##################################################################################################
+# name-go services
+##################################################################################################
+# kind: ServiceAccount
+# apiVersion: v1
+# metadata:
+#   name: name-go
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: name-go-svc
+#   labels:
+#     app: name-go-svc
+#     service: name-go-svc
+#     app.kubernetes.io/name: name-go
+# spec:
+#   selector:
+#     app: name-go-svc
+#   ports:
+#   - name: http
+#     port: 8000
+#     targetPort: 8000
+#   type: LoadBalancer
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: name-go
+#   labels:
+#     app: name-go
+#     app.kubernetes.io/name: name-go
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: name-go-svc
+#   template:
+#     metadata:
+#       labels:
+#         app: name-go-svc
+#     spec:
+#       serviceAccountName: name-go
+#       terminationGracePeriodSeconds: 0
+#       containers:
+#         - name: name-go-svc
+#           image: name-go-auto:local
+#           imagePullPolicy: IfNotPresent
+#           ports:
+#           - containerPort: 8000
+#             name: http
+#           resources:
+#             requests:
+#               cpu: 100m
+#           env:
+#           - name: MESSAGE_ENDPOINT
+#             value: http://message:9000
+#           - name: NAME_ENDPOINT
+#             value: http://name:8000
+#           - name: YEAR_ENDPOINT
+#             value: http://year:6001
+---
+##################################################################################################
+# year-go services
+##################################################################################################
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: year-go
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: year-go-svc
+  labels:
+    app: year-go-svc
+    service: year-go-svc
+    app.kubernetes.io/name: year-go
+spec:
+  selector:
+    app: year-go-svc
+  ports:
+  - name: http
+    port: 6001
+    targetPort: 6001
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: year-go
+  labels:
+    app: year-go
+    app.kubernetes.io/name: year-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: year-go-svc
+  template:
+    metadata:
+      labels:
+        app: year-go-svc
+    spec:
+      serviceAccountName: year-go
+      terminationGracePeriodSeconds: 0
+      containers:
+        - name: year-go-svc
+          image: year-go-auto:local
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 6001
+            name: http
+          resources:
+            requests:
+              cpu: 100m
+          env:
+          - name: MESSAGE_ENDPOINT
+            value: http://message:9000
+          - name: NAME_ENDPOINT
+            value: http://name:8000
+          - name: YEAR_ENDPOINT
+            value: http://year:6001
+---

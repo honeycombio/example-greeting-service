@@ -1,0 +1,56 @@
+##################################################################################################
+# frontend-go services
+##################################################################################################
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: frontend-go
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-go-svc
+  labels:
+    app: frontend-go-svc
+    service: frontend-go-svc
+    app.kubernetes.io/name: frontend-go
+spec:
+  selector:
+    app: frontend-go-svc
+  ports:
+  - name: http
+    port: 7007
+    targetPort: 7007
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-go
+  labels:
+    app: frontend-go
+    app.kubernetes.io/name: frontend-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend-go-svc
+  template:
+    metadata:
+      labels:
+        app: frontend-go-svc
+    spec:
+      serviceAccountName: frontend-go
+      terminationGracePeriodSeconds: 0
+      containers:
+      - env:
+        name: frontend-go-svc
+        image: frontend-go-auto:local
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 7007
+          name: http
+        resources:
+          requests:
+            cpu: 100m
+---
