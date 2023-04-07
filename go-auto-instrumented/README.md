@@ -9,7 +9,7 @@ export HONEYCOMB_API_KEY=<APIKEY>
 ```
 
 ```sh
-# build the docker image for the year service
+# build the docker images for all the services
 docker-compose build
 
 # create secret with api key
@@ -18,7 +18,7 @@ kubectl create secret generic honeycomb --from-literal=api-key=$HONEYCOMB_API_KE
 # deploy the service in k8s
 kubectl apply -f greetings.yaml
 
-# deploy the service with the auto-instrumentation agent
+# deploy the services with the auto-instrumentation agent
 kubectl apply -f greetings-instrumented.yaml
 
 # deploy the collector
@@ -42,10 +42,10 @@ WIP `curl localhost:7007/greeting`
 # delete secret with api key
 kubectl delete secret honeycomb
 
-# delete the service in k8s
+# delete the services in k8s
 kubectl delete -f greetings.yaml
 
-# delete the service with the auto-instrumentation agent
+# delete the services with the auto-instrumentation agent
 kubectl delete -f greetings-instrumented.yaml
 
 # delete the collector service
