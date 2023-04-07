@@ -36,6 +36,13 @@
 #         - name: frontend-go-svc
 #           image: frontend-go-auto:local
 #           imagePullPolicy: IfNotPresent
+#           env:
+#             - name: MESSAGE_ENDPOINT
+#               value: http://message-go-svc:9000
+#             - name: NAME_ENDPOINT
+#               value: http://name-go-svc:8000
+#             - name: YEAR_ENDPOINT
+#               value: http://year-go-svc:6001
 #           ports:
 #             - containerPort: 6001
 #           command:
@@ -56,12 +63,6 @@
 #               value: otel-collector:4317
 #             - name: OTEL_SERVICE_NAME
 #               value: frontend-go-auto
-#             - name: MESSAGE_ENDPOINT
-#               value: http://message:9000
-#             - name: NAME_ENDPOINT
-#               value: http://name:8000
-#             - name: YEAR_ENDPOINT
-#               value: http://year:6001
 #           securityContext:
 #             runAsUser: 0
 #             capabilities:
@@ -117,6 +118,13 @@ spec:
         - name: message-go-svc
           image: message-go-auto:local
           imagePullPolicy: IfNotPresent
+          env:
+            - name: MESSAGE_ENDPOINT
+              value: http://message-go-svc:9000
+            - name: NAME_ENDPOINT
+              value: http://name-go-svc:8000
+            - name: YEAR_ENDPOINT
+              value: http://year-go-svc:6001
           ports:
             - containerPort: 6001
           command:
@@ -137,12 +145,6 @@ spec:
               value: otel-collector:4317
             - name: OTEL_SERVICE_NAME
               value: message-go-auto
-            - name: MESSAGE_ENDPOINT
-              value: http://message:9000
-            - name: NAME_ENDPOINT
-              value: http://name:8000
-            - name: YEAR_ENDPOINT
-              value: http://year:6001
           securityContext:
             runAsUser: 0
             capabilities:
@@ -163,83 +165,83 @@ spec:
 ##################################################################################################
 # name-go instrumentation
 ##################################################################################################
-# apiVersion: apps/v1
-# kind: Deployment
-# metadata:
-#   name: name-go
-#   labels:
-#     app: name-go
-#     app.kubernetes.io/name: name-go
-# spec:
-#   replicas: 1
-#   selector:
-#     matchLabels:
-#       app: name-go-svc
-#   template:
-#     metadata:
-#       labels:
-#         app: name-go-svc
-#     spec:
-#       serviceAccountName: name-go
-#       shareProcessNamespace: true
-#       terminationGracePeriodSeconds: 0
-#       initContainers:
-#         - name: copy-launcher
-#           image: keyval/launcher:v0.1
-#           command:
-#             - cp
-#             - -a
-#             - /kv-launcher/.
-#             - /otel-auto-launcher/
-#           volumeMounts:
-#             - name: launcherdir
-#               mountPath: /otel-auto-launcher
-#       containers:
-#         - name: name-go-svc
-#           image: name-go-auto:local
-#           imagePullPolicy: IfNotPresent
-#           ports:
-#             - containerPort: 6001
-#           command:
-#             - /otel-auto-launcher/launch
-#             - /app/name-service
-#           volumeMounts:
-#             - mountPath: /otel-auto-launcher
-#               name: launcherdir
-#           resources:
-#             requests:
-#               cpu: 100m
-#         - name: name-go-instrumentation
-#           image: keyval/otel-go-agent:v0.6.4
-#           env:
-#             - name: OTEL_TARGET_EXE
-#               value: /app/name-service
-#             - name: OTEL_EXPORTER_OTLP_ENDPOINT
-#               value: otel-collector:4317
-#             - name: OTEL_SERVICE_NAME
-#               value: name-go-auto
-#             - name: MESSAGE_ENDPOINT
-#               value: http://message:9000
-#             - name: NAME_ENDPOINT
-#               value: http://name:8000
-#             - name: YEAR_ENDPOINT
-#               value: http://year:6001
-#           securityContext:
-#             runAsUser: 0
-#             capabilities:
-#               add:
-#                 - SYS_PTRACE
-#             privileged: true
-#           volumeMounts:
-#             - mountPath: /sys/kernel/debug
-#               name: kernel-debug
-#       volumes:
-#         - name: launcherdir
-#           emptyDir: {}
-#         - name: kernel-debug
-#           hostPath:
-#             path: /sys/kernel/debug
-
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: name-go
+  labels:
+    app: name-go
+    app.kubernetes.io/name: name-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: name-go-svc
+  template:
+    metadata:
+      labels:
+        app: name-go-svc
+    spec:
+      serviceAccountName: name-go
+      shareProcessNamespace: true
+      terminationGracePeriodSeconds: 0
+      initContainers:
+        - name: copy-launcher
+          image: keyval/launcher:v0.1
+          command:
+            - cp
+            - -a
+            - /kv-launcher/.
+            - /otel-auto-launcher/
+          volumeMounts:
+            - name: launcherdir
+              mountPath: /otel-auto-launcher
+      containers:
+        - name: name-go-svc
+          image: name-go-auto:local
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MESSAGE_ENDPOINT
+              value: http://message-go-svc:9000
+            - name: NAME_ENDPOINT
+              value: http://name-go-svc:8000
+            - name: YEAR_ENDPOINT
+              value: http://year-go-svc:6001
+          ports:
+            - containerPort: 6001
+          command:
+            - /otel-auto-launcher/launch
+            - /app/name-service
+          volumeMounts:
+            - mountPath: /otel-auto-launcher
+              name: launcherdir
+          resources:
+            requests:
+              cpu: 100m
+        - name: name-go-instrumentation
+          image: keyval/otel-go-agent:v0.6.4
+          env:
+            - name: OTEL_TARGET_EXE
+              value: /app/name-service
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
+              value: otel-collector:4317
+            - name: OTEL_SERVICE_NAME
+              value: name-go-auto
+          securityContext:
+            runAsUser: 0
+            capabilities:
+              add:
+                - SYS_PTRACE
+            privileged: true
+          volumeMounts:
+            - mountPath: /sys/kernel/debug
+              name: kernel-debug
+      volumes:
+        - name: launcherdir
+          emptyDir: {}
+        - name: kernel-debug
+          hostPath:
+            path: /sys/kernel/debug
 ---
 ##################################################################################################
 # year-go instrumentation
