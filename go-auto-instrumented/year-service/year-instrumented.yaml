@@ -18,20 +18,21 @@ spec:
       labels:
         app: year-go-svc
     spec:
-      serviceAccountName: year-go
       shareProcessNamespace: true
-      terminationGracePeriodSeconds: 0
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
       initContainers:
-        - name: copy-launcher
-          image: keyval/launcher:v0.1
-          command:
-            - cp
-            - -a
-            - /kv-launcher/.
-            - /otel-auto-launcher/
-          volumeMounts:
-            - name: launcherdir
-              mountPath: /otel-auto-launcher
+      - name: copy-launcher
+        image: keyval/launcher:v0.1
+        imagePullPolicy: IfNotPresent
+        command:
+          - cp
+          - -a
+          - /kv-launcher/.
+          - /launcher/
+        volumeMounts:
+          - name: launcherdir
+            mountPath: /launcher
       containers:
         - name: year-go-svc
           image: year-go-auto:local
@@ -39,23 +40,23 @@ spec:
           ports:
             - containerPort: 6001
           command:
-            - /otel-auto-launcher/launch
+            - /launcher/launch
             - /app/year-service
           volumeMounts:
-            - mountPath: /otel-auto-launcher
+            - mountPath: /launcher
               name: launcherdir
-          resources:
-            requests:
-              cpu: 100m
         - name: year-go-instrumentation
           image: keyval/otel-go-agent:v0.6.4
+          imagePullPolicy: IfNotPresent
           env:
-            - name: OTEL_TARGET_EXE
-              value: /app/year-service
-            - name: OTEL_EXPORTER_OTLP_ENDPOINT
-              value: otel-collector:4317
-            - name: OTEL_SERVICE_NAME
-              value: year-go-auto
+          - name: OTEL_TARGET_EXE
+            value: /app/year-service
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            value: otel-collector:4317
+          - name: OTEL_SERVICE_NAME
+            value: year-go-auto
+          - name: OTEL_PROPAGATORS
+            value: "tracecontext,baggage"
           securityContext:
             runAsUser: 0
             capabilities:
@@ -63,12 +64,11 @@ spec:
                 - SYS_PTRACE
             privileged: true
           volumeMounts:
-            - mountPath: /sys/kernel/debug
-              name: kernel-debug
+          - mountPath: /sys/kernel/debug
+            name: kernel-debug
       volumes:
-        - name: launcherdir
-          emptyDir: {}
-        - name: kernel-debug
-          hostPath:
-            path: /sys/kernel/debug
----
+      - name: launcherdir
+        emptyDir: {}
+      - name: kernel-debug
+        hostPath:
+          path: /sys/kernel/debug
