@@ -31,19 +31,13 @@ kubectl get pods
 kubectl logs deployments/otel-collector --follow
 ```
 
-`curl localhost:6001/year`
-`curl localhost:9000/message`
-
-WIP `curl localhost:7007/greeting`
+`curl localhost:7007/greeting`
 
 ## cleanup
 
 ```sh
 # delete secret with api key
 kubectl delete secret honeycomb
-
-# delete the services in k8s
-kubectl delete -f greetings.yaml
 
 # delete the services with the auto-instrumentation agent
 kubectl delete -f greetings-instrumented.yaml
