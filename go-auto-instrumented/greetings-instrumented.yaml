@@ -21,30 +21,12 @@ spec:
       shareProcessNamespace: true
       securityContext: {}
       terminationGracePeriodSeconds: 30
-      initContainers:
-      - name: copy-launcher
-        image: keyval/launcher:v0.1
-        imagePullPolicy: IfNotPresent
-        command:
-          - cp
-          - -a
-          - /kv-launcher/.
-          - /launcher/
-        volumeMounts:
-          - name: launcherdir
-            mountPath: /launcher
       containers:
         - name: frontend-go-svc
           image: frontend-go-auto:local
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 6001
-          command:
-            - /launcher/launch
-            - /app/frontend
-          volumeMounts:
-            - mountPath: /launcher
-              name: launcherdir
         - name: frontend-go-instrumentation
           image: keyval/otel-go-agent:v0.6.4
           imagePullPolicy: IfNotPresent
@@ -67,8 +49,6 @@ spec:
           - mountPath: /sys/kernel/debug
             name: kernel-debug
       volumes:
-      - name: launcherdir
-        emptyDir: {}
       - name: kernel-debug
         hostPath:
           path: /sys/kernel/debug
@@ -97,30 +77,12 @@ spec:
       shareProcessNamespace: true
       securityContext: {}
       terminationGracePeriodSeconds: 30
-      initContainers:
-      - name: copy-launcher
-        image: keyval/launcher:v0.1
-        imagePullPolicy: IfNotPresent
-        command:
-          - cp
-          - -a
-          - /kv-launcher/.
-          - /launcher/
-        volumeMounts:
-          - name: launcherdir
-            mountPath: /launcher
       containers:
         - name: message-go-svc
           image: message-go-auto:local
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 6001
-          command:
-            - /launcher/launch
-            - /app/message-service
-          volumeMounts:
-            - mountPath: /launcher
-              name: launcherdir
         - name: message-go-instrumentation
           image: keyval/otel-go-agent:v0.6.4
           imagePullPolicy: IfNotPresent
@@ -143,8 +105,6 @@ spec:
           - mountPath: /sys/kernel/debug
             name: kernel-debug
       volumes:
-      - name: launcherdir
-        emptyDir: {}
       - name: kernel-debug
         hostPath:
           path: /sys/kernel/debug
@@ -173,30 +133,12 @@ spec:
       shareProcessNamespace: true
       securityContext: {}
       terminationGracePeriodSeconds: 30
-      initContainers:
-      - name: copy-launcher
-        image: keyval/launcher:v0.1
-        imagePullPolicy: IfNotPresent
-        command:
-          - cp
-          - -a
-          - /kv-launcher/.
-          - /launcher/
-        volumeMounts:
-          - name: launcherdir
-            mountPath: /launcher
       containers:
         - name: name-go-svc
           image: name-go-auto:local
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 6001
-          command:
-            - /launcher/launch
-            - /app/name-service
-          volumeMounts:
-            - mountPath: /launcher
-              name: launcherdir
         - name: name-go-instrumentation
           image: keyval/otel-go-agent:v0.6.4
           imagePullPolicy: IfNotPresent
@@ -219,8 +161,6 @@ spec:
           - mountPath: /sys/kernel/debug
             name: kernel-debug
       volumes:
-      - name: launcherdir
-        emptyDir: {}
       - name: kernel-debug
         hostPath:
           path: /sys/kernel/debug
@@ -249,30 +189,12 @@ spec:
       shareProcessNamespace: true
       securityContext: {}
       terminationGracePeriodSeconds: 30
-      initContainers:
-      - name: copy-launcher
-        image: keyval/launcher:v0.1
-        imagePullPolicy: IfNotPresent
-        command:
-          - cp
-          - -a
-          - /kv-launcher/.
-          - /launcher/
-        volumeMounts:
-          - name: launcherdir
-            mountPath: /launcher
       containers:
         - name: year-go-svc
           image: year-go-auto:local
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 6001
-          command:
-            - /launcher/launch
-            - /app/year-service
-          volumeMounts:
-            - mountPath: /launcher
-              name: launcherdir
         - name: year-go-instrumentation
           image: keyval/otel-go-agent:v0.6.4
           imagePullPolicy: IfNotPresent
@@ -295,8 +217,6 @@ spec:
           - mountPath: /sys/kernel/debug
             name: kernel-debug
       volumes:
-      - name: launcherdir
-        emptyDir: {}
       - name: kernel-debug
         hostPath:
           path: /sys/kernel/debug
