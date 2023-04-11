@@ -24,12 +24,10 @@ spec:
       containers:
         - name: frontend-go-svc
           image: frontend-go-auto:local
-          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 7007
         - name: frontend-go-instrumentation
-          image: keyval/otel-go-agent:v0.6.4
-          imagePullPolicy: IfNotPresent
+          image: otel-go-agent:v0.1
           env:
           - name: OTEL_TARGET_EXE
             value: /app/frontend
@@ -80,12 +78,10 @@ spec:
       containers:
         - name: message-go-svc
           image: message-go-auto:local
-          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 9000
         - name: message-go-instrumentation
-          image: keyval/otel-go-agent:v0.6.4
-          imagePullPolicy: IfNotPresent
+          image: otel-go-agent:v0.1
           env:
           - name: OTEL_TARGET_EXE
             value: /app/message-service
@@ -136,12 +132,10 @@ spec:
       containers:
         - name: name-go-svc
           image: name-go-auto:local
-          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8000
         - name: name-go-instrumentation
-          image: keyval/otel-go-agent:v0.6.4
-          imagePullPolicy: IfNotPresent
+          image: otel-go-agent:v0.1
           env:
           - name: OTEL_TARGET_EXE
             value: /app/name-service
@@ -192,12 +186,10 @@ spec:
       containers:
         - name: year-go-svc
           image: year-go-auto:local
-          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 6001
         - name: year-go-instrumentation
-          image: keyval/otel-go-agent:v0.6.4
-          imagePullPolicy: IfNotPresent
+          image: otel-go-agent:v0.1
           env:
           - name: OTEL_TARGET_EXE
             value: /app/year-service
