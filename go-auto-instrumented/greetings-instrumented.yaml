@@ -26,7 +26,7 @@ spec:
           image: frontend-go-auto:local
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 6001
+            - containerPort: 7007
         - name: frontend-go-instrumentation
           image: keyval/otel-go-agent:v0.6.4
           imagePullPolicy: IfNotPresent
@@ -82,7 +82,7 @@ spec:
           image: message-go-auto:local
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 6001
+            - containerPort: 9000
         - name: message-go-instrumentation
           image: keyval/otel-go-agent:v0.6.4
           imagePullPolicy: IfNotPresent
@@ -138,7 +138,7 @@ spec:
           image: name-go-auto:local
           imagePullPolicy: IfNotPresent
           ports:
-            - containerPort: 6001
+            - containerPort: 8000
         - name: name-go-instrumentation
           image: keyval/otel-go-agent:v0.6.4
           imagePullPolicy: IfNotPresent
