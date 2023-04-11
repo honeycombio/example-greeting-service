@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+    "github.com/gorilla/mux"
 )
 
 func getEnv(key, fallback string) string {
@@ -24,18 +25,16 @@ var (
 
 func main() {
 
-    mux := http.NewServeMux()
-	mux.HandleFunc("/greeting", func(w http.ResponseWriter, r *http.Request) {
+    r := mux.NewRouter()
+	r.HandleFunc("/greeting", func(w http.ResponseWriter, r *http.Request) {
 		name := getName(r.Context())
 		message := getMessage(r.Context())
 
 		_, _ = fmt.Fprintf(w, "Hello %s, %s", name, message)
 	})
 
-	handler := http.Handler(mux)
-
 	log.Println("Listening on http://localhost:7007/greeting")
-	log.Fatal(http.ListenAndServe(":7007", handler))
+	log.Fatal(http.ListenAndServe(":7007", r))
 }
 
 func getName(ctx context.Context) string {

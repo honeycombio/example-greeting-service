@@ -3,8 +3,8 @@ WORKDIR /src
 ENV CGO_ENABLED=0
 
 COPY go.mod .
-
 COPY frontend/. .
+RUN go get
 RUN go build -o /out/frontend .
 
 FROM scratch AS bin
