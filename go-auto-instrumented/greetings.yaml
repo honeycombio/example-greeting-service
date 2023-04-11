@@ -45,7 +45,6 @@ spec:
       containers:
         - name: frontend-go-svc
           image: frontend-go-auto:local
-          imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 7007
             name: http
@@ -104,7 +103,6 @@ spec:
       containers:
         - name: message-go-svc
           image: message-go-auto:local
-          imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 9000
             name: http
@@ -163,7 +161,6 @@ spec:
       containers:
         - name: name-go-svc
           image: name-go-auto:local
-          imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 8000
             name: http
@@ -222,7 +219,6 @@ spec:
       containers:
         - name: year-go-svc
           image: year-go-auto:local
-          imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 6001
             name: http
