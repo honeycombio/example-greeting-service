@@ -27,23 +27,23 @@ export HONEYCOMB_API_KEY=<APIKEY>
 # build the docker images for all the services
 docker-compose build
 
-# create secret with api key
-kubectl create secret generic honeycomb --from-literal=api-key=$HONEYCOMB_API_KEY
+# deploy the greetings namespace in k8s
+kubectl apply -k greetings/
 
-# deploy the service in k8s
-kubectl apply -f greetings.yaml
+# create secret with api key
+kubectl create secret generic honeycomb --from-literal=api-key=$HONEYCOMB_API_KEY -n greetings
 
 # deploy the services with the auto-instrumentation agent
-kubectl apply -f greetings-instrumented.yaml
+kubectl apply -f greetings-instrumented.yaml -n greetings
 
 # deploy the collector
-kubectl apply -f otel-collector.yaml
+kubectl apply -f otel-collector.yaml -n greetings
 
 # make sure everything is up and running
-kubectl get pods
+kubectl get pods -n greetings
 
 # follow logs for collector (optional)
-kubectl logs deployments/otel-collector --follow
+kubectl logs deployments/otel-collector --follow -n greetings
 ```
 
 `curl localhost:7007/greeting`
@@ -52,14 +52,8 @@ kubectl logs deployments/otel-collector --follow
 
 ```sh
 # delete secret with api key
-kubectl delete secret honeycomb
-
-# delete the services, including the auto-instrumentation agents
-kubectl delete -f greetings.yaml
-
-# delete the collector service
-kubectl delete -f otel-collector.yaml
+kubectl delete namespace greetings
 
 # make sure everything is gone
-kubectl get pods
+kubectl get pods -n greetings
 ```

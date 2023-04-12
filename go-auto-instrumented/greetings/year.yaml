@@ -1,0 +1,54 @@
+##################################################################################################
+# year-go services
+##################################################################################################
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: year-go
+  namespace: greetings
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: year
+  namespace: greetings
+  labels:
+    app: year
+    service: year
+    app.kubernetes.io/name: year-go
+spec:
+  selector:
+    app: year
+  ports:
+  - name: http
+    port: 6001
+    targetPort: 6001
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: year-go
+  namespace: greetings
+  labels:
+    app: year-go
+    app.kubernetes.io/name: year-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: year
+  template:
+    metadata:
+      labels:
+        app: year
+    spec:
+      serviceAccountName: year-go
+      terminationGracePeriodSeconds: 0
+      containers:
+        - name: year
+          image: year-go-auto:local
+          ports:
+          - containerPort: 6001
+            name: http
+

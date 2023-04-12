@@ -5,6 +5,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend-go
+  namespace: greetings
   labels:
     app: frontend-go
     app.kubernetes.io/name: frontend-go
@@ -65,6 +66,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: message-go
+  namespace: greetings
   labels:
     app: message-go
     app.kubernetes.io/name: message-go
@@ -119,6 +121,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: name-go
+  namespace: greetings
   labels:
     app: name-go
     app.kubernetes.io/name: name-go
@@ -177,6 +180,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: year-go
+  namespace: greetings
   labels:
     app: year-go
     app.kubernetes.io/name: year-go

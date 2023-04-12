@@ -2,6 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: otel-collector-conf
+  namespace: greetings
   labels:
     app: otel-collector
 data:
@@ -31,6 +32,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: otel-collector
+  namespace: greetings
   labels:
     app: otel-collector
     component:  otel-collector
@@ -112,6 +114,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: otel-collector
+  namespace: greetings
   labels:
     app: otel-collector
     component: otel-collector

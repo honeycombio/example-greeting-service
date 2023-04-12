@@ -1,0 +1,6 @@
+resources:
+- ns.yaml
+- frontend.yaml
+- message.yaml
+- name.yaml
+- year.yaml
