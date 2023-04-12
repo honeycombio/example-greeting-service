@@ -9,14 +9,14 @@ metadata:
 apiVersion: v1
 kind: Service
 metadata:
-  name: frontend-go-svc
+  name: frontend
   labels:
-    app: frontend-go-svc
-    service: frontend-go-svc
+    app: frontend
+    service: frontend
     app.kubernetes.io/name: frontend-go
 spec:
   selector:
-    app: frontend-go-svc
+    app: frontend
   ports:
   - name: http
     port: 7007
@@ -34,27 +34,26 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: frontend-go-svc
+      app: frontend
   template:
     metadata:
       labels:
-        app: frontend-go-svc
+        app: frontend
     spec:
       serviceAccountName: frontend-go
       terminationGracePeriodSeconds: 0
       containers:
-        - name: frontend-go-svc
+        - name: frontend
           image: frontend-go-auto:local
           ports:
           - containerPort: 7007
             name: http
           env:
           - name: MESSAGE_ENDPOINT
-            value: http://message-go-svc:9000
+            value: http://message:9000
           - name: NAME_ENDPOINT
-            value: http://name-go-svc:8000
-          - name: YEAR_ENDPOINT
-            value: http://year-go-svc:6001
+            value: http://name:8000
+
 ---
 ##################################################################################################
 # message-go services
@@ -67,14 +66,14 @@ metadata:
 apiVersion: v1
 kind: Service
 metadata:
-  name: message-go-svc
+  name: message
   labels:
-    app: message-go-svc
-    service: message-go-svc
+    app: message
+    service: message
     app.kubernetes.io/name: message-go
 spec:
   selector:
-    app: message-go-svc
+    app: message
   ports:
   - name: http
     port: 9000
@@ -92,27 +91,21 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: message-go-svc
+      app: message
   template:
     metadata:
       labels:
-        app: message-go-svc
+        app: message
     spec:
       serviceAccountName: message-go
       terminationGracePeriodSeconds: 0
       containers:
-        - name: message-go-svc
+        - name: message
           image: message-go-auto:local
           ports:
           - containerPort: 9000
             name: http
-          env:
-          - name: MESSAGE_ENDPOINT
-            value: http://message-go-svc:9000
-          - name: NAME_ENDPOINT
-            value: http://name-go-svc:8000
-          - name: YEAR_ENDPOINT
-            value: http://year-go-svc:6001
+
 ---
 ##################################################################################################
 # name-go services
@@ -125,14 +118,14 @@ metadata:
 apiVersion: v1
 kind: Service
 metadata:
-  name: name-go-svc
+  name: name
   labels:
-    app: name-go-svc
-    service: name-go-svc
+    app: name
+    service: name
     app.kubernetes.io/name: name-go
 spec:
   selector:
-    app: name-go-svc
+    app: name
   ports:
   - name: http
     port: 8000
@@ -150,27 +143,23 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: name-go-svc
+      app: name
   template:
     metadata:
       labels:
-        app: name-go-svc
+        app: name
     spec:
       serviceAccountName: name-go
       terminationGracePeriodSeconds: 0
       containers:
-        - name: name-go-svc
+        - name: name
           image: name-go-auto:local
           ports:
           - containerPort: 8000
             name: http
           env:
-          - name: MESSAGE_ENDPOINT
-            value: http://message-go-svc:9000
-          - name: NAME_ENDPOINT
-            value: http://name-go-svc:8000
           - name: YEAR_ENDPOINT
-            value: http://year-go-svc:6001
+            value: http://year:6001
 ---
 ##################################################################################################
 # year-go services
@@ -183,14 +172,14 @@ metadata:
 apiVersion: v1
 kind: Service
 metadata:
-  name: year-go-svc
+  name: year
   labels:
-    app: year-go-svc
-    service: year-go-svc
+    app: year
+    service: year
     app.kubernetes.io/name: year-go
 spec:
   selector:
-    app: year-go-svc
+    app: year
   ports:
   - name: http
     port: 6001
@@ -208,24 +197,18 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: year-go-svc
+      app: year
   template:
     metadata:
       labels:
-        app: year-go-svc
+        app: year
     spec:
       serviceAccountName: year-go
       terminationGracePeriodSeconds: 0
       containers:
-        - name: year-go-svc
+        - name: year
           image: year-go-auto:local
           ports:
           - containerPort: 6001
             name: http
-          env:
-          - name: MESSAGE_ENDPOINT
-            value: http://message-go-svc:9000
-          - name: NAME_ENDPOINT
-            value: http://name-go-svc:8000
-          - name: YEAR_ENDPOINT
-            value: http://year-go-svc:6001
+

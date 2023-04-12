@@ -12,20 +12,26 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: frontend-go-svc
+      app: frontend
   template:
     metadata:
       labels:
-        app: frontend-go-svc
+        app: frontend
     spec:
       shareProcessNamespace: true
       securityContext: {}
       terminationGracePeriodSeconds: 30
       containers:
-        - name: frontend-go-svc
+        - name: frontend
           image: frontend-go-auto:local
           ports:
-            - containerPort: 7007
+          - containerPort: 7007
+            name: http
+          env:
+          - name: MESSAGE_ENDPOINT
+            value: http://message:9000
+          - name: NAME_ENDPOINT
+            value: http://name:8000
         - name: frontend-go-instrumentation
           image: otel-go-agent:v0.1
           env:
@@ -66,17 +72,17 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: message-go-svc
+      app: message
   template:
     metadata:
       labels:
-        app: message-go-svc
+        app: message
     spec:
       shareProcessNamespace: true
       securityContext: {}
       terminationGracePeriodSeconds: 30
       containers:
-        - name: message-go-svc
+        - name: message
           image: message-go-auto:local
           ports:
             - containerPort: 9000
@@ -120,20 +126,24 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: name-go-svc
+      app: name
   template:
     metadata:
       labels:
-        app: name-go-svc
+        app: name
     spec:
       shareProcessNamespace: true
       securityContext: {}
       terminationGracePeriodSeconds: 30
       containers:
-        - name: name-go-svc
+        - name: name
           image: name-go-auto:local
           ports:
-            - containerPort: 8000
+          - containerPort: 8000
+            name: http
+          env:
+          - name: YEAR_ENDPOINT
+            value: http://year:6001
         - name: name-go-instrumentation
           image: otel-go-agent:v0.1
           env:
@@ -174,17 +184,17 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: year-go-svc
+      app: year
   template:
     metadata:
       labels:
-        app: year-go-svc
+        app: year
     spec:
       shareProcessNamespace: true
       securityContext: {}
       terminationGracePeriodSeconds: 30
       containers:
-        - name: year-go-svc
+        - name: year
           image: year-go-auto:local
           ports:
             - containerPort: 6001
