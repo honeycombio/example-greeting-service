@@ -10,7 +10,7 @@ sourceCompatibility = '11'
 
 ext {
     otelVersion = '1.24.0'
-    otelAgentVersion = '1.21.0'
+    otelAgentVersion = '1.24.0'
 }
 
 configurations {
