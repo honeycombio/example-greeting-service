@@ -17,17 +17,14 @@ docker images | grep otel-go-agent
 
 ## setup
 
-replace `<APIKEY>` with actual api key
-
 ```sh
+# replace `<APIKEY>` with actual api key
 export HONEYCOMB_API_KEY=<APIKEY>
-```
 
-```sh
 # build the docker images for all the services
 docker-compose build
 
-# deploy the greetings namespace in k8s
+# deploy the greetings namespace and services in k8s
 kubectl apply -k greetings/
 
 # create secret with api key
