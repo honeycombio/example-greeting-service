@@ -1,17 +1,10 @@
 version: "2.4"
 
-x-common-env: &common-env
-  MESSAGE_ENDPOINT: http://message:9000
-  NAME_ENDPOINT: http://name:8000
-  YEAR_ENDPOINT: http://year:6001
-
 services:
   frontend:
     build:
         context: .
         dockerfile: ./frontend/Dockerfile
-    environment:
-      <<: *common-env
     image: frontend-go-auto:local
     ports:
       - 7007:7007
@@ -20,8 +13,6 @@ services:
     build:
         context: .
         dockerfile: ./message-service/Dockerfile
-    environment:
-      <<: *common-env
     image: message-go-auto:local
     ports:
       - 9000:9000
@@ -30,8 +21,6 @@ services:
     build:
         context: .
         dockerfile: ./name-service/Dockerfile
-    environment:
-      <<: *common-env
     image: name-go-auto:local
     ports:
       - 8000:8000
@@ -40,8 +29,6 @@ services:
     build:
         context: .
         dockerfile: ./year-service/Dockerfile
-    environment:
-      <<: *common-env
     image: year-go-auto:local
     ports:
       - 6001:6001

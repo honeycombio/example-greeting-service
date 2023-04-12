@@ -1,3 +1,4 @@
+# to be built from docker-compose
 FROM golang:1.20 AS build
 WORKDIR /src
 ENV CGO_ENABLED=0

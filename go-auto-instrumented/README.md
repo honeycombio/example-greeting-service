@@ -54,8 +54,8 @@ kubectl logs deployments/otel-collector --follow
 # delete secret with api key
 kubectl delete secret honeycomb
 
-# delete the services with the auto-instrumentation agent
-kubectl delete -f greetings-instrumented.yaml
+# delete the services, including the auto-instrumentation agents
+kubectl delete -f greetings.yaml
 
 # delete the collector service
 kubectl delete -f otel-collector.yaml
