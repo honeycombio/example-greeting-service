@@ -50,13 +50,6 @@ spec:
               add:
                 - SYS_PTRACE
             privileged: true
-          volumeMounts:
-          - mountPath: /sys/kernel/debug
-            name: kernel-debug
-      volumes:
-      - name: kernel-debug
-        hostPath:
-          path: /sys/kernel/debug
 
 ---
 ##################################################################################################
@@ -105,13 +98,6 @@ spec:
               add:
                 - SYS_PTRACE
             privileged: true
-          volumeMounts:
-          - mountPath: /sys/kernel/debug
-            name: kernel-debug
-      volumes:
-      - name: kernel-debug
-        hostPath:
-          path: /sys/kernel/debug
 
 ---
 ##################################################################################################
@@ -164,13 +150,6 @@ spec:
               add:
                 - SYS_PTRACE
             privileged: true
-          volumeMounts:
-          - mountPath: /sys/kernel/debug
-            name: kernel-debug
-      volumes:
-      - name: kernel-debug
-        hostPath:
-          path: /sys/kernel/debug
 
 ---
 ##################################################################################################
@@ -219,10 +198,3 @@ spec:
               add:
                 - SYS_PTRACE
             privileged: true
-          volumeMounts:
-          - mountPath: /sys/kernel/debug
-            name: kernel-debug
-      volumes:
-      - name: kernel-debug
-        hostPath:
-          path: /sys/kernel/debug
