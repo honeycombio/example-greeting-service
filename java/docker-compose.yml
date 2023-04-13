@@ -1,0 +1,50 @@
+version: "2.4"
+
+x-common-env: &common-env
+  HONEYCOMB_API_KEY:
+  HONEYCOMB_DATASET:
+  HONEYCOMB_API:
+  OTEL_EXPORTER_OTLP_ENDPOINT:
+  OTEL_EXPORTER_OTLP_HEADERS:
+  OTEL_RESOURCE_ATTRIBUTES: app.running-in=docker
+  MESSAGE_ENDPOINT: message-java:9000
+  NAME_ENDPOINT: name-java:8000
+  YEAR_ENDPOINT: year-java:6001
+  REDIS_URL: redis
+
+services:
+  frontend-java:
+    build: ./frontend
+    image: hnyexample/frontend-java
+    environment:
+      <<: *common-env
+      OTEL_SERVICE_NAME: frontend-java
+    ports:
+      - 7007:7007
+
+  message-java:
+    build: ./message-service
+    image: hnyexample/message-java
+    environment:
+      <<: *common-env
+      SERVICE_NAME: message-java
+    ports:
+      - 9000:9000
+
+  name-java:
+    build: ./name-service
+    image: hnyexample/name-java
+    environment:
+      <<: *common-env
+      SERVICE_NAME: name-java
+    ports:
+      - 8000:8000
+
+  year-java:
+    build: ./year-service
+    image: hnyexample/year-java
+    environment:
+      <<: *common-env
+      SERVICE_NAME: year-java
+    ports:
+      - 6001:6001

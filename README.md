@@ -109,6 +109,8 @@ This tiltfile utilizes [docker](https://docs.docker.com/desktop/install/mac-inst
 
 The default tilt setup runs the go services.
 
+**NOTE**: if you cancel the `tilt up` command, docker resources will remain running. If you then try to start up another set of services, you will get a port collision. Run `tilt down` which will remove any resources started by tilt previously.
+
 To run services in another supported language, add the language name after the tilt command:
 
 ```shell
