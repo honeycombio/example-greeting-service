@@ -6,7 +6,7 @@ authors = ["Honeycomb"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-bottle = "^0.12.24"
+bottle = "^0.12.25"
 opentelemetry-api = "^1.16.0"
 opentelemetry-sdk = "^1.16.0"
 opentelemetry-exporter-otlp-proto-grpc = "^1.16.0"
