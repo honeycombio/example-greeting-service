@@ -11,7 +11,7 @@ to_run = cfg.get('to-run', []) or ["go"]
 
 # required resrouces: collector & redis
 # Java services
-docker_compose(["./docker-compose.yml", "./java/docker-compose.yml"])
+docker_compose(["./docker-compose.yml", "./docker-compose.java.yml"])
 
 # curl greeting service, language / ecosystem agnostic
 local_resource(

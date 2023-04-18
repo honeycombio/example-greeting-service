@@ -1,5 +1,6 @@
 version: "2.4"
 
+# noinspection ComposeUnknownKeys
 x-common-env: &common-env
   HONEYCOMB_API_KEY:
   HONEYCOMB_DATASET:
@@ -14,7 +15,7 @@ x-common-env: &common-env
 
 services:
   frontend-java:
-    build: ./frontend
+    build: ./java/frontend
     image: hnyexample/frontend-java
     environment:
       <<: *common-env
@@ -23,7 +24,7 @@ services:
       - 7007:7007
 
   message-java:
-    build: ./message-service
+    build: ./java/message-service
     image: hnyexample/message-java
     environment:
       <<: *common-env
@@ -32,7 +33,7 @@ services:
       - 9000:9000
 
   name-java:
-    build: ./name-service
+    build: ./java/name-service
     image: hnyexample/name-java
     environment:
       <<: *common-env
@@ -41,7 +42,7 @@ services:
       - 8000:8000
 
   year-java:
-    build: ./year-service
+    build: ./java/year-service
     image: hnyexample/year-java
     environment:
       <<: *common-env

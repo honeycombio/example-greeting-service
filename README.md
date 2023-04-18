@@ -105,6 +105,11 @@ If using Classic Honeycomb, you'll also need a dataset and must include in the O
 There is a `Tiltfile` to run these services on a local host using <https://tilt.dev/>.
 After installing Tilt, running `tilt up` should spin up all of the services.
 
+**NOTE**: you need to use tilt version 0.32.2+ otherwise you will get an error
+```
+Docker Compose service "frontend-java" has a relative build path: "./frontend"
+```
+
 This tiltfile utilizes [docker](https://docs.docker.com/desktop/install/mac-install/) and docker compose. You can verify they are installed first by checking `docker version` and `docker compose version` 
 
 The default tilt setup runs the go services.
