@@ -16,7 +16,7 @@ docker_compose(["./docker-compose.yml", "./docker-compose.java.yml"])
 # curl greeting service, language / ecosystem agnostic
 local_resource(
   'curl greeting',
-  cmd='curl -s -i localhost:7007/greeting',
+  cmd='curl -s -i localhost:7777/greeting',
   trigger_mode=TRIGGER_MODE_MANUAL,
   auto_init=False)
 

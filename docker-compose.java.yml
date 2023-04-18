@@ -21,7 +21,7 @@ services:
       <<: *common-env
       OTEL_SERVICE_NAME: frontend-java
     ports:
-      - 7007:7007
+      - 7777:7777
 
   message-java:
     build: ./java/message-service

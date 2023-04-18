@@ -21,6 +21,6 @@ In the python directory run `docker-compose up --build`
 In each service directory, run the Docker commands that build and start the service with the corresponding service names and ports.
 
 ` docker build -t frontend .`
-` docker run -dp 7007:7007 frontend`
+` docker run -dp 7777:7777 frontend`
 
 Or however it is you prefer to Docker. :)

@@ -122,8 +122,8 @@ end
 
 Rails.application.initialize!
 
-Rack::Server.new(app: FrontendGreetingApp, Port: 7007).start
+Rack::Server.new(app: FrontendGreetingApp, Port: 7777).start
 
 # To run this example run the `rackup` command with this file
 # Example: rackup frontend.ru
-# Navigate to http://localhost:7007/
+# Navigate to http://localhost:7777/
