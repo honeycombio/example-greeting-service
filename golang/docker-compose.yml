@@ -19,7 +19,7 @@ services:
       <<: *common-env
       OTEL_SERVICE_NAME: frontend-go
     ports:
-      - 7007:7007
+      - 7777:7777
 
   message:
     build:

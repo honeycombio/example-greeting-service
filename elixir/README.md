@@ -1,7 +1,7 @@
 # Elixir Greeting Services
 
 ## Services
-- Frontend: Service that calls the message, name and year services to create a greeting message served at `localhost:7007/greeting`.
+- Frontend: Service that calls the message, name and year services to create a greeting message served at `localhost:7777/greeting`.
 - Message: Service that chooses a random greeting message.
 - Name: Service that chooses a random name.
 - Year: Service that returns a random year.
@@ -58,7 +58,7 @@ In the top level directory run `tilt up elixir`
 
 ## See it in action
 
-`curl localhost:7007/greeting` for greeting
+`curl localhost:7777/greeting` for greeting
 
 `curl localhost:9000/message` for message only
 

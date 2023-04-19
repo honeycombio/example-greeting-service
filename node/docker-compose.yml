@@ -9,7 +9,7 @@ services:
       - MESSAGE_ENDPOINT=message:9000
       - SERVICE_NAME=node-frontend-service
     ports:
-      - 7007:7007
+      - 7777:7777
 
   message:
     build: message-service

@@ -39,7 +39,7 @@ In top-level directory run `tilt up node`
 
 ## See it in action
 
-`curl localhost:7007/greeting` for greeting
+`curl localhost:7777/greeting` for greeting
 
 `curl localhost:9000/message` for message only
 

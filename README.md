@@ -70,7 +70,7 @@ The motivating use case is testing trace context header compatibility between Ho
 
 Port and host names are hardcoded.
 
-- Frontend: Port 7007
+- Frontend: Port 7777
 - Name: Port 8000
 - Year: Port 6001
 - Message: Port 9000
@@ -105,9 +105,16 @@ If using Classic Honeycomb, you'll also need a dataset and must include in the O
 There is a `Tiltfile` to run these services on a local host using <https://tilt.dev/>.
 After installing Tilt, running `tilt up` should spin up all of the services.
 
+**NOTE**: you need to use tilt version 0.32.2+ otherwise you will get an error
+```
+Docker Compose service "frontend-java" has a relative build path: "./frontend"
+```
+
 This tiltfile utilizes [docker](https://docs.docker.com/desktop/install/mac-install/) and docker compose. You can verify they are installed first by checking `docker version` and `docker compose version` 
 
 The default tilt setup runs the go services.
+
+**NOTE**: if you cancel the `tilt up` command, docker resources will remain running. If you then try to start up another set of services, you will get a port collision. Run `tilt down` which will remove any resources started by tilt previously.
 
 To run services in another supported language, add the language name after the tilt command:
 
@@ -151,7 +158,7 @@ Example `tilt_config.json` to override the default with multiple services
 }
 ```
 
-Once running, `curl localhost:7007/greeting` to get a greeting and a trace!
+Once running, `curl localhost:7777/greeting` to get a greeting and a trace!
 
 ctrl+c to kill the session, and `tilt down` to spin down all services.
 
@@ -163,4 +170,4 @@ To run the browser app inside of `/web` run
 tilt up web node 
 ```
 
-This will start up the browser app as well as all node backend services. The browser app makes requests to `http://localhost:7007/greeting` so there has to be a set of backend services running. It could also be any one of our other supported languages (e.g. `py`, `go` etc.)
+This will start up the browser app as well as all node backend services. The browser app makes requests to `http://localhost:7777/greeting` so there has to be a set of backend services running. It could also be any one of our other supported languages (e.g. `py`, `go` etc.)

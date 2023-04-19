@@ -18,7 +18,7 @@ services:
       - MESSAGE_ENDPOINT=message:9000
       - OTEL_COLLECTOR_HOST=collector
     ports:
-      - "7007:7007"
+      - "7777:7777"
 
   name:
     build: name

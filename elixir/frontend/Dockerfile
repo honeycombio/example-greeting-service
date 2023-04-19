@@ -8,5 +8,5 @@ RUN mix local.rebar --force
 RUN mix deps.get
 RUN mix deps.compile
 
-EXPOSE 7007
+EXPOSE 7777
 CMD mix phx.server

@@ -10,12 +10,13 @@ cfg = config.parse()
 to_run = cfg.get('to-run', []) or ["go"]
 
 # required resrouces: collector & redis
-docker_compose("./docker-compose.yml")
+# Java services
+docker_compose(["./docker-compose.yml", "./docker-compose.java.yml"])
 
 # curl greeting service, language / ecosystem agnostic
 local_resource(
   'curl greeting',
-  cmd='curl -s -i localhost:7007/greeting',
+  cmd='curl -s -i localhost:7777/greeting',
   trigger_mode=TRIGGER_MODE_MANUAL,
   auto_init=False)
 
@@ -138,41 +139,6 @@ def launch_ruby_name_service(auto_init=True):
 def launch_ruby_year_service(auto_init=True):
     launch_ruby_svc("year-rb", "ruby/year-service", "puma --port 6001", auto_init=auto_init)
 
-def launch_java_svc(name, dirname="", flags="", auto_init=True):
-    '''
-    Starts a single Java service.
-
-    Parameters:
-    name: used to display the name of the process in the tilt tab
-    dirname: (optional) directory name in which to run `go run main.go` defaults to 'name'
-    flags: (optional) any additional flags to add to the command line
-    '''
-
-    env = {
-        'SERVICE_NAME': name,
-        'OTEL_SERVICE_NAME': name
-    }
-    cmd = "cd {} && gradle bootRun".format(
-        dirname if dirname else name,
-        flags if flags else ""
-    )
-    if "java" in to_run or name in to_run:
-        print("About to start {} with command {}".format(name, cmd))
-
-    local_resource(name, "", auto_init=auto_init, serve_cmd=cmd, serve_env=env)
-
-def launch_java_frontend(auto_init=True):
-    launch_java_svc("frontend-java", dirname="java/frontend", auto_init=auto_init)
-
-def launch_java_message_service(auto_init=True):
-    launch_java_svc("message-java", dirname="java/message-service", auto_init=auto_init)
-
-def launch_java_name_service(auto_init=True):
-    launch_java_svc("name-java", dirname="java/name-service", auto_init=auto_init)
-
-def launch_java_year_service(auto_init=True):
-    launch_java_svc("year-java", dirname="java/year-service", auto_init=auto_init)
-
 def launch_dotnet_svc(name, dirname="", flags="", auto_init=True):
     '''
     Starts a single .NET service.
@@ -291,11 +257,12 @@ def launch_web_vanillajs_service(auto_init=True):
 
 # Launch all services so that all service resources are registered with Tilt
 
+# Java services use docker
+
 # Server services
 launch_go_frontend()
 launch_python_frontend()
 launch_ruby_frontend()
-launch_java_frontend()
 launch_dotnet_frontend()
 launch_node_frontend()
 launch_elixir_frontend()
@@ -303,7 +270,6 @@ launch_elixir_frontend()
 launch_go_message_service()
 launch_python_message_service()
 launch_ruby_message_service()
-launch_java_message_service()
 launch_dotnet_message_service()
 launch_node_message_service()
 launch_elixir_message_service()
@@ -311,7 +277,6 @@ launch_elixir_message_service()
 launch_go_name_service()
 launch_python_name_service()
 launch_ruby_name_service()
-launch_java_name_service()
 launch_dotnet_name_service()
 launch_node_name_service()
 launch_elixir_name_service()
@@ -319,7 +284,6 @@ launch_elixir_name_service()
 launch_go_year_service()
 launch_python_year_service()
 launch_ruby_year_service()
-launch_java_year_service()
 launch_dotnet_year_service()
 launch_node_year_service()
 launch_elixir_year_service()
