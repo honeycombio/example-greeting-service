@@ -1,0 +1,58 @@
+##################################################################################################
+# frontend-go services
+##################################################################################################
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: frontend-go
+  namespace: greetings
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: greetings
+  labels:
+    app: frontend
+    service: frontend
+    app.kubernetes.io/name: frontend-go
+spec:
+  selector:
+    app: frontend
+  ports:
+  - name: http
+    port: 7007
+    targetPort: 7007
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-go
+  namespace: greetings
+  labels:
+    app: frontend-go
+    app.kubernetes.io/name: frontend-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      serviceAccountName: frontend-go
+      terminationGracePeriodSeconds: 0
+      containers:
+        - name: frontend
+          image: frontend-go-auto:local
+          ports:
+          - containerPort: 7007
+            name: http
+          env:
+          - name: MESSAGE_ENDPOINT
+            value: http://message:9000
+          - name: NAME_ENDPOINT
+            value: http://name:8000

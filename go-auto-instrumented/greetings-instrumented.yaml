@@ -1,0 +1,200 @@
+##################################################################################################
+# frontend-go instrumentation
+##################################################################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-go
+  namespace: greetings
+  labels:
+    app: frontend-go
+    app.kubernetes.io/name: frontend-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      shareProcessNamespace: true
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: frontend
+          image: frontend-go-auto:local
+          ports:
+          - containerPort: 7007
+            name: http
+          env:
+          - name: MESSAGE_ENDPOINT
+            value: http://message:9000
+          - name: NAME_ENDPOINT
+            value: http://name:8000
+        - name: frontend-go-instrumentation
+          image: otel-go-agent:v0.1
+          env:
+          - name: OTEL_TARGET_EXE
+            value: /app/frontend
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            value: otel-collector:4317
+          - name: OTEL_SERVICE_NAME
+            value: frontend-go-auto
+          - name: OTEL_PROPAGATORS
+            value: "tracecontext,baggage"
+          securityContext:
+            runAsUser: 0
+            capabilities:
+              add:
+                - SYS_PTRACE
+            privileged: true
+
+---
+##################################################################################################
+# message-go instrumentation
+##################################################################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: message-go
+  namespace: greetings
+  labels:
+    app: message-go
+    app.kubernetes.io/name: message-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: message
+  template:
+    metadata:
+      labels:
+        app: message
+    spec:
+      shareProcessNamespace: true
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: message
+          image: message-go-auto:local
+          ports:
+            - containerPort: 9000
+        - name: message-go-instrumentation
+          image: otel-go-agent:v0.1
+          env:
+          - name: OTEL_TARGET_EXE
+            value: /app/message-service
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            value: otel-collector:4317
+          - name: OTEL_SERVICE_NAME
+            value: message-go-auto
+          - name: OTEL_PROPAGATORS
+            value: "tracecontext,baggage"
+          securityContext:
+            runAsUser: 0
+            capabilities:
+              add:
+                - SYS_PTRACE
+            privileged: true
+
+---
+##################################################################################################
+# name-go instrumentation
+##################################################################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: name-go
+  namespace: greetings
+  labels:
+    app: name-go
+    app.kubernetes.io/name: name-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: name
+  template:
+    metadata:
+      labels:
+        app: name
+    spec:
+      shareProcessNamespace: true
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: name
+          image: name-go-auto:local
+          ports:
+          - containerPort: 8000
+            name: http
+          env:
+          - name: YEAR_ENDPOINT
+            value: http://year:6001
+        - name: name-go-instrumentation
+          image: otel-go-agent:v0.1
+          env:
+          - name: OTEL_TARGET_EXE
+            value: /app/name-service
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            value: otel-collector:4317
+          - name: OTEL_SERVICE_NAME
+            value: name-go-auto
+          - name: OTEL_PROPAGATORS
+            value: "tracecontext,baggage"
+          securityContext:
+            runAsUser: 0
+            capabilities:
+              add:
+                - SYS_PTRACE
+            privileged: true
+
+---
+##################################################################################################
+# year-go instrumentation
+##################################################################################################
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: year-go
+  namespace: greetings
+  labels:
+    app: year-go
+    app.kubernetes.io/name: year-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: year
+  template:
+    metadata:
+      labels:
+        app: year
+    spec:
+      shareProcessNamespace: true
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: year
+          image: year-go-auto:local
+          ports:
+            - containerPort: 6001
+        - name: year-go-instrumentation
+          image: otel-go-agent:v0.1
+          env:
+          - name: OTEL_TARGET_EXE
+            value: /app/year-service
+          - name: OTEL_EXPORTER_OTLP_ENDPOINT
+            value: otel-collector:4317
+          - name: OTEL_SERVICE_NAME
+            value: year-go-auto
+          - name: OTEL_PROPAGATORS
+            value: "tracecontext,baggage"
+          securityContext:
+            runAsUser: 0
+            capabilities:
+              add:
+                - SYS_PTRACE
+            privileged: true

@@ -1,0 +1,53 @@
+##################################################################################################
+# message-go services
+##################################################################################################
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: message-go
+  namespace: greetings
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: message
+  namespace: greetings
+  labels:
+    app: message
+    service: message
+    app.kubernetes.io/name: message-go
+spec:
+  selector:
+    app: message
+  ports:
+  - name: http
+    port: 9000
+    targetPort: 9000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: message-go
+  namespace: greetings
+  labels:
+    app: message-go
+    app.kubernetes.io/name: message-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: message
+  template:
+    metadata:
+      labels:
+        app: message
+    spec:
+      serviceAccountName: message-go
+      terminationGracePeriodSeconds: 0
+      containers:
+        - name: message
+          image: message-go-auto:local
+          ports:
+          - containerPort: 9000
+            name: http
