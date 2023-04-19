@@ -6,7 +6,7 @@ plugins {
 
 group = 'io.honeycomb.examples'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
+sourceCompatibility = '17'
 
 ext {
     distroVersion = '1.4.2'
