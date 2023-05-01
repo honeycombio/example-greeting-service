@@ -9,10 +9,10 @@ make local docker image for auto-instrumentation agent:
 git clone git@github.com:open-telemetry/opentelemetry-go-instrumentation.git
 # navigate into new repo
 cd opentelemetry-go-instrumentation
-# make docker image called otel-go-agent:v0.1
-make docker-build IMG=otel-go-agent:v0.1
+# make docker image called otel-go-instrumentation:v0.1
+make docker-build IMG=otel-go-instrumentation:v0.1
 # make sure you have it locally
-docker images | grep otel-go-agent
+docker images | grep otel-go-instrumentation
 ```
 
 ## setup
@@ -59,12 +59,7 @@ after buildings things locally...
 kind create cluster
 
 # load locally built docker images into kind
-kind load docker-image frontend-go-auto:local
-kind load docker-image message-go-auto:local
-kind load docker-image name-go-auto:local
-kind load docker-image year-go-auto:local
-kind load docker-image otel-go-agent:v0.1
-kind load docker-image otel/opentelemetry-collector:0.75.0
+kind load docker-image frontend-go-auto:local message-go-auto:local name-go-auto:local year-go-auto:local otel-go-instrumentation:v0.1 otel/opentelemetry-collector:0.75.0
 ```
 
 ## cleanup
