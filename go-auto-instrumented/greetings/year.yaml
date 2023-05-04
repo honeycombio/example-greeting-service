@@ -42,6 +42,10 @@ spec:
     metadata:
       labels:
         app: year
+      annotations:
+        sidecar.opentelemetry.io/inject: "true"
+        instrumentation.opentelemetry.io/inject-go: "true"
+        instrumentation.opentelemetry.io/otel-go-auto-target-exe: /app/year-service
     spec:
       serviceAccountName: year-go
       terminationGracePeriodSeconds: 0

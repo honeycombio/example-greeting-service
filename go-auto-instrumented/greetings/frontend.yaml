@@ -42,6 +42,10 @@ spec:
     metadata:
       labels:
         app: frontend
+      annotations:
+        sidecar.opentelemetry.io/inject: "true"
+        instrumentation.opentelemetry.io/inject-go: "true"
+        instrumentation.opentelemetry.io/otel-go-auto-target-exe: /app/frontend
     spec:
       serviceAccountName: frontend-go
       terminationGracePeriodSeconds: 0

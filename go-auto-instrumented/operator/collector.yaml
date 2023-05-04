@@ -1,0 +1,30 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  name: sidecar
+  namespace: greetings
+spec:
+  mode: sidecar
+  config: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+          http:
+
+    processors:
+
+    exporters:
+      logging:
+      otlp:
+        endpoint: "api.honeycomb.io:443"
+        headers:
+          "X-Honeycomb-Team": ""
+          "X-Honeycomb-Dataset": "test-operator-metrics"
+
+    service:
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: []
+          exporters: [logging, otlp]

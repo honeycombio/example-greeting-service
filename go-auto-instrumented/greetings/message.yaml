@@ -42,6 +42,10 @@ spec:
     metadata:
       labels:
         app: message
+      annotations:
+        sidecar.opentelemetry.io/inject: "true"
+        instrumentation.opentelemetry.io/inject-go: "true"
+        instrumentation.opentelemetry.io/otel-go-auto-target-exe: /app/message-service
     spec:
       serviceAccountName: message-go
       terminationGracePeriodSeconds: 0
