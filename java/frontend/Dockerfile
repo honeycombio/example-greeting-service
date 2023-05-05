@@ -5,7 +5,7 @@ COPY --chown=gradle:gradle *.gradle ./
 COPY --chown=gradle:gradle ./src ./src
 RUN gradle bootJar --no-daemon
 
-FROM openjdk:13-jdk-alpine
+FROM eclipse-temurin:17-jdk
 VOLUME /tmp
 ENV JAVA_AGENT=otel-javaagent.jar
 ENV JAVA_TOOL_OPTIONS=-javaagent:${JAVA_AGENT}
