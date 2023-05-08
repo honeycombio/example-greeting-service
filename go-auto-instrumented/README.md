@@ -1,20 +1,5 @@
 # auto-instrument go services
 
-## temporary start
-
-make local docker image for auto-instrumentation agent:
-
-```sh
-# clone repo
-git clone git@github.com:open-telemetry/opentelemetry-go-instrumentation.git
-# navigate into new repo
-cd opentelemetry-go-instrumentation
-# make docker image called otel-go-instrumentation:v0.1
-make docker-build IMG=otel-go-instrumentation:v0.1
-# make sure you have it locally
-docker images | grep otel-go-instrumentation
-```
-
 ## setup
 
 ```sh
