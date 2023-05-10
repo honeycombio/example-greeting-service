@@ -10,7 +10,7 @@ x-common-env: &common-env
   OTEL_RESOURCE_ATTRIBUTES: app.running-in=docker
   Honeycomb__ApiKey: ${HONEYCOMB_API_KEY}
   Honeycomb__Dataset: ${HONEYCOMB_DATASET}
-  Honeycomb__Endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT}
+  Honeycomb__Endpoint: ${HONEYCOMB_API}
   Otlp__ApiKey: ${HONEYCOMB_API_KEY}
   Otlp__Dataset: ${HONEYCOMB_DATASET}
   Otlp__Endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT}
