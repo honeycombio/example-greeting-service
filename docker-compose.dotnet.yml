@@ -1,9 +1,12 @@
 version: "2.4"
 
+# noinspection ComposeUnknownKeys
 x-common-env: &common-env
   HONEYCOMB_API_KEY:
   HONEYCOMB_DATASET:
+  HONEYCOMB_API:
   OTEL_EXPORTER_OTLP_ENDPOINT:
+  OTEL_EXPORTER_OTLP_HEADERS:
   OTEL_RESOURCE_ATTRIBUTES: app.running-in=docker
   Honeycomb__ApiKey: ${HONEYCOMB_API_KEY}
   Honeycomb__Dataset: ${HONEYCOMB_DATASET}
@@ -11,46 +14,40 @@ x-common-env: &common-env
   Otlp__ApiKey: ${HONEYCOMB_API_KEY}
   Otlp__Dataset: ${HONEYCOMB_DATASET}
   Otlp__Endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT}
-  MESSAGE_ENDPOINT: message:9000
-  NAME_ENDPOINT: name:8000
-  YEAR_ENDPOINT: year:6001
+  MESSAGE_ENDPOINT: message-dotnet:9000
+  NAME_ENDPOINT: name-dotnet:8000
+  YEAR_ENDPOINT: year-dotnet:6001
   REDIS_URL: redis
 
 services:
-  frontend:
-    build: ./frontend
+  frontend-dotnet:
+    build: ./dotnet/frontend
     image: hnyexample/frontend-dotnet
     environment:
       <<: *common-env
     ports:
       - 7777:7777
 
-  message:
-    build: ./message-service
+  message-dotnet:
+    build: ./dotnet/message-service
     image: hnyexample/message-dotnet
     environment:
       <<: *common-env
     ports:
       - 9000:9000
 
-  name:
-    build: ./name-service
+  name-dotnet:
+    build: ./dotnet/name-service
     image: hnyexample/name-dotnet
     environment:
       <<: *common-env
     ports:
       - 8000:8000
 
-  year:
-    build: ./year-service
+  year-dotnet:
+    build: ./dotnet/year-service
     image: hnyexample/year-dotnet
     environment:
       <<: *common-env
     ports:
       - 6001:6001
-
-  redis:
-    image: redis:latest
-    ports:
-      - "127.0.0.1:6379:6379"
-
