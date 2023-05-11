@@ -10,8 +10,17 @@ cfg = config.parse()
 to_run = cfg.get('to-run', []) or ["go"]
 
 # required resrouces: collector & redis
-# Java services
-docker_compose(["./docker-compose.yml", "./docker-compose.java.yml"])
+# Java & dotnet services
+docker_compose([
+    "./docker-compose.yml",
+    "./docker-compose.java.yml",
+    "./docker-compose.dotnet.yml"])
+
+# populate redis for message services that use redis
+local_resource(
+  'load messages into redis',
+  cmd='docker-compose exec  -T redis redis-cli -n 0 SADD messages "how are you?" "how are you doing?" "what\'s good?" "what\'s up?" "how do you do?" "sup?" "good day to you" "how are things?" "howzit?" "woohoo"',
+  resource_deps=['redis'])
 
 # curl greeting service, language / ecosystem agnostic
 local_resource(
@@ -139,38 +148,6 @@ def launch_ruby_name_service(auto_init=True):
 def launch_ruby_year_service(auto_init=True):
     launch_ruby_svc("year-rb", "ruby/year-service", "puma --port 6001", auto_init=auto_init)
 
-def launch_dotnet_svc(name, dirname="", flags="", auto_init=True):
-    '''
-    Starts a single .NET service.
-
-    Parameters:
-    name: used to display the name of the process in the tilt tab
-    dirname: (optional) directory name in which to run `go run main.go` defaults to 'name'
-    flags: (optional) any additional flags to add to the command line
-    '''
-
-    cmd = "cd {} && dotnet run".format(
-        dirname if dirname else name,
-        flags if flags else ""
-    )
-
-    if "dotnet" in to_run or name in to_run:
-        print("About to start {} with command {}".format(name, cmd))
-
-    local_resource(name, "", auto_init=auto_init, serve_cmd=cmd)
-
-def launch_dotnet_frontend(auto_init=True):
-    launch_dotnet_svc("frontend-dotnet", dirname="dotnet/frontend", auto_init=auto_init)
-
-def launch_dotnet_message_service(auto_init=True):
-    launch_dotnet_svc("message-dotnet", dirname="dotnet/message-service", auto_init=auto_init)
-
-def launch_dotnet_name_service(auto_init=True):
-    launch_dotnet_svc("name-dotnet", dirname="dotnet/name-service", auto_init=auto_init)
-
-def launch_dotnet_year_service(auto_init=True):
-    launch_dotnet_svc("year-dotnet", dirname="dotnet/year-service", auto_init=auto_init)
-
 def launch_node_svc(name, dirname="", flags="", auto_init=True):
     '''
     Starts a single Node service.
@@ -257,34 +234,30 @@ def launch_web_vanillajs_service(auto_init=True):
 
 # Launch all services so that all service resources are registered with Tilt
 
-# Java services use docker
+# Java & dotnet services use docker
 
 # Server services
 launch_go_frontend()
 launch_python_frontend()
 launch_ruby_frontend()
-launch_dotnet_frontend()
 launch_node_frontend()
 launch_elixir_frontend()
 
 launch_go_message_service()
 launch_python_message_service()
 launch_ruby_message_service()
-launch_dotnet_message_service()
 launch_node_message_service()
 launch_elixir_message_service()
 
 launch_go_name_service()
 launch_python_name_service()
 launch_ruby_name_service()
-launch_dotnet_name_service()
 launch_node_name_service()
 launch_elixir_name_service()
 
 launch_go_year_service()
 launch_python_year_service()
 launch_ruby_year_service()
-launch_dotnet_year_service()
 launch_node_year_service()
 launch_elixir_year_service()
 
@@ -304,7 +277,7 @@ groups = { i: append_lang(i) for i in supported_languages }
 groups["web"] = ["vanillajs-web"]
 
 # Common resources we always want to run
-resources = ['collector', 'redis', 'curl greeting']
+resources = ['collector', 'redis', 'curl greeting', 'load messages into redis']
 
 # Create the final list of services to run
 for arg in to_run:
