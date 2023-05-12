@@ -10,7 +10,7 @@ import (
 
 	_ "github.com/honeycombio/honeycomb-opentelemetry-go"
 
-	"github.com/honeycombio/otel-launcher-go/launcher"
+	"github.com/honeycombio/otel-config-go/otelconfig"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/trace"
@@ -41,7 +41,7 @@ func yearHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	otelShutdown, err := launcher.ConfigureOpenTelemetry()
+	otelShutdown, err := otelconfig.ConfigureOpenTelemetry()
 	if err != nil {
 		log.Fatalf("error setting up OTel SDK - %e", err)
 	}
