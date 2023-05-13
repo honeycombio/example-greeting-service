@@ -1,4 +1,4 @@
-using Honeycomb.OpenTelemetry;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,7 +6,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddHttpClient();
-builder.Services.AddHoneycomb(builder.Configuration);
+var honeycombOptions = builder.Configuration.GetHoneycombOptions();
+builder.Services.AddOpenTelemetry().WithTracing(otelBuilder =>
+{
+    otelBuilder
+        .AddHoneycomb(honeycombOptions)
+        .AddCommonInstrumentations()
+        .AddAspNetCoreInstrumentationWithBaggage();
+});
+builder.Services.AddSingleton(TracerProvider.Default.GetTracer(honeycombOptions.ServiceName));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
