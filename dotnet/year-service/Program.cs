@@ -19,12 +19,13 @@ var configureOtlpExporter = (OtlpExporterOptions options) =>
     options.Headers = $"x-honeycomb-team={apiKey},x-honeycomb-dataset={dataset}";
 };
 
-builder.Services.AddOpenTelemetryTracing(options => options
-    .SetResourceBuilder(resourceBuilder)
-    .AddSource(telemetrySourceName)
-    .AddAspNetCoreInstrumentation()
-    .AddHttpClientInstrumentation()
-    .AddOtlpExporter(configureOtlpExporter));
+builder.Services.AddOpenTelemetry()
+    .WithTracing(options => options
+        .SetResourceBuilder(resourceBuilder)
+        .AddSource(telemetrySourceName)
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddOtlpExporter(configureOtlpExporter));
 
 builder.Logging.AddOpenTelemetry(options => options
     .SetResourceBuilder(resourceBuilder)
@@ -33,10 +34,7 @@ builder.Logging.AddOpenTelemetry(options => options
 
 Tracer tracer = TracerProvider.Default.GetTracer(telemetrySourceName);
 var app = builder.Build();
-int[] years =
-{
-    2015, 2016, 2017, 2018, 2019, 2020
-};
+int[] years = { 2015, 2016, 2017, 2018, 2019, 2020 };
 
 app.MapGet("/year", () =>
 {
