@@ -31,22 +31,22 @@ namespace name_service
             });
 
             services.AddHttpClient();
-            services.AddOpenTelemetryTracing((builder => builder
-
-                .SetResourceBuilder(ResourceBuilder.CreateDefault()
-                    .AddService(this.Configuration.GetValue<string>("Otlp:ServiceName"))
-                    .AddEnvironmentVariableDetector()
-                )
-                .AddSource(TelemetrySourceName)
-                .AddAspNetCoreInstrumentation()
-                .AddHttpClientInstrumentation()
-                .AddOtlpExporter(options =>
-                {
-                    options.Endpoint = new Uri(Configuration.GetValue<string>("Otlp:Endpoint"));
-                    var apiKey = Configuration.GetValue<string>("Otlp:ApiKey");
-                    var dataset = Configuration.GetValue<string>("Otlp:Dataset");
-                    options.Headers = $"x-honeycomb-team={apiKey},x-honeycomb-dataset={dataset}";
-                })));
+            services.AddOpenTelemetry()
+                .WithTracing((builder => builder
+                    .SetResourceBuilder(ResourceBuilder.CreateDefault()
+                        .AddService(this.Configuration.GetValue<string>("Otlp:ServiceName"))
+                        .AddEnvironmentVariableDetector()
+                    )
+                    .AddSource(TelemetrySourceName)
+                    .AddAspNetCoreInstrumentation()
+                    .AddHttpClientInstrumentation()
+                    .AddOtlpExporter(options =>
+                    {
+                        options.Endpoint = new Uri(Configuration.GetValue<string>("Otlp:Endpoint"));
+                        var apiKey = Configuration.GetValue<string>("Otlp:ApiKey");
+                        var dataset = Configuration.GetValue<string>("Otlp:Dataset");
+                        options.Headers = $"x-honeycomb-team={apiKey},x-honeycomb-dataset={dataset}";
+                    })));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
