@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry.Trace;
 using StackExchange.Redis;
 using System;
 
@@ -28,7 +29,15 @@ namespace message_service
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "message_service", Version = "v1" });
             });
 
-            services.AddHoneycomb(Configuration);
+            HoneycombOptions honeycombOptions = Configuration.GetHoneycombOptions();
+            services.AddOpenTelemetry().WithTracing(otelBuilder =>
+            {
+                otelBuilder
+                    .AddHoneycomb(honeycombOptions)
+                    .AddCommonInstrumentations()
+                    .AddAspNetCoreInstrumentation();
+            });
+            services.AddSingleton(TracerProvider.Default.GetTracer(honeycombOptions.ServiceName));
 
             var redisConfigString = Environment.GetEnvironmentVariable("REDIS_URL");
             if (string.IsNullOrWhiteSpace(redisConfigString))
