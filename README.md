@@ -130,7 +130,7 @@ tilt down
 List of supported languages
 
 - `go`
-- `py`
+- `python`
 - `rb`
 - `java`
 - `dotnet`
@@ -140,7 +140,7 @@ List of supported languages
 It's also possible to run a combination of services in different languages, for example the following command would run each specific service mentioned along with the required services (collector, redis, curl greeting)
 
 ```shell
-tilt up frontend-node message-go name-py year-rb
+tilt up frontend-node message-go name-python year-rb
 ```
 
 To configure a common set of services that are specific to ongoing development, or to override the default option of running all services in go, add a file `tilt_config.json` and specify a group or set of services.
@@ -159,7 +159,7 @@ Example `tilt_config.json` to override the default with multiple services
 
 ```json
 {
-  "to-run": ["frontend-node", "message-go", "name-py", "year-rb"]
+  "to-run": ["frontend-node", "message-go", "name-python", "year-rb"]
 }
 ```
 
