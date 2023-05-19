@@ -9,7 +9,7 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
 ext {
-    distroVersion = '1.4.2'
+    distroVersion = '1.5.0'
 }
 
 repositories {
