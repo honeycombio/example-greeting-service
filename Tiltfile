@@ -10,11 +10,12 @@ cfg = config.parse()
 to_run = cfg.get('to-run', []) or ["go"]
 
 # required resrouces: collector & redis
-# Java & dotnet services
+# Java & dotnet & python services
 docker_compose([
     "./docker-compose.yml",
     "./docker-compose.java.yml",
-    "./docker-compose.dotnet.yml"])
+    "./docker-compose.dotnet.yml",
+    "./docker-compose.python.yml"])
 
 # populate redis for message services that use redis
 local_resource(
@@ -68,49 +69,6 @@ def launch_go_name_service(auto_init=True):
 
 def launch_go_year_service(auto_init=True):
     launch_go_svc("year-go", dirname="golang/year-service")
-
-def launch_python_svc(name, dirname, run_cmd, auto_init=True):
-    '''
-    Starts a single Python service.
-
-    Parameters:
-    name: used to display the name of the process in the tilt tab
-    dirname: (optional) directory name in which to run `python main.py` defaults to 'name'
-    run_cmd: command required to run the service
-    '''
-
-    setup_cmd = "cd {} && poetry install --no-root".format(dirname)
-    serve_cmd = "cd {} && poetry run {}".format(dirname,run_cmd)
-
-    env = {
-        'SERVICE_NAME': name,
-        'OTEL_SERVICE_NAME': name,
-        'OTEL_RESOURCE_ATTRIBUTES': 'app.running-in=tilt'
-    }
-
-    if "py" in to_run or name in to_run:
-        print("About to start {} with command {}".format(name, serve_cmd))
-
-    local_resource(name, setup_cmd, auto_init=auto_init, serve_cmd=serve_cmd, serve_env=env)
-
-
-def launch_python_frontend(auto_init=True):
-    launch_python_svc("frontend-py", dirname="python/frontend", run_cmd="python -m frontend", auto_init=auto_init)
-
-
-def launch_python_message_service(auto_init=True):
-    launch_python_svc("message-py", dirname="python/message-service", run_cmd="python -m message_service", auto_init=auto_init)
-
-
-
-def launch_python_name_service(auto_init=True):
-    launch_python_svc("name-py", dirname="python/name-service", run_cmd="opentelemetry-instrument flask run", auto_init=auto_init)
-
-
-
-def launch_python_year_service(auto_init=True):
-    launch_python_svc("year-py", dirname="python/year-service", run_cmd="yearservice/manage.py runserver 127.0.0.1:6001", auto_init=auto_init)
-
 
 def launch_ruby_svc(name, dirname, run_cmd, auto_init=True):
     '''
@@ -234,29 +192,25 @@ def launch_web_vanillajs_service(auto_init=True):
 
 # Launch all services so that all service resources are registered with Tilt
 
-# Java & dotnet services use docker
+# Java & dotnet & python services use docker
 
 # Server services
 launch_go_frontend()
-launch_python_frontend()
 launch_ruby_frontend()
 launch_node_frontend()
 launch_elixir_frontend()
 
 launch_go_message_service()
-launch_python_message_service()
 launch_ruby_message_service()
 launch_node_message_service()
 launch_elixir_message_service()
 
 launch_go_name_service()
-launch_python_name_service()
 launch_ruby_name_service()
 launch_node_name_service()
 launch_elixir_name_service()
 
 launch_go_year_service()
-launch_python_year_service()
 launch_ruby_year_service()
 launch_node_year_service()
 launch_elixir_year_service()
@@ -265,7 +219,7 @@ launch_elixir_year_service()
 launch_web_vanillajs_service()
 
 # Create map of "groups" of services to commonly run together (e.g. all node services)
-supported_languages = ["go", "py", "rb", "java", "dotnet", "node", "elixir"]
+supported_languages = ["go", "python", "rb", "java", "dotnet", "node", "elixir"]
 language_specific_services = ["frontend", "message", "name", "year"]
 
 def append_lang(lang):

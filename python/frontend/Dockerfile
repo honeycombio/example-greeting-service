@@ -1,4 +1,3 @@
-# not used by Tilt (yet)
 FROM python:3.10-alpine
 
 WORKDIR /app
