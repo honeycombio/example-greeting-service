@@ -12,7 +12,7 @@ opentelemetry-sdk = "^1.16.0"
 opentelemetry-exporter-otlp-proto-grpc = "^1.16.0"
 opentelemetry-instrumentation-requests = "^0.37b0"
 opentelemetry-instrumentation-wsgi = "^0.37b0"
-requests = "^2.28.2"
+requests = "^2.31.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.3.1"
