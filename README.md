@@ -99,7 +99,7 @@ If using Classic Honeycomb, you'll also need a dataset and must include in the O
 - `HONEYCOMB_DATASET` - The name of the dataset you want to write to
 - `OTEL_EXPORTER_OTLP_HEADERS='x-honeycomb-team=api-key,x-honeycomb-dataset=greetings'`
 
-## Running
+## Running with Tilt
 
 ### Server apps
 There is a `Tiltfile` to run these services on a local host using <https://tilt.dev/>.
@@ -114,18 +114,23 @@ This tiltfile utilizes [docker](https://docs.docker.com/desktop/install/mac-inst
 
 The default tilt setup runs the go services.
 
-**NOTE**: if you cancel the `tilt up` command, docker resources will remain running. If you then try to start up another set of services, you will get a port collision. Run `tilt down` which will remove any resources started by tilt previously.
-
 To run services in another supported language, add the language name after the tilt command:
 
 ```shell
 tilt up node
 ```
 
+When you're done:
+
+```shell
+tilt down
+```
+**NOTE**: if you only cancel the `tilt up` command, docker resources will remain running. If you then try to start up another set of services, you will get a port collision. `tilt down` removes any resources started by tilt previously.
+
 List of supported languages
 
 - `go`
-- `py`
+- `python`
 - `rb`
 - `java`
 - `dotnet`
@@ -135,7 +140,7 @@ List of supported languages
 It's also possible to run a combination of services in different languages, for example the following command would run each specific service mentioned along with the required services (collector, redis, curl greeting)
 
 ```shell
-tilt up frontend-node message-go name-py year-rb
+tilt up frontend-node message-go name-python year-rb
 ```
 
 To configure a common set of services that are specific to ongoing development, or to override the default option of running all services in go, add a file `tilt_config.json` and specify a group or set of services.
@@ -154,7 +159,7 @@ Example `tilt_config.json` to override the default with multiple services
 
 ```json
 {
-  "to-run": ["frontend-node", "message-go", "name-py", "year-rb"]
+  "to-run": ["frontend-node", "message-go", "name-python", "year-rb"]
 }
 ```
 
@@ -171,3 +176,18 @@ tilt up web node
 ```
 
 This will start up the browser app as well as all node backend services. The browser app makes requests to `http://localhost:7777/greeting` so there has to be a set of backend services running. It could also be any one of our other supported languages (e.g. `py`, `go` etc.)
+
+## Running with Docker
+
+You can also run services without Tilt by running docker-compose with the base configuration file and a language-specific configuration file.
+
+
+```shell
+docker-compose -f docker-compose.yml -f docker-compose.java.yml up
+```
+
+When you're done:
+
+```shell
+docker-compose down
+````

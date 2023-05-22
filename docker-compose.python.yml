@@ -1,17 +1,20 @@
 version: "2.4"
 
+# noinspection ComposeUnknownKeys
 x-common-env: &common-env
-  HONEYCOMB_API_KEY: ${HONEYCOMB_API_KEY}
-  OTEL_EXPORTER_OTLP_ENDPOINT: https://api.honeycomb.io
-  HONEYCOMB_API_ENDPOINT: https://api.honeycomb.io
-  OTEL_RESOURCE_ATTRIBUTES: app.running-in=docker
-  MESSAGE_ENDPOINT: http://message:9000
-  NAME_ENDPOINT: http://name:8000
-  YEAR_ENDPOINT: http://year:6001
+    HONEYCOMB_API_KEY:
+    HONEYCOMB_DATASET:
+    HONEYCOMB_API:
+    OTEL_EXPORTER_OTLP_ENDPOINT:
+    OTEL_EXPORTER_OTLP_HEADERS:
+    OTEL_RESOURCE_ATTRIBUTES: app.running-in=docker
+    MESSAGE_ENDPOINT: http://message-python:9000
+    NAME_ENDPOINT: http://name-python:8000
+    YEAR_ENDPOINT: http://year-python:6001
 
 services:
-  frontend:
-    build: frontend
+  frontend-python:
+    build: ./python/frontend
     image: hnyexample/frontend-python
     environment:
       <<: *common-env
@@ -19,8 +22,8 @@ services:
     ports:
       - 7777:7777
 
-  message:
-    build: message-service
+  message-python:
+    build: ./python/message-service
     image: hnyexample/message-python
     environment:
       <<: *common-env
@@ -28,8 +31,8 @@ services:
     ports:
       - 9000:9000
 
-  name:
-    build: name-service
+  name-python:
+    build: ./python/name-service
     image: hnyexample/name-python
     environment:
       <<: *common-env
@@ -37,8 +40,8 @@ services:
     ports:
       - 8000:8000
 
-  year:
-    build: year-service
+  year-python:
+    build: ./python/year-service
     image: hnyexample/year-python
     environment:
       <<: *common-env
