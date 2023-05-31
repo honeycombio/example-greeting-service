@@ -8,12 +8,13 @@ x-common-env: &common-env
     OTEL_EXPORTER_OTLP_ENDPOINT:
     OTEL_EXPORTER_OTLP_HEADERS:
     OTEL_RESOURCE_ATTRIBUTES: app.running-in=docker
-    MESSAGE_ENDPOINT: http://message-python:9000
-    NAME_ENDPOINT: http://name-python:8000
-    YEAR_ENDPOINT: http://year-python:6001
+    MESSAGE_ENDPOINT: http://message-service:9000
+    NAME_ENDPOINT: http://name-service:8000
+    YEAR_ENDPOINT: http://year-service:6001
 
 services:
   frontend-python:
+    container_name: frontend-service
     build: ./python/frontend
     image: hnyexample/frontend-python
     environment:
@@ -23,6 +24,7 @@ services:
       - 7777:7777
 
   message-python:
+    container_name: message-service
     build: ./python/message-service
     image: hnyexample/message-python
     environment:
@@ -32,6 +34,7 @@ services:
       - 9000:9000
 
   name-python:
+    container_name: name-service
     build: ./python/name-service
     image: hnyexample/name-python
     environment:
@@ -41,6 +44,7 @@ services:
       - 8000:8000
 
   year-python:
+    container_name: year-service
     build: ./python/year-service
     image: hnyexample/year-python
     environment:

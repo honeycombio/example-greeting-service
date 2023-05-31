@@ -8,13 +8,14 @@ x-common-env: &common-env
   OTEL_EXPORTER_OTLP_ENDPOINT:
   OTEL_EXPORTER_OTLP_HEADERS:
   OTEL_RESOURCE_ATTRIBUTES: app.running-in=docker
-  MESSAGE_ENDPOINT: message-java:9000
-  NAME_ENDPOINT: name-java:8000
-  YEAR_ENDPOINT: year-java:6001
+  MESSAGE_ENDPOINT: message-service:9000
+  NAME_ENDPOINT: name-service:8000
+  YEAR_ENDPOINT: year-service:6001
   REDIS_URL: redis
 
 services:
   frontend-java:
+    container_name: frontend-service
     build: ./java/frontend
     image: hnyexample/frontend-java
     environment:
@@ -24,6 +25,7 @@ services:
       - 7777:7777
 
   message-java:
+    container_name: message-service
     build: ./java/message-service
     image: hnyexample/message-java
     environment:
@@ -33,6 +35,7 @@ services:
       - 9000:9000
 
   name-java:
+    container_name: name-service
     build: ./java/name-service
     image: hnyexample/name-java
     environment:
@@ -42,6 +45,7 @@ services:
       - 8000:8000
 
   year-java:
+    container_name: year-service
     build: ./java/year-service
     image: hnyexample/year-java
     environment:
