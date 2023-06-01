@@ -6,7 +6,7 @@ authors = ["Honeycomb"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-honeycomb-beeline = "^3.5.1"
+honeycomb-beeline = "^3.5.2"
 django = "^4.1.9"
 python-dotenv = "^1.0.0"
 
