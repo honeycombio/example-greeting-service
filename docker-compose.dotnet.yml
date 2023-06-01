@@ -14,13 +14,14 @@ x-common-env: &common-env
   Otlp__ApiKey: ${HONEYCOMB_API_KEY}
   Otlp__Dataset: ${HONEYCOMB_DATASET}
   Otlp__Endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT}
-  MESSAGE_ENDPOINT: message-dotnet:9000
-  NAME_ENDPOINT: name-dotnet:8000
-  YEAR_ENDPOINT: year-dotnet:6001
+  MESSAGE_ENDPOINT: message-service:9000
+  NAME_ENDPOINT: name-service:8000
+  YEAR_ENDPOINT: year-service:6001
   REDIS_URL: redis
 
 services:
   frontend-dotnet:
+    container_name: frontend-service
     build: ./dotnet/frontend
     image: hnyexample/frontend-dotnet
     environment:
@@ -29,6 +30,7 @@ services:
       - 7777:7777
 
   message-dotnet:
+    container_name: message-service
     build: ./dotnet/message-service
     image: hnyexample/message-dotnet
     environment:
@@ -37,6 +39,7 @@ services:
       - 9000:9000
 
   name-dotnet:
+    container_name: name-service
     build: ./dotnet/name-service
     image: hnyexample/name-dotnet
     environment:
@@ -45,6 +48,7 @@ services:
       - 8000:8000
 
   year-dotnet:
+    container_name: year-service
     build: ./dotnet/year-service
     image: hnyexample/year-dotnet
     environment:
