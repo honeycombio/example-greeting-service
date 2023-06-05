@@ -25,7 +25,7 @@ SECRET_KEY = 'fdcn%etfos=f+l-$fsg69k14k3#2jh*i%=8#g)6*ry=_nyoc(q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'year-python']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'year-service']
 
 
 # Application definition
