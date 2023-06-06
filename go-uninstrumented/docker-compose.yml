@@ -5,7 +5,7 @@ services:
     build:
         context: .
         dockerfile: ./frontend/Dockerfile
-    image: frontend-go
+    image: hnyexample/frontend-go-uninstrumented
     ports:
       - 7777:7777
 
@@ -13,7 +13,7 @@ services:
     build:
         context: .
         dockerfile: ./message-service/Dockerfile
-    image: message-go
+    image: hnyexample/message-go-uninstrumented
     ports:
       - 9000:9000
 
@@ -21,7 +21,7 @@ services:
     build:
         context: .
         dockerfile: ./name-service/Dockerfile
-    image: name-go
+    image: hnyexample/name-go-uninstrumented
     ports:
       - 8000:8000
 
@@ -29,7 +29,7 @@ services:
     build:
         context: .
         dockerfile: ./year-service/Dockerfile
-    image: year-go
+    image: hnyexample/year-go-uninstrumented
     ports:
       - 6001:6001
 
