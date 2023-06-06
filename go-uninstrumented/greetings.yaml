@@ -1,0 +1,227 @@
+##################################################################################################
+# frontend-go services
+##################################################################################################
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: frontend-go
+  namespace: default
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: default
+  labels:
+    app: frontend
+    service: frontend
+    app.kubernetes.io/name: frontend-go
+spec:
+  selector:
+    app: frontend
+  ports:
+  - name: http
+    port: 7777
+    targetPort: 7777
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-go
+  namespace: default
+  labels:
+    app: frontend-go
+    app.kubernetes.io/name: frontend-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      serviceAccountName: frontend-go
+      terminationGracePeriodSeconds: 0
+      containers:
+        - name: frontend
+          imagePullPolicy: IfNotPresent
+          image: frontend-go
+          ports:
+          - containerPort: 7777
+            name: http
+          env:
+          - name: MESSAGE_ENDPOINT
+            value: http://message:9000
+          - name: NAME_ENDPOINT
+            value: http://name:8000
+---
+##################################################################################################
+# message-go services
+##################################################################################################
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: message-go
+  namespace: default
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: message
+  namespace: default
+  labels:
+    app: message
+    service: message
+    app.kubernetes.io/name: message-go
+spec:
+  selector:
+    app: message
+  ports:
+  - name: http
+    port: 9000
+    targetPort: 9000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: message-go
+  namespace: default
+  labels:
+    app: message-go
+    app.kubernetes.io/name: message-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: message
+  template:
+    metadata:
+      labels:
+        app: message
+    spec:
+      serviceAccountName: message-go
+      terminationGracePeriodSeconds: 0
+      containers:
+        - name: message
+          imagePullPolicy: IfNotPresent
+          image: message-go
+          ports:
+          - containerPort: 9000
+            name: http
+---
+##################################################################################################
+# name-go services
+##################################################################################################
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: name-go
+  namespace: default
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: name
+  namespace: default
+  labels:
+    app: name
+    service: name
+    app.kubernetes.io/name: name-go
+spec:
+  selector:
+    app: name
+  ports:
+  - name: http
+    port: 8000
+    targetPort: 8000
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: name-go
+  namespace: default
+  labels:
+    app: name-go
+    app.kubernetes.io/name: name-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: name
+  template:
+    metadata:
+      labels:
+        app: name
+    spec:
+      serviceAccountName: name-go
+      terminationGracePeriodSeconds: 0
+      containers:
+        - name: name
+          imagePullPolicy: IfNotPresent
+          image: name-go
+          ports:
+          - containerPort: 8000
+            name: http
+          env:
+          - name: YEAR_ENDPOINT
+            value: http://year:6001
+---
+##################################################################################################
+# year-go services
+##################################################################################################
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: year-go
+  namespace: default
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: year
+  namespace: default
+  labels:
+    app: year
+    service: year
+    app.kubernetes.io/name: year-go
+spec:
+  selector:
+    app: year
+  ports:
+  - name: http
+    port: 6001
+    targetPort: 6001
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: year-go
+  namespace: default
+  labels:
+    app: year-go
+    app.kubernetes.io/name: year-go
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: year
+  template:
+    metadata:
+      labels:
+        app: year
+    spec:
+      serviceAccountName: year-go
+      terminationGracePeriodSeconds: 0
+      containers:
+        - name: year
+          imagePullPolicy: IfNotPresent
+          image: year-go
+          ports:
+          - containerPort: 6001
+            name: http

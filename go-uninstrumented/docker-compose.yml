@@ -1,0 +1,35 @@
+version: "2.4"
+
+services:
+  frontend:
+    build:
+        context: .
+        dockerfile: ./frontend/Dockerfile
+    image: frontend-go
+    ports:
+      - 7777:7777
+
+  message:
+    build:
+        context: .
+        dockerfile: ./message-service/Dockerfile
+    image: message-go
+    ports:
+      - 9000:9000
+
+  name:
+    build:
+        context: .
+        dockerfile: ./name-service/Dockerfile
+    image: name-go
+    ports:
+      - 8000:8000
+
+  year:
+    build:
+        context: .
+        dockerfile: ./year-service/Dockerfile
+    image: year-go
+    ports:
+      - 6001:6001
+
