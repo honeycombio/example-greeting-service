@@ -39,6 +39,7 @@ jobs:
         with:
           context: "{{ defaultContext }}:go-uninstrumented"
           file: ${{ matrix.service }}-service/Dockerfile
+          tags: ghcr.io/${{ github.repository }}/egs-${{ matrix.service }}-go:dev
           push: true
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64
