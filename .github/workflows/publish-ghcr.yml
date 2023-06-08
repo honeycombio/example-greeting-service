@@ -42,4 +42,4 @@ jobs:
           tags: ghcr.io/${{ github.repository }}/egs-${{ matrix.service }}-go:dev
           push: true
           labels: ${{ steps.meta.outputs.labels }}
-          platforms: linux/amd64
+          platforms: linux/amd64,linux/arm64
