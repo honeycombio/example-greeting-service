@@ -32,12 +32,12 @@ jobs:
         uses: docker/metadata-action@v4.4.0
         with:
           images: |
-            ghcr.io/${{ github.repository }}/egs-${ matrix.service }-go
+            ghcr.io/${{ github.repository }}/egs-${{ matrix.service }}-go
 
       - name: Build and push
         uses: docker/build-push-action@v4.0.0
         with:
-          file: go-uninstrumented/${ matrix.service }-service.Dockerfile
+          file: go-uninstrumented/${{ matrix.service }}-service.Dockerfile
           push: true
           tags: dev
           labels: ${{ steps.meta.outputs.labels }}
