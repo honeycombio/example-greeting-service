@@ -37,7 +37,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4.0.0
         with:
-          file: go-uninstrumented/${{ matrix.service }}-service.Dockerfile
+          file: go-uninstrumented/${{ matrix.service }}-service/Dockerfile
           push: true
           tags: dev
           labels: ${{ steps.meta.outputs.labels }}
