@@ -2,13 +2,6 @@
 
 Images are now available on [GitHub Packages](https://github.com/orgs/honeycombio/packages?repo_name=example-greeting-service)
 
-## Steps to Build Locally
-
-```sh
-# build docker images
-docker-compose build
-```
-
 ## Steps to Run in Kubernetes
 
 ```sh
@@ -24,4 +17,28 @@ When all done:
 
 ```sh
 kubectl delete -f greetings.yaml
+```
+
+## Steps to Build Locally
+
+To use local images, build using `docker-compose` and update the `greetings.yaml` with the new image names.
+
+```sh
+# build docker images
+docker-compose build
+```
+
+As an example:
+
+```yaml
+    spec:
+      serviceAccountName: year-go
+      terminationGracePeriodSeconds: 0
+      containers:
+        - name: year
+          imagePullPolicy: IfNotPresent
+          image: egs-year-go:local
+          ports:
+          - containerPort: 6001
+            name: http
 ```

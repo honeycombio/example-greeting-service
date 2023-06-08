@@ -5,7 +5,7 @@ services:
     build:
         context: .
         dockerfile: ./frontend-service/Dockerfile
-    image: egs-frontend-go
+    image: egs-frontend-go:local
     ports:
       - 7777:7777
 
@@ -13,7 +13,7 @@ services:
     build:
         context: .
         dockerfile: ./message-service/Dockerfile
-    image: egs-message-go
+    image: egs-message-go:local
     ports:
       - 9000:9000
 
@@ -21,7 +21,7 @@ services:
     build:
         context: .
         dockerfile: ./name-service/Dockerfile
-    image: egs-name-go
+    image: egs-name-go:local
     ports:
       - 8000:8000
 
@@ -29,7 +29,7 @@ services:
     build:
         context: .
         dockerfile: ./year-service/Dockerfile
-    image: egs-year-go
+    image: egs-year-go:local
     ports:
       - 6001:6001
 
