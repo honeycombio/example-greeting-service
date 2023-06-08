@@ -39,6 +39,6 @@ jobs:
         with:
           file: go-uninstrumented/${ matrix.service }-service.Dockerfile
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: dev
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64,linux/arm64
