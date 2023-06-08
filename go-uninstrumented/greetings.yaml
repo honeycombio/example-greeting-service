@@ -48,7 +48,7 @@ spec:
       containers:
         - name: frontend
           imagePullPolicy: IfNotPresent
-          image: hnyexample/frontend-go-uninstrumented
+          image: ghcr.io/honeycombio/example-greeting-service/egs-frontend-go:dev
           ports:
           - containerPort: 7777
             name: http
@@ -108,7 +108,7 @@ spec:
       containers:
         - name: message
           imagePullPolicy: IfNotPresent
-          image: hnyexample/message-go-uninstrumented
+          image: ghcr.io/honeycombio/example-greeting-service/egs-message-go:dev
           ports:
           - containerPort: 9000
             name: http
@@ -163,7 +163,7 @@ spec:
       containers:
         - name: name
           imagePullPolicy: IfNotPresent
-          image: hnyexample/name-go-uninstrumented
+          image: ghcr.io/honeycombio/example-greeting-service/egs-name-go:dev
           ports:
           - containerPort: 8000
             name: http
@@ -221,7 +221,7 @@ spec:
       containers:
         - name: year
           imagePullPolicy: IfNotPresent
-          image: hnyexample/year-go-uninstrumented
+          image: ghcr.io/honeycombio/example-greeting-service/egs-year-go:dev
           ports:
           - containerPort: 6001
             name: http
