@@ -1,11 +1,17 @@
 # example greeting service in golang - uninstrumented
 
-from root directory:
+Images are now available on [GitHub Packages](https://github.com/orgs/honeycombio/packages?repo_name=example-greeting-service)
+
+## Steps to Build Locally
 
 ```sh
 # build docker images
 docker-compose build
-# TODO publish docker image to skip docker-compose step
+```
+
+## Steps to Run in Kubernetes
+
+```sh
 # deploy the services in k8s
 kubectl apply -f greetings.yaml
 # port-forward the frontend service
