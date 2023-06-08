@@ -4,8 +4,8 @@ services:
   frontend:
     build:
         context: .
-        dockerfile: ./frontend/Dockerfile
-    image: hnyexample/frontend-go-uninstrumented
+        dockerfile: ./frontend-service/Dockerfile
+    image: egs-frontend-go
     ports:
       - 7777:7777
 
@@ -13,7 +13,7 @@ services:
     build:
         context: .
         dockerfile: ./message-service/Dockerfile
-    image: hnyexample/message-go-uninstrumented
+    image: egs-message-go
     ports:
       - 9000:9000
 
@@ -21,7 +21,7 @@ services:
     build:
         context: .
         dockerfile: ./name-service/Dockerfile
-    image: hnyexample/name-go-uninstrumented
+    image: egs-name-go
     ports:
       - 8000:8000
 
@@ -29,7 +29,7 @@ services:
     build:
         context: .
         dockerfile: ./year-service/Dockerfile
-    image: hnyexample/year-go-uninstrumented
+    image: egs-year-go
     ports:
       - 6001:6001
 
