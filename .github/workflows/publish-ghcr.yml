@@ -40,6 +40,5 @@ jobs:
           context: "{{ defaultContext }}:go-uninstrumented"
           file: ${{ matrix.service }}-service/Dockerfile
           push: true
-          tags: dev
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64
