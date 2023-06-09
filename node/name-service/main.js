@@ -20,7 +20,7 @@ const PORT = 8000;
 const HOST = '0.0.0.0';
 const YEAR_ENDPOINT = process.env.YEAR_ENDPOINT || 'localhost:6001';
 
-const yearURL = `http://${YEAR_ENDPOINT}/year`;
+const yearURL = `${YEAR_ENDPOINT}/year`;
 
 // App
 const app = express();

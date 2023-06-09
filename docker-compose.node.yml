@@ -1,0 +1,43 @@
+version: "2.4"
+
+x-common-env: &common-env
+  HONEYCOMB_API_KEY: ${HONEYCOMB_API_KEY}
+  OTEL_EXPORTER_OTLP_ENDPOINT: api.honeycomb.io
+  OTEL_RESOURCE_ATTRIBUTES: app.running-in=docker
+  MESSAGE_ENDPOINT: http://message-node:9000
+  NAME_ENDPOINT: http://name-node:8000
+  YEAR_ENDPOINT: http://year-node:6001
+  REDIS_URL: redis
+
+services:
+  frontend-node:
+    build: ./node/frontend-service
+    environment:
+      <<: *common-env
+      SERVICE_NAME: node-frontend-service
+    ports:
+      - 7777:7777
+
+  message-node:
+    build: ./node/message-service
+    environment:
+      <<: *common-env
+      SERVICE_NAME: node-message-service
+    ports:
+      - 9000:9000
+
+  name-node:
+    build: ./node/name-service
+    environment:
+      <<: *common-env
+      SERVICE_NAME: node-name-service
+    ports:
+      - 8000:8000
+
+  year-node:
+    build: ./node/year-service
+    environment:
+      <<: *common-env
+      SERVICE_NAME: node-year-service
+    ports:
+      - 6001:6001
