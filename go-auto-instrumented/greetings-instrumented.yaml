@@ -34,7 +34,7 @@ spec:
           - name: NAME_ENDPOINT
             value: http://name:8000
         - name: frontend-go-instrumentation
-          image: ghcr.io/open-telemetry/opentelemetry-go-instrumentation/autoinstrumentation-go:v0.2.0-alpha
+          image: ghcr.io/open-telemetry/opentelemetry-go-instrumentation/autoinstrumentation-go:v0.2.2-alpha
           env:
           - name: OTEL_GO_AUTO_TARGET_EXE
             value: /app/frontend
@@ -82,7 +82,7 @@ spec:
           ports:
             - containerPort: 9000
         - name: message-go-instrumentation
-          image: ghcr.io/open-telemetry/opentelemetry-go-instrumentation/autoinstrumentation-go:v0.2.0-alpha
+          image: ghcr.io/open-telemetry/opentelemetry-go-instrumentation/autoinstrumentation-go:v0.2.2-alpha
           env:
           - name: OTEL_GO_AUTO_TARGET_EXE
             value: /app/message-service
@@ -134,7 +134,7 @@ spec:
           - name: YEAR_ENDPOINT
             value: http://year:6001
         - name: name-go-instrumentation
-          image: ghcr.io/open-telemetry/opentelemetry-go-instrumentation/autoinstrumentation-go:v0.2.0-alpha
+          image: ghcr.io/open-telemetry/opentelemetry-go-instrumentation/autoinstrumentation-go:v0.2.2-alpha
           env:
           - name: OTEL_GO_AUTO_TARGET_EXE
             value: /app/name-service
@@ -182,7 +182,7 @@ spec:
           ports:
             - containerPort: 6001
         - name: year-go-instrumentation
-          image: ghcr.io/open-telemetry/opentelemetry-go-instrumentation/autoinstrumentation-go:v0.2.0-alpha
+          image: ghcr.io/open-telemetry/opentelemetry-go-instrumentation/autoinstrumentation-go:v0.2.2-alpha
           env:
           - name: OTEL_GO_AUTO_TARGET_EXE
             value: /app/year-service
