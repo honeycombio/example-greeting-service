@@ -1,11 +1,11 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.8.1)
+    addressable (2.8.4)
       public_suffix (>= 2.0.2, < 6.0)
     domain_name (0.5.20190701)
       unf (>= 0.0.5, < 1.0.0)
-    excon (0.99.0)
+    excon (0.100.0)
     faraday (2.7.4)
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
@@ -14,7 +14,7 @@ GEM
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
-    honeycomb-beeline (2.11.0)
+    honeycomb-beeline (3.0.0)
       libhoney (>= 1.14.2)
     http (5.1.1)
       addressable (~> 2.8)
@@ -33,7 +33,7 @@ GEM
       rake (~> 13.0)
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
-    public_suffix (5.0.1)
+    public_suffix (5.0.3)
     rack (2.2.7)
     rack-protection (3.0.6)
       rack
