@@ -6,7 +6,7 @@ authors = ["Honeycomb"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-werkzeug = "^2.3.3"
+werkzeug = "^2.3.6"
 honeycomb-beeline = "^3.5.2"
 [tool.poetry.dev-dependencies]
 pytest = "^7.4.0"
