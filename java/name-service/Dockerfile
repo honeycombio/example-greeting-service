@@ -1,4 +1,4 @@
-FROM gradle:7.0.1-jdk11 AS build
+FROM gradle:8.1.0-jdk17 AS build
 WORKDIR /home/gradle/
 RUN mkdir ./libs
 COPY --chown=gradle:gradle *.gradle ./
