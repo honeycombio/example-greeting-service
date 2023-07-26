@@ -18,9 +18,7 @@ provider.addSpanProcessor(new SimpleSpanProcessor(new ConsoleSpanExporter()));
 provider.addSpanProcessor(
   new SimpleSpanProcessor(
     new OTLPTraceExporter({
-      // we're sending data to a local collector here because
-      // traces are exported in HTTP/JSON which is not yet
-      // natively supported by Honeycomb
+      // we're sending data to a local collector here to avoid exposing the API key in the browser
       url: 'http://localhost:55681/v1/traces',
     })
   )

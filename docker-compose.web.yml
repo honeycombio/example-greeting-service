@@ -1,0 +1,16 @@
+version: "2.4"
+
+x-common-env: &common-env
+  OTEL_RESOURCE_ATTRIBUTES: app.running-in=docker
+  COLLECTOR_ENDPOINT: http://collector:55681
+  REDIS_URL: redis
+
+services:
+  web:
+    container_name: web-app
+    build: ./web
+    environment:
+      <<: *common-env
+      SERVICE_NAME: web-app
+    ports:
+      - 8080:8080

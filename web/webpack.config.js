@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require("webpack");
 
 module.exports = {
   entry: {
@@ -23,6 +24,9 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: 'Development',
     }),
+      new webpack.DefinePlugin({
+          FRONTEND_ENDPOINT: JSON.stringify(process.env.FRONTEND_ENDPOINT || 'http://localhost:7777'),
+      }),
   ],
   resolve: {
     fallback: {

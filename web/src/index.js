@@ -57,7 +57,7 @@ const updateGreetingContent = async () => {
       ? document.createElement('h1')
       : document.getElementsByTagName('h1')[0];
   try {
-    const greetingContent = await request('http://localhost:7777/greeting');
+    const greetingContent = await request(FRONTEND_ENDPOINT + '/greeting');
 
     greeting.innerHTML = greetingContent;
 
