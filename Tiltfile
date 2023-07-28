@@ -10,12 +10,13 @@ cfg = config.parse()
 to_run = cfg.get('to-run', []) or ["go"]
 
 # required resrouces: collector & redis
-# Java & dotnet & python services & node services
+# optional resources: dockerized services
 docker_compose([
     "./docker-compose.yml",
     "./docker-compose.java.yml",
     "./docker-compose.dotnet.yml",
     "./docker-compose.python.yml",
+    "./docker-compose.web.yml",
     "./docker-compose.node.yml"])
 
 # populate redis for message services that use redis
@@ -142,25 +143,9 @@ def launch_elixir_name_service(auto_init=True):
 def launch_elixir_year_service(auto_init=True):
     launch_elixir_svc("year-elixir", dirname="elixir/year", cmd="run --no-halt", auto_init=auto_init)
 
-def launch_web_service(name, dirname="", flags="", auto_init=True):
-    cmd = "cd {} && npm install && npm start".format(
-        dirname if dirname else name,
-        flags if flags else ""
-    )
-
-    env = {'SERVICE_NAME': name}
-
-    if "web" in to_run or name in to_run:
-        print("About to start {} with command {}".format(name, cmd))
-
-    local_resource(name, "", auto_init=auto_init, serve_cmd=cmd, serve_env=env)
-
-def launch_web_vanillajs_service(auto_init=True):
-    launch_web_service("vanillajs-web", dirname="web", auto_init=auto_init)
-
 # Launch all services so that all service resources are registered with Tilt
 
-# Java & dotnet & python services use docker
+# Other services use docker
 
 # Server services
 launch_go_frontend()
@@ -179,9 +164,6 @@ launch_go_year_service()
 launch_ruby_year_service()
 launch_elixir_year_service()
 
-# Client services
-launch_web_vanillajs_service()
-
 # Create map of "groups" of services to commonly run together (e.g. all node services)
 supported_languages = ["go", "python", "rb", "java", "dotnet", "node", "elixir"]
 language_specific_services = ["frontend", "message", "name", "year"]
@@ -192,7 +174,6 @@ def append_lang(lang):
         lang_appended_list.append(service + "-" +lang)
     return lang_appended_list
 groups = { i: append_lang(i) for i in supported_languages }
-groups["web"] = ["vanillajs-web"]
 
 # Common resources we always want to run
 resources = ['collector', 'redis', 'curl greeting', 'load messages into redis']

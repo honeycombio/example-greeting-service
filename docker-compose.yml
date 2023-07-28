@@ -2,7 +2,7 @@ version: "2.4"
 
 services:
   collector:
-    image: otel/opentelemetry-collector-contrib:0.42.0
+    image: otel/opentelemetry-collector-contrib:0.81.0
     command: ["--config=/etc/otel-collector-config.yaml"]
     environment:
       - HONEYCOMB_API_KEY
