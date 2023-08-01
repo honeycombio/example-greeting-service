@@ -1,0 +1,56 @@
+version: "2.4"
+
+# noinspection ComposeUnknownKeys
+x-common-env: &common-env
+  HONEYCOMB_API_KEY:
+  HONEYCOMB_DATASET:
+  HONEYCOMB_API:
+  OTEL_EXPORTER_OTLP_ENDPOINT:
+  OTEL_EXPORTER_OTLP_HEADERS:
+  OTEL_RESOURCE_ATTRIBUTES: app.running-in=docker
+  MESSAGE_ENDPOINT: message-service:9000
+  NAME_ENDPOINT: name-service:8000
+  YEAR_ENDPOINT: year-service:6001
+  REDIS_URL: redis
+  OTEL_COLLECTOR_HOST: collector
+
+services:
+  frontend-elixir:
+    container_name: frontend-service
+    build: ./elixir/frontend
+    image: hnyexample/frontend-elixir
+    environment:
+      <<: *common-env
+      OTEL_SERVICE_NAME: frontend-elixir
+    ports:
+      - 7777:7777
+
+  message-elixir:
+    container_name: message-service
+    build: ./elixir/message
+    image: hnyexample/message-elixir
+    environment:
+      <<: *common-env
+      SERVICE_NAME: message-elixir
+    ports:
+      - 9000:9000
+
+  name-elixir:
+    container_name: name-service
+    build: ./elixir/name
+    image: hnyexample/name-elixir
+    environment:
+      <<: *common-env
+      SERVICE_NAME: name-elixir
+    ports:
+      - 8000:8000
+
+  year-elixir:
+    container_name: year-service
+    build: ./elixir/year
+    image: hnyexample/year-elixir
+    environment:
+      <<: *common-env
+      SERVICE_NAME: year-elixir
+    ports:
+      - 6001:6001
