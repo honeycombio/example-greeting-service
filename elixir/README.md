@@ -6,7 +6,9 @@
 - Name: Service that chooses a random name.
 - Year: Service that returns a random year.
 
-## How to run
+## How to run without Tilt/Docker
+
+See top-level README.md for instructions on how to run services with Tilt and Docker (easiest).
 
 ### Install Elixir
 If using option 1 or 3 below, make sure you have Elixir installed. The preferred way to install Elixir is with [asdf](https://asdf-vm.com/guide/getting-started.html#_1-install-dependencies).
@@ -26,7 +28,7 @@ asdf install erlang <insert-version-here>
 asdf install elixir <insert-version-here>
 ```
 
-### Option 1: One service at a time
+### Run each service
 
 Install dependencies in the service directory
 
@@ -47,14 +49,6 @@ Message/Name/Year:
 ```shell
 mix run --no-halt
 ```
-
-### Option 2: All Elixir Services via Docker
-
-In the Elixir directory run `docker-compose up -- build`.
-
-### Option 3: All Elixir Servies via Tilt
-
-In the top level directory run `tilt up elixir`
 
 ## See it in action
 
