@@ -44,7 +44,7 @@ follow instructions to [download istio](https://istio.io/latest/docs/setup/getti
 
 ```sh
 curl -L https://istio.io/downloadIstio | sh -
-cd istio-1.15.3
+cd istio-1.18.2
 export PATH=$PWD/bin:$PATH
 ```
 
