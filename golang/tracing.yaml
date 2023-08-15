@@ -12,7 +12,15 @@ spec:
         # zipkin:
         #   address: otel-collector.default:9411
         # openCensusAgent for w3c propagation
-        openCensusAgent:
-            address: otel-collector.default:55678
-        sampling: 100
+        # openCensusAgent:
+        #     address: otel-collector.default:55678
+        # sampling: 100
+    extensionProviders:
+    - name: otel-tracing
+      opentelemetry:
+        port: 4317
+        service: opentelemetry-collector.otel-collector.svc.cluster.local
+    defaultProviders:
+      tracing:
+        - otel-tracing
 ---
