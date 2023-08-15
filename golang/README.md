@@ -7,17 +7,13 @@ note: dataset is only needed for classic but since it's still in some code, add 
 ### build docker images locally
 
 ```shell
-cd golang/frontend
-docker build -t frontend-go:local .
+cd golang/frontend && docker build -t frontend-go:local .
 
-cd golang/message-service
-docker build -t message-go:local .
+cd golang/message-service && docker build -t message-go:local .
 
-cd golang/name-service
-docker build -t name-go:local .
+cd golang/name-service && docker build -t name-go:local .
 
-cd golang/year-service
-docker build -t year-go:local .
+cd golang/year-service && docker build -t year-go:local .
 ```
 
 ### setup environment variables
