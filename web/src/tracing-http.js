@@ -1,10 +1,13 @@
 import { ConsoleSpanExporter, SimpleSpanProcessor } from '@opentelemetry/sdk-trace-base';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
 import { WebTracerProvider } from '@opentelemetry/sdk-trace-web';
-import { ZoneContextManager } from '@opentelemetry/context-zone';
+// import { ZoneContextManager } from '@opentelemetry/context-zone';
 import { Resource } from '@opentelemetry/resources';
 import { SemanticResourceAttributes } from '@opentelemetry/semantic-conventions';
-
+import { registerInstrumentations } from '@opentelemetry/instrumentation';
+import { UserInteractionInstrumentation } from '@opentelemetry/instrumentation-user-interaction';
+import { diag, DiagConsoleLogger, DiagLogLevel } from '@opentelemetry/api';
+diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.DEBUG);
 const provider = new WebTracerProvider({
   resource: new Resource({
     [SemanticResourceAttributes.SERVICE_NAME]: 'egs-browser',
@@ -14,7 +17,7 @@ const provider = new WebTracerProvider({
 // Note: For production consider using the "BatchSpanProcessor" to reduce the number of requests
 // to your exporter. Using the SimpleSpanProcessor here as it sends the spans immediately to the
 // exporter without delay
-provider.addSpanProcessor(new SimpleSpanProcessor(new ConsoleSpanExporter()));
+// provider.addSpanProcessor(new SimpleSpanProcessor(new ConsoleSpanExporter()));
 provider.addSpanProcessor(
   new SimpleSpanProcessor(
     new OTLPTraceExporter({
@@ -25,5 +28,15 @@ provider.addSpanProcessor(
 );
 
 provider.register({
-  contextManager: new ZoneContextManager(),
+  //   contextManager: new ZoneContextManager(),
 });
+
+registerInstrumentations({
+  instrumentations: [
+    new UserInteractionInstrumentation({
+      eventNames: ['click', 'scroll', 'mousedown'],
+    }),
+  ],
+});
+
+// window.addEventListener('click', () => {});

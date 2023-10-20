@@ -76,6 +76,10 @@ const updateGreetingContent = async () => {
 const main = async () => {
   await updateGreetingContent();
   createButton('Refresh greeting', updateGreetingContent);
+  const link = document.createElement('a');
+  link.href = 'https://ui.honeycomb.io';
+  link.innerHTML = 'click me!';
+  document.body.appendChild(link);
 };
 
 // onload kicks off the main function and instruments the page load
