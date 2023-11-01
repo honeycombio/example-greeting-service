@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@grpc/grpc-js": "^1.8.17",
+    "@grpc/grpc-js": "^1.9.9",
     "@opentelemetry/api": "^1.4.1",
     "@opentelemetry/auto-instrumentations-node": "^0.38.0",
     "@opentelemetry/exporter-trace-otlp-grpc": "^0.41.0",
