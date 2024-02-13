@@ -16,7 +16,7 @@
     "node-fetch": "^2.6.12"
   },
   "devDependencies": {
-    "nodemon": "^2.0.22",
+    "nodemon": "^3.0.3",
     "prettier": "^2.8.8"
   }
 }
