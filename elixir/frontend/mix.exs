@@ -37,7 +37,7 @@ defmodule Frontend.MixProject do
       {:telemetry_metrics, "~> 0.6.1"},
       {:telemetry_poller, "~> 1.0.0"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.6.1"},
+      {:plug_cowboy, "~> 2.7.0"},
       {:httpoison, "~> 2.1"},
       {:opentelemetry, "~> 1.2.1"},
       {:opentelemetry_api, "~> 1.2.1"},
