@@ -26,7 +26,7 @@ defmodule Year.MixProject do
       {:opentelemetry, "~> 1.2.0"},
       {:opentelemetry_api, "~> 1.2.1"},
       {:opentelemetry_exporter, "~> 1.4.0"},
-      {:opentelemetry_process_propagator, "~> 0.2.2"},
+      {:opentelemetry_process_propagator, "~> 0.3.0"},
       {:opentelemetry_cowboy, "~> 0.2"}
     ]
   end
