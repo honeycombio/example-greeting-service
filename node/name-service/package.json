@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.18.2",
+    "express": "^4.18.3",
     "honeycomb-beeline": "^4.0.0",
     "node-fetch": "^2.6.12"
   },
