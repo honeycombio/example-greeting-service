@@ -13,7 +13,8 @@
   "dependencies": {
     "@grpc/grpc-js": "^1.8.17",
     "@opentelemetry/api": "^1.4.1",
-    "@opentelemetry/auto-instrumentations-node": "^0.38.0",
+    "@opentelemetry/auto-instrumentations-node": "file:opentelemetry-auto-instrumentations-node-0.41.1.tgz",
+    "@opentelemetry/instrumentation-undici": "file:opentelemetry-instrumentation-undici-0.33.0.tgz",
     "@opentelemetry/exporter-trace-otlp-grpc": "^0.41.0",
     "@opentelemetry/sdk-node": "^0.41.0",
     "express": "^4.18.2"

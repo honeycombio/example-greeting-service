@@ -15,7 +15,23 @@ app.get('/year', async (req, res) => {
   const year = await determineYear(years);
   res.send(`${year}`);
   span.end();
+  tryFetch();
 });
+
+const tryFetch = async (url) => {
+  try {
+    const userId = Math.floor(Math.random() * 10) + 1;
+    const user = await fetch(
+      `https://jsonplaceholder.typicode.com/users/${userId}`
+    );
+    const userData = await user.json();
+    console.log(userData)
+    return userData;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 
 const years = [2015, 2016, 2017, 2018, 2019, 2020];
 
