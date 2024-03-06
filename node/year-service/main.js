@@ -15,7 +15,7 @@ const app = express();
 app.get('/year', async (req, res) => {
   const span = opentelemetry.trace.getTracer('default').startSpan('Getting year');
   const year = await determineYear(years);
-  logger.info('selected year', year);
+  logger.info({"selected_year":year});
   res.send(`${year}`);
   span.end();
 });
