@@ -1,33 +1,13 @@
 const process = require('process');
-const { Metadata, credentials } = require('@grpc/grpc-js');
 
-const { NodeSDK } = require('@opentelemetry/sdk-node');
+const { NodeSDK, logs, tracing } = require('@opentelemetry/sdk-node');
 const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node');
-const { Resource } = require('@opentelemetry/resources');
-const { SemanticResourceAttributes } = require('@opentelemetry/semantic-conventions');
 const { OTLPTraceExporter } = require('@opentelemetry/exporter-trace-otlp-grpc');
-
-// Honeycomb
-const HONEYCOMB_API_KEY = process.env.HONEYCOMB_API_KEY || '';
-const HONEYCOMB_DATASET = process.env.HONEYCOMB_DATASET || '';
-const SERVICE_NAME = process.env.SERVICE_NAME || 'node-year-service';
-const OTLP_ENDPOINT = process.env.HONEYCOMB_API_ENDPOINT || 'grpc://api.honeycomb.io:443/';
-
-const metadata = new Metadata();
-metadata.set('x-honeycomb-team', HONEYCOMB_API_KEY);
-metadata.set('x-honeycomb-dataset', HONEYCOMB_DATASET);
-
-const traceExporter = new OTLPTraceExporter({
-  url: OTLP_ENDPOINT,
-  credentials: credentials.createSsl(),
-  metadata,
-});
+const { OTLPLogExporter } = require('@opentelemetry/exporter-logs-otlp-grpc');
 
 const sdk = new NodeSDK({
-  resource: new Resource({
-    [SemanticResourceAttributes.SERVICE_NAME]: SERVICE_NAME,
-  }),
-  traceExporter,
+  spanProcessor: new tracing.SimpleSpanProcessor(new OTLPTraceExporter()),
+  logRecordProcessor: new logs.SimpleLogRecordProcessor(new OTLPLogExporter()),
   instrumentations: [getNodeAutoInstrumentations({
     '@opentelemetry/instrumentation-fs': {
       enabled: false,

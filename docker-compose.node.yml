@@ -3,6 +3,7 @@ version: "2.4"
 x-common-env: &common-env
   HONEYCOMB_API_KEY: ${HONEYCOMB_API_KEY}
   OTEL_EXPORTER_OTLP_ENDPOINT: api.honeycomb.io
+  OTEL_EXPORTER_OTLP_HEADERS: "x-honeycomb-team=${HONEYCOMB_API_KEY}"
   OTEL_RESOURCE_ATTRIBUTES: app.running-in=docker
   MESSAGE_ENDPOINT: http://message-service:9000
   NAME_ENDPOINT: http://name-service:8000
@@ -42,6 +43,6 @@ services:
     build: ./node/year-service
     environment:
       <<: *common-env
-      SERVICE_NAME: node-year-service
+      OTEL_SERVICE_NAME: node-year-service
     ports:
       - 6001:6001

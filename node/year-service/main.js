@@ -1,8 +1,10 @@
 'use strict';
 
 const opentelemetry = require('@opentelemetry/api');
+const bunyan = require('bunyan');
 
 const express = require('express');
+const logger = bunyan.createLogger({name: 'myapp', level: 'info'});
 
 // Constants
 const PORT = 6001;
@@ -13,6 +15,7 @@ const app = express();
 app.get('/year', async (req, res) => {
   const span = opentelemetry.trace.getTracer('default').startSpan('Getting year');
   const year = await determineYear(years);
+  logger.info({"selected_year":year});
   res.send(`${year}`);
   span.end();
 });
