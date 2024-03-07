@@ -6,10 +6,12 @@ authors = ["Honeycomb"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-honeycomb-beeline = "^3.5.2"
-django = "^4.1.10"
-python-dotenv = "^1.0.0"
+django = "^5.0.2"
+python-dotenv = "^1.0.1"
+opentelemetry-instrumentation-django = "^0.44b0"
+opentelemetry-sdk = "^1.23.0"
+opentelemetry-exporter-otlp-proto-grpc = "^1.23.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^7.4.0"
-autopep8 = "^2.0.1"
+pytest = "^8.0.2"
+autopep8 = "^2.0.4"

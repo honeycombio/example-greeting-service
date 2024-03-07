@@ -19,4 +19,4 @@ RUN poetry config virtualenvs.create false \
 COPY ./yearservice ./yearservice
 
 EXPOSE 6001
-CMD ["poetry", "run", "yearservice/manage.py", "runserver", "0.0.0.0:6001"]
+CMD ["poetry", "run", "yearservice/manage.py", "runserver", "0.0.0.0:6001", "--noreload"]

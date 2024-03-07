@@ -1,24 +1,33 @@
 import os
-import logging
-import beeline
-import beeline.propagation.w3c as w3c
-
+from opentelemetry import trace
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import \
+    OTLPSpanExporter
+from opentelemetry.sdk.resources import Resource, SERVICE_NAME
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import (
+    BatchSpanProcessor,
+    ConsoleSpanExporter,
+)
 from django.apps import AppConfig
-
 
 
 class YearappConfig(AppConfig):
     name = 'yearapp'
 
     def ready(self):
-        # If you use uwsgi, gunicorn, celery, or other pre-fork models, see the section below on pre-fork
-        # models and do not initialize here.
-        beeline.init(
-            writekey=os.environ.get("HONEYCOMB_API_KEY"),
-            api_host=os.environ.get("HONEYCOMB_API_ENDPOINT",
-                                "https://api.honeycomb.io"),
-            service_name='year-python',
-            debug=True,
-            http_trace_parser_hook=w3c.http_trace_parser_hook,
-            http_trace_propagation_hook=w3c.http_trace_propagation_hook,
+        trace.set_tracer_provider(TracerProvider(
+            resource=Resource.create({SERVICE_NAME: "year-python"})
+        ))
+
+        # helpful to see in console while developing
+        trace.get_tracer_provider().add_span_processor(
+            BatchSpanProcessor(ConsoleSpanExporter())
         )
+
+        trace.get_tracer_provider().add_span_processor(
+            BatchSpanProcessor(OTLPSpanExporter(
+                headers=(
+                    ("x-honeycomb-team", os.environ.get("HONEYCOMB_API_KEY")),),
+                endpoint=os.environ.get("HONEYCOMB_API_ENDPOINT",
+                                        "https://api.honeycomb.io")
+            )))
