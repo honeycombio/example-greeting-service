@@ -139,18 +139,18 @@ test = ["pytest (>=6)"]
 
 [[package]]
 name = "honeycomb-beeline"
-version = "3.5.2"
+version = "3.6.0"
 description = "Honeycomb library for easy instrumentation"
 category = "main"
 optional = false
 python-versions = ">=3.7,<4"
 files = [
-    {file = "honeycomb_beeline-3.5.2-py3-none-any.whl", hash = "sha256:b5c94243f02115dfe6130dbc8cda59cb9cd84654da5e9424640d295d07f5d479"},
-    {file = "honeycomb_beeline-3.5.2.tar.gz", hash = "sha256:137f949c40e20ab8547bb6342e6f3cf093ba029c1dc894c9101f87884eab91ea"},
+    {file = "honeycomb_beeline-3.6.0-py3-none-any.whl", hash = "sha256:f6ed94f499408ba49cc9ab90fac81b41891c8b3f2b5134d24e47b39ef1334aa1"},
+    {file = "honeycomb_beeline-3.6.0.tar.gz", hash = "sha256:0a2d6aa317d411466fd55cca3b5c55f6379adfddbd73908cc4db38835c2182fb"},
 ]
 
 [package.dependencies]
-libhoney = ">=2.3.0,<3.0.0"
+libhoney = ">=2.4.0,<3.0.0"
 wrapt = ">=1.12.1,<2.0.0"
 
 [[package]]
@@ -179,19 +179,20 @@ files = [
 
 [[package]]
 name = "libhoney"
-version = "2.3.0"
+version = "2.4.0"
 description = "Python library for sending data to Honeycomb"
 category = "main"
 optional = false
 python-versions = ">=3.7,<4"
 files = [
-    {file = "libhoney-2.3.0-py3-none-any.whl", hash = "sha256:04b7358513ff3eb11c07c6d4dd726de45b93a918ffe42748710c0e53a616c04a"},
-    {file = "libhoney-2.3.0.tar.gz", hash = "sha256:c1ffa35a22061bb6e5c1f9711da39055cf905a9588899626303b73b9cd398772"},
+    {file = "libhoney-2.4.0-py3-none-any.whl", hash = "sha256:02e6eb2b139e96c1236fbaf2a6123db854310fe9439eda181db1e570388665fd"},
+    {file = "libhoney-2.4.0.tar.gz", hash = "sha256:94fc6c6eebd66167a1a5291e8a5d5fed5079cf8ac1afed14cf85d900723cb4b0"},
 ]
 
 [package.dependencies]
 requests = ">=2.24.0,<3.0.0"
-statsd = ">=3.3.0,<4.0.0"
+statsd = ">=3.3,<5.0"
+urllib3 = ">=1.26,<3.0"
 
 [[package]]
 name = "markupsafe"
@@ -473,4 +474,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "7a92412ab321d5bc1c0b1c03779674306b1a100ea68c356c2de2a3ef541124ae"
+content-hash = "a5819b18431565db87ce693a9f626e39ab29bdfcfdfe9ee92d1e91a02ab808a1"
