@@ -31,7 +31,7 @@ class YearappConfig(AppConfig):
 
     def ready(self):
         resource = Resource.create({SERVICE_NAME: 'year-python'})
-        headers = (('x-honeycomb-team', os.environ.get('HONEYCOMB_API_KEY')),),
+        headers = (('x-honeycomb-team', os.environ.get('HONEYCOMB_API_KEY')),)
         endpoint = os.environ.get(
             'HONEYCOMB_API_ENDPOINT', 'https://api.honeycomb.io')
 
