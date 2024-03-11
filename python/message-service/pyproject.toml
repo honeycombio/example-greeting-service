@@ -15,7 +15,7 @@ opentelemetry-instrumentation-wsgi = "^0.44b0"
 requests = "^2.31.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^8.0.2"
+pytest = "^8.1.1"
 
 [build-system]
 requires = ["poetry>=0.12"]
