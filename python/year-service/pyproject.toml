@@ -13,5 +13,5 @@ opentelemetry-sdk = "^1.23.0"
 opentelemetry-exporter-otlp-proto-grpc = "^1.23.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^8.0.2"
+pytest = "^8.1.1"
 autopep8 = "^2.0.4"
