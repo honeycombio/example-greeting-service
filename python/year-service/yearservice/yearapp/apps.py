@@ -30,15 +30,18 @@ class YearappConfig(AppConfig):
     name = 'yearapp'
 
     def ready(self):
+        resource = Resource.create({SERVICE_NAME: 'year-python'})
+        headers = (('x-honeycomb-team', os.environ.get('HONEYCOMB_API_KEY')),),
+        endpoint = os.environ.get(
+            'HONEYCOMB_API_ENDPOINT', 'https://api.honeycomb.io')
+
         trace.set_tracer_provider(TracerProvider(
-            resource=Resource.create({SERVICE_NAME: 'year-python'})
+            resource=resource
         ))
 
         trace_exporter = OTLPSpanExporter(
-            headers=(
-                    ('x-honeycomb-team', os.environ.get('HONEYCOMB_API_KEY')),),
-            endpoint=os.environ.get('HONEYCOMB_API_ENDPOINT',
-                                    'https://api.honeycomb.io')
+            headers=headers,
+            endpoint=endpoint
         )
 
         trace.get_tracer_provider().add_span_processor(
@@ -49,15 +52,13 @@ class YearappConfig(AppConfig):
             BatchSpanProcessor(trace_exporter))
 
         logger_provider = LoggerProvider(
-            resource=Resource.create({SERVICE_NAME: 'year-python'})
+            resource=resource
         )
         set_logger_provider(logger_provider)
 
         log_exporter = OTLPLogExporter(
-            headers=(
-                    ('x-honeycomb-team', os.environ.get('HONEYCOMB_API_KEY')),),
-            endpoint=os.environ.get('HONEYCOMB_API_ENDPOINT',
-                                    'https://api.honeycomb.io')
+            headers=headers,
+            endpoint=endpoint
         )
 
         logger_provider.add_log_record_processor(
