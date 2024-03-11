@@ -30,4 +30,8 @@ service:
       receivers: [otlp]
       processors: [batch]
       exporters: [otlp/hny, logging]
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlp/hny, logging]
 #   exporters: [otlp/hny, logging, file]
