@@ -1,7 +1,11 @@
 package io.honeycomb.examples.javaotlp;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.message.ObjectMessage;
 import org.springframework.stereotype.Component;
 import io.opentelemetry.instrumentation.annotations.WithSpan;
 import io.opentelemetry.api.OpenTelemetry;
@@ -14,6 +18,7 @@ public class YearService {
     private static final Random generator = new Random();
 
     private Tracer tracer;
+    private static final Logger logger = LogManager.getLogger("my-logger");
 
     public YearService(OpenTelemetry openTelemetry) {
         tracer = openTelemetry.getTracer("year-tracer");
@@ -24,6 +29,9 @@ public class YearService {
         Span span = tracer.spanBuilder("🗓 get-a-year ✨").startSpan();
         int rnd = generator.nextInt(YEARS.length);
         String year = YEARS[rnd];
+        Map<String, String> mapMessage = new HashMap<>();
+        mapMessage.put("selected_year", year);
+        logger.info(new ObjectMessage(mapMessage));
         span.end();
 
         return year;

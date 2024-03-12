@@ -9,8 +9,9 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
 ext {
-    otelVersion = '1.27.0'
-    otelAgentVersion = '1.28.0'
+    otelAlphaVersion = '1.32.0-alpha'
+    otelVersion = '1.32.0'
+    otelAgentVersion = '1.32.0'
 }
 
 configurations {
@@ -23,6 +24,12 @@ repositories {
 }
 
 dependencies {
+    // Log4j
+    implementation("org.apache.logging.log4j:log4j-api:2.17.2")
+    implementation("org.apache.logging.log4j:log4j-core:2.17.2")
+
+    // OpenTelemetry SDK
+    implementation("io.opentelemetry:opentelemetry-sdk")
     implementation("io.opentelemetry:opentelemetry-api:${otelVersion}")
     implementation("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:${otelVersion}")
 
@@ -32,6 +39,9 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+
+    // OpenTelemetry log4j appender
+    implementation("io.opentelemetry.instrumentation:opentelemetry-log4j-appender-2.17:${otelAlphaVersion}")
 }
 
 task copyAgentJar(type: Copy) {
