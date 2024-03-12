@@ -50,6 +50,6 @@ services:
     image: hnyexample/year-java
     environment:
       <<: *common-env
-      SERVICE_NAME: year-java
+      OTEL_SERVICE_NAME: year-java
     ports:
       - 6001:6001
