@@ -52,6 +52,8 @@ def launch_go_svc(name, dirname="", flags="", auto_init=True):
         'NAME_ENDPOINT': 'http://localhost:8000',
         'YEAR_ENDPOINT': 'http://localhost:6001',
         'MESSAGE_ENDPOINT': 'http://localhost:9000',
+        'OTEL_EXPORTER_OTLP_ENDPOINT': 'api.honeycomb.io:443',
+        'OTEL_EXPORTER_OTLP_HEADERS': 'x-honeycomb-team=' + os.environ['HONEYCOMB_API_KEY']
     }
     if "go" in to_run or name in to_run:
         print("About to start {} with command {}".format(name, cmd))
