@@ -8,8 +8,7 @@ on:
 
 jobs:
   build-and-publish-docker-image:
-    machine:
-      image: ubuntu-2204:2024.01.1
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
       packages: write
