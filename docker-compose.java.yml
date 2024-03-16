@@ -12,6 +12,7 @@ x-common-env: &common-env
   NAME_ENDPOINT: name-service:8000
   YEAR_ENDPOINT: year-service:6001
   REDIS_URL: redis
+  OTEL_COLLECTOR_HOST: collector
 
 services:
   frontend-java:
