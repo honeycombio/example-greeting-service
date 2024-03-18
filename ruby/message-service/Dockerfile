@@ -1,4 +1,4 @@
-FROM ruby:2.7
+FROM ruby:3.0
 RUN gem install bundler
 WORKDIR /myapp
 COPY Gemfile /myapp/Gemfile
