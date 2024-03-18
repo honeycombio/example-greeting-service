@@ -9,8 +9,8 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
 ext {
-    otelVersion = '1.27.0'
-    otelAgentVersion = '1.28.0'
+    otelApiVersion = '1.35.0'
+    otelAgentVersion = '1.33.0'
 }
 
 configurations {
@@ -23,8 +23,8 @@ repositories {
 }
 
 dependencies {
-    implementation("io.opentelemetry:opentelemetry-api:${otelVersion}")
-    implementation("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:${otelVersion}")
+    implementation("io.opentelemetry:opentelemetry-api:${otelApiVersion}")
+    implementation("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:${otelAgentVersion}")
 
     agent "io.opentelemetry.javaagent:opentelemetry-javaagent:${otelAgentVersion}"
 
