@@ -9,9 +9,10 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
 ext {
-    otelAlphaVersion = '1.32.0-alpha'
-    otelVersion = '1.32.0'
-    otelAgentVersion = '1.32.0'
+    otelAlphaVersion = '2.2.0-alpha'
+    otelSdkVersion = '1.35.0'
+    otelApiVersion = '1.35.0'
+    otelAgentVersion = '2.2.0'
 }
 
 configurations {
@@ -29,9 +30,9 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-core:2.17.2")
 
     // OpenTelemetry SDK
-    implementation("io.opentelemetry:opentelemetry-sdk")
-    implementation("io.opentelemetry:opentelemetry-api:${otelVersion}")
-    implementation("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:${otelVersion}")
+    implementation("io.opentelemetry:opentelemetry-sdk:${otelSdkVersion}")
+    implementation("io.opentelemetry:opentelemetry-api:${otelApiVersion}")
+    implementation("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:${otelAgentVersion}")
 
     agent "io.opentelemetry.javaagent:opentelemetry-javaagent:${otelAgentVersion}"
 
