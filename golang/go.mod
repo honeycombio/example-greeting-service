@@ -5,14 +5,13 @@ go 1.18
 require (
 	github.com/honeycombio/beeline-go v1.11.1
 	github.com/honeycombio/honeycomb-opentelemetry-go v0.7.0
-	github.com/honeycombio/otel-config-go v1.10.0
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.42.0
 	go.opentelemetry.io/otel v1.16.0
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace v1.16.0
 	go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc v1.16.0
 	go.opentelemetry.io/otel/sdk v1.16.0
 	go.opentelemetry.io/otel/trace v1.16.0
-	google.golang.org/grpc v1.55.0
+	google.golang.org/grpc v1.56.3
 )
 
 require (
@@ -27,6 +26,7 @@ require (
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.15.2 // indirect
 	github.com/honeycombio/libhoney-go v1.18.0 // indirect
+	github.com/honeycombio/otel-config-go v1.10.0 // indirect
 	github.com/klauspost/compress v1.15.15 // indirect
 	github.com/lufia/plan9stats v0.0.0-20230326075908-cb1d2100619a // indirect
 	github.com/power-devops/perfstat v0.0.0-20221212215047-62379fc7944b // indirect
