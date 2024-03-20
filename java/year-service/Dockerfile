@@ -7,5 +7,8 @@ RUN gradle bootJar --no-daemon
 
 FROM eclipse-temurin:17-jdk
 VOLUME /tmp
+ENV JAVA_AGENT=otel-javaagent.jar
+ENV JAVA_TOOL_OPTIONS=-javaagent:${JAVA_AGENT}
+COPY --from=build /home/gradle/agent/${JAVA_AGENT} ./${JAVA_AGENT}
 COPY --from=build /home/gradle/build/libs/*.jar app.jar
 CMD ["java", "-jar", "app.jar"]

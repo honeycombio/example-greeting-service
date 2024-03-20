@@ -1,6 +1,6 @@
 plugins {
-    id 'org.springframework.boot' version '3.1.1'
-    id 'io.spring.dependency-management' version '1.1.0'
+    id 'org.springframework.boot' version '3.2.3'
+    id 'io.spring.dependency-management' version '1.1.4'
     id 'java'
 }
 
@@ -9,7 +9,13 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
 ext {
-    distroVersion = '1.5.2'
+    otelAlphaVersion = '1.33.1-alpha'
+    otelApiVersion = '1.36.0'
+    otelAgentVersion = '1.33.1'
+}
+
+configurations {
+    agent
 }
 
 repositories {
@@ -18,11 +24,37 @@ repositories {
 }
 
 dependencies {
-    implementation("io.honeycomb:honeycomb-opentelemetry-sdk:${distroVersion}")
+    implementation("org.apache.logging.log4j:log4j-api:2.17.2")
+    implementation("org.apache.logging.log4j:log4j-core:2.17.2")
+
+    implementation("io.opentelemetry:opentelemetry-api:${otelApiVersion}")
+    implementation("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:${otelAgentVersion}")
+
+    agent "io.opentelemetry.javaagent:opentelemetry-javaagent:${otelAgentVersion}"
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+}
+
+task copyAgentJar(type: Copy) {
+    from configurations.agent {
+        include '**/opentelemetry-javaagent*.jar'
+    }
+    into "agent"
+    rename { fileName -> "otel-javaagent.jar" }
+}
+
+compileJava.dependsOn copyAgentJar
+bootRun.dependsOn copyAgentJar
+
+bootRun.doFirst {
+    jvmArgs("-javaagent:agent/otel-javaagent.jar")
+}
+
+clean.doFirst {
+    delete "agent"
 }
 
 test {

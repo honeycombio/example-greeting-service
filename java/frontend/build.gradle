@@ -1,6 +1,6 @@
 plugins {
-    id 'org.springframework.boot' version '3.1.2'
-    id 'io.spring.dependency-management' version '1.1.0'
+    id 'org.springframework.boot' version '3.2.3'
+    id 'io.spring.dependency-management' version '1.1.4'
     id 'java'
 }
 
@@ -9,8 +9,8 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
 ext {
-    otelVersion = '1.27.0'
-    otelAgentVersion = '1.28.0'
+    otelApiVersion = '1.36.0'
+    otelAgentVersion = '1.33.1'
 }
 
 configurations {
@@ -23,8 +23,8 @@ repositories {
 }
 
 dependencies {
-    implementation("io.opentelemetry:opentelemetry-api:${otelVersion}")
-    implementation("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:${otelVersion}")
+    implementation("io.opentelemetry:opentelemetry-api:${otelApiVersion}")
+    implementation("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:${otelAgentVersion}")
 
     agent "io.opentelemetry.javaagent:opentelemetry-javaagent:${otelAgentVersion}"
 
