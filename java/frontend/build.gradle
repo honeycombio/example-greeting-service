@@ -9,8 +9,8 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
 ext {
-    otelApiVersion = '1.35.0'
-    otelAgentVersion = '1.33.0'
+    otelApiVersion = '1.36.0'
+    otelAgentVersion = '1.33.1'
 }
 
 configurations {
