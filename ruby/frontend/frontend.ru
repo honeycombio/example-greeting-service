@@ -14,8 +14,13 @@ begin
   OpenTelemetry::SDK.configure do |c|
     c.service_name = ENV['SERVICE_NAME'] || "frontend-ruby"
 
-    # enable all auto-instrumentation available
-    c.use_all()
+    # enable all instrumentation libraries installed in the Gemfile
+    # and configure some
+    c.use_all({
+      'OpenTelemetry::Instrumentation::Rack' => {
+        untraced_endpoints: ['/up'], # don't create traces for healthchecks
+      },
+    })
 
     # add the Baggage and CarryOn processors to thepipeline
     c.add_span_processor(O11yWrapper::BaggageSpanProcessor.new)
@@ -49,7 +54,14 @@ class FrontendGreetingApp < Rails::Application
   Rails.logger  = config.logger
 
   routes.append do
+    get "/up" => "health#show"
     get "/greeting" => "greetings#index"
+  end
+end
+
+class HealthController < ActionController::Base
+  def show
+    render plain: "ok"
   end
 end
 
