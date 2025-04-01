@@ -7,6 +7,9 @@ services:
     environment:
       - HONEYCOMB_API_KEY
       - HONEYCOMB_DATASET
+      - HONEYCOMB_API_ENDPOINT
+      - DD_API_KEY
+      - DD_SITE
     volumes:
       - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
     ports:
