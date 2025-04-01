@@ -17,21 +17,27 @@ exporters:
   logging:
     loglevel: debug
   otlp/hny:
-    endpoint: api.honeycomb.io:443
+    endpoint: ${HONEYCOMB_API_ENDPOINT}
     headers:
       # use environment variables to set the values for these headers
       "x-honeycomb-team": "${HONEYCOMB_API_KEY}"
     #   "x-honeycomb-dataset": "${HONEYCOMB_DATASET}" for classic only
 #   file: # optionally export data to a file
 #     path: ./data.json # optional file to store exported data
+  datadog:
+    traces:
+      span_name_as_resource_name: true
+    hostname: "otelcol-docker"
+    api:
+      key: ${DD_API_KEY}
+      site: ${DD_SITE}
 service:
   pipelines:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp/hny, logging]
+      exporters: [otlp/hny, datadog, logging]
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [otlp/hny, logging]
-#   exporters: [otlp/hny, logging, file]
+      exporters: [otlp/hny, datadog, logging]
