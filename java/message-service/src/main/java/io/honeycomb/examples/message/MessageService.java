@@ -26,6 +26,11 @@ public class MessageService {
     private String pickMessage() {
         Span messageLookupSpan = tracer.spanBuilder("📖 look up message ✨").startSpan();
         messageLookupSpan.makeCurrent();
+        try {
+            Thread.sleep(generator.nextInt(1000)); // Simulate 0–999 ms latency
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
         int rnd = generator.nextInt(MESSAGES.length);
         String message = MESSAGES[rnd];
         messageLookupSpan.end();
