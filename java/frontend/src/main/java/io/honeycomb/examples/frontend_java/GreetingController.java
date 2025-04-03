@@ -24,6 +24,12 @@ public class GreetingController {
     @RequestMapping("/greeting")
     public String index() throws URISyntaxException {
         String name = nameService.getName();
+
+        // Simulate random server error
+        if (Math.random() < 0.2) { // 20% chance of failure
+            throw new RuntimeException("Simulated server error");
+        }
+
         Span.current().setAttribute("app.username", name);
 
         try (final Scope ignored = Baggage.current()
