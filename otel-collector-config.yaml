@@ -12,6 +12,11 @@ receivers:
 
 processors:
   batch:
+  resource:
+    attributes:
+      - key: env
+        value: dev
+        action: upsert
 
 exporters:
   logging:
@@ -35,9 +40,9 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [batch]
-      exporters: [otlp/hny, datadog, logging]
+      processors: [batch, resource]
+      exporters: [otlp/hny, datadog]
     logs:
       receivers: [otlp]
-      processors: [batch]
-      exporters: [otlp/hny, datadog, logging]
+      processors: [batch, resource]
+      exporters: [otlp/hny, datadog]
