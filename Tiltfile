@@ -23,7 +23,7 @@ docker_compose([
 # populate redis for message services that use redis
 local_resource(
   'load messages into redis',
-  cmd='docker-compose exec  -T redis redis-cli -n 0 SADD messages "how are you?" "how are you doing?" "what\'s good?" "what\'s up?" "how do you do?" "sup?" "good day to you" "how are things?" "howzit?" "woohoo"',
+  cmd='docker compose exec  -T redis redis-cli -n 0 SADD messages "how are you?" "how are you doing?" "what\'s good?" "what\'s up?" "how do you do?" "sup?" "good day to you" "how are things?" "howzit?" "woohoo"',
   resource_deps=['redis'])
 
 # curl greeting service, language / ecosystem agnostic
