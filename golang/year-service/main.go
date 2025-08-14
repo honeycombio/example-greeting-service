@@ -9,8 +9,6 @@ import (
 	"os"
 	"time"
 
-	_ "github.com/honeycombio/honeycomb-opentelemetry-go"
-
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"

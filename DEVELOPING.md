@@ -98,7 +98,7 @@ For go services, use the go modules file to replace our beeline (and optionally 
 ```txt
 module main
 
-go 1.14
+go 1.24
 
 replace github.com/honeycombio/beeline-go => /home/paul/projects/beeline-go
 
