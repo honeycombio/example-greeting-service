@@ -9,7 +9,8 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
 ext {
-    distroVersion = '1.6.0'
+    otelApiVersion = '1.36.0'
+    otelAgentVersion = '1.33.1'
 }
 
 configurations {
@@ -22,9 +23,11 @@ repositories {
 }
 
 dependencies {
-    agent "io.honeycomb:honeycomb-opentelemetry-javaagent:${distroVersion}"
+    implementation("io.opentelemetry:opentelemetry-api:${otelApiVersion}")
+    implementation("io.opentelemetry.instrumentation:opentelemetry-instrumentation-annotations:${otelAgentVersion}")
 
-    implementation("io.honeycomb:honeycomb-opentelemetry-sdk:${distroVersion}")
+    agent "io.opentelemetry.javaagent:opentelemetry-javaagent:${otelAgentVersion}"
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
@@ -33,17 +36,17 @@ dependencies {
 
 task copyAgentJar(type: Copy) {
     from configurations.agent {
-        include '**/honeycomb-opentelemetry-javaagent*.jar'
+        include '**/opentelemetry-javaagent*.jar'
     }
     into "agent"
-    rename { fileName -> "honey-javaagent.jar" }
+    rename { fileName -> "otel-javaagent.jar" }
 }
 
 compileJava.dependsOn copyAgentJar
 bootRun.dependsOn copyAgentJar
 
 bootRun.doFirst {
-    jvmArgs("-javaagent:agent/honey-javaagent.jar")
+    jvmArgs("-javaagent:agent/otel-javaagent.jar")
 }
 
 clean.doFirst {

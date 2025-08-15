@@ -41,9 +41,9 @@ The motivating use case is testing trace context header compatibility between Ho
 
 **Java**
 - [frontend](/java/frontend) using [opentelemetry-javaagent](https://github.com/open-telemetry/opentelemetry-java-instrumentation)
-- [message-service](/java/message-service) using [honeycomb-opentelemetry-javaagent](https://github.com/honeycombio/honeycomb-opentelemetry-java)
-- [name-service](/java/name-service) using [honeycomb-opentelemetry-javaagent](https://github.com/honeycombio/honeycomb-opentelemetry-java)
-- [year-service](/java/year-service) using [honeycomb-opentelemetry-skd](https://github.com/honeycombio/honeycomb-opentelemetry-java)
+- [message-service](/java/message-service) using [opentelemetry-javaagent](https://github.com/open-telemetry/opentelemetry-java-instrumentation)
+- [name-service](/java/name-service) using [opentelemetry-javaagent](https://github.com/open-telemetry/opentelemetry-java-instrumentation)
+- [year-service](/java/year-service) using [opentelemetry-javaagent](https://github.com/open-telemetry/opentelemetry-java-instrumentation)
 
 **Node**
 - [frontend](/node/frontend) using [opentelemetry-js](https://github.com/open-telemetry/opentelemetry-js)

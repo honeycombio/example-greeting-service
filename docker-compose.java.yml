@@ -31,7 +31,7 @@ services:
     image: hnyexample/message-java
     environment:
       <<: *common-env
-      SERVICE_NAME: message-java
+      OTEL_SERVICE_NAME: message-java
     ports:
       - 9000:9000
 
@@ -41,7 +41,7 @@ services:
     image: hnyexample/name-java
     environment:
       <<: *common-env
-      SERVICE_NAME: name-java
+      OTEL_SERVICE_NAME: name-java
     ports:
       - 8000:8000
 
