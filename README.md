@@ -22,8 +22,8 @@ The idea is to use these to test compatibility between various types of services
 The motivating use case is testing trace context header compatibility between Honeycomb and OpenTelemetry.
 
 **.NET**
-- [frontend](/dotnet/frontend) using [Honeycomb.OpenTelemetry](https://github.com/honeycombio/honeycomb-opentelemetry-dotnet)
-- [message-service](/dotnet/message-service) using [Honeycomb.OpenTelemetry](https://github.com/honeycombio/honeycomb-opentelemetry-dotnet)
+- [frontend](/dotnet/frontend) using [OpenTelemetry](https://github.com/open-telemetry/opentelemetry-dotnet)
+- [message-service](/dotnet/message-service) using [OpenTelemetry](https://github.com/open-telemetry/opentelemetry-dotnet)
 - [name-service](/dotnet/name-service) using [OpenTelemetry](https://github.com/open-telemetry/opentelemetry-dotnet)
 - [year-service](/dotnet/year-service) using [OpenTelemetry](https://github.com/open-telemetry/opentelemetry-dotnet)
 

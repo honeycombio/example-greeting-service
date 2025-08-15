@@ -1,10 +1,10 @@
-using Honeycomb.OpenTelemetry;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using StackExchange.Redis;
 using System;
@@ -13,6 +13,8 @@ namespace message_service
 {
     public class Startup
     {
+        public const string TelemetrySourceName = "honeycomb.examples.message-service-dotnet";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -29,16 +31,24 @@ namespace message_service
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "message_service", Version = "v1" });
             });
 
-            HoneycombOptions honeycombOptions = Configuration.GetHoneycombOptions();
-            services.AddOpenTelemetry().WithTracing(otelBuilder =>
-            {
-                otelBuilder
-                    .AddHoneycomb(honeycombOptions)
-                    .AddCommonInstrumentations()
-                    .AddAspNetCoreInstrumentation();
-            });
-            services.AddSingleton(TracerProvider.Default.GetTracer(honeycombOptions.ServiceName));
+            services.AddOpenTelemetry()
+                .WithTracing((builder => builder
+                    .SetResourceBuilder(ResourceBuilder.CreateDefault()
+                        .AddService(this.Configuration.GetValue<string>("Otlp:ServiceName"))
+                        .AddEnvironmentVariableDetector()
+                    )
+                    .AddSource(TelemetrySourceName)
+                    .AddAspNetCoreInstrumentation()
+                    .AddHttpClientInstrumentation()
+                    .AddOtlpExporter(options =>
+                    {
+                        options.Endpoint = new Uri(Configuration.GetValue<string>("Otlp:Endpoint"));
+                        var apiKey = Configuration.GetValue<string>("Otlp:ApiKey");
+                        var dataset = Configuration.GetValue<string>("Otlp:Dataset");
+                        options.Headers = $"x-honeycomb-team={apiKey},x-honeycomb-dataset={dataset}";
+                    })));
 
+            services.AddSingleton(TracerProvider.Default.GetTracer(this.Configuration.GetValue<string>("Otlp:ServiceName")));
             var redisConfigString = Environment.GetEnvironmentVariable("REDIS_URL");
             if (string.IsNullOrWhiteSpace(redisConfigString))
             {
