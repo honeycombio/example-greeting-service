@@ -37,7 +37,7 @@ The motivating use case is testing trace context header compatibility between Ho
 - [frontend](/golang/frontend) using [opentelemetry-go](https://github.com/open-telemetry/opentelemetry-go)
 - [message-service](/golang/message-service) using [beeline-go](https://github.com/honeycombio/beeline-go)
 - [name-service](/golang/name-service) using [opentelemetry-go](https://github.com/open-telemetry/opentelemetry-go)
-- [year-service](/golang/year-service) using [honeycomb-opentelemetry-go](https://github.com/honeycombio/honeycomb-opentelemetry-go)
+- [year-service](/golang/year-service) using [opentelemetry-go](https://github.com/open-telemetry/opentelemetry-go)
 
 **Java**
 - [frontend](/java/frontend) using [opentelemetry-javaagent](https://github.com/open-telemetry/opentelemetry-java-instrumentation)
@@ -54,7 +54,7 @@ The motivating use case is testing trace context header compatibility between Ho
 **Python**
 - [frontend](/python/frontend) using [beeline-python](https://github.com/honeycombio/beeline-python)
 - [message-service](/python/message-service) using [opentelemetry-python](https://github.com/open-telemetry/opentelemetry-python)
-- [name-service](/python/name-service) using [honeycomb-opentelemetry](https://github.com/honeycombio/honeycomb-opentelemetry-python)
+- [name-service](/python/name-service) using [opentelemetry-python](https://github.com/open-telemetry/opentelemetry-python)
 - [year-service](/python/year-service) using [beeline-python](https://github.com/honeycombio/beeline-python)
 
 **Ruby**
