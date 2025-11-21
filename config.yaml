@@ -1,0 +1,21 @@
+file_format: "1.0"
+disabled: false
+log_level:
+
+tracer_provider:
+  processors:
+      - batch:
+          schedule_delay: 5000
+          export_timeout: 5000
+          max_queue_size: 2048
+          max_export_batch_size: 512
+          # Configure exporter.
+          exporter:
+            # Configure exporter to be OTLP with HTTP transport.
+            otlp_http:
+              # Configure endpoint, including the trace specific path.
+              # If omitted or null, http://localhost:4318/v1/traces is used.
+              endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT}
+              headers:
+                - name: x-honeycomb-team
+                  value: ${HONEYCOMB_API_KEY}
