@@ -10,11 +10,10 @@ import (
 	"time"
 
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+	otelconf "go.opentelemetry.io/contrib/otelconf/v0.3.0"
 	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
-	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
+	"go.opentelemetry.io/otel/log/global"
 	"go.opentelemetry.io/otel/propagation"
-	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	"go.opentelemetry.io/otel/trace"
 )
 
@@ -43,19 +42,31 @@ func yearHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	ctx := context.Background()
-	exporter, _ := otlptrace.New(ctx, otlptracegrpc.NewClient(
-		otlptracegrpc.WithEndpoint(os.Getenv("OTEL_EXPORTER_OTLP_ENDPOINT")),
-		otlptracegrpc.WithHeaders(map[string]string{
-			"x-honeycomb-team": os.Getenv("HONEYCOMB_API_KEY"),
-		}),
-	))
-	tracerProvider := sdktrace.NewTracerProvider(
-		sdktrace.WithBatcher(exporter),
-	)
-	defer tracerProvider.Shutdown(ctx)
+	b, err := os.ReadFile("/etc/otelconf.yaml")
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	otel.SetTracerProvider(tracerProvider)
+	c, err := otelconf.ParseYAML(b)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	s, err := otelconf.NewSDK(otelconf.WithOpenTelemetryConfiguration(*c))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer func() {
+		if err := s.Shutdown(context.Background()); err != nil {
+			log.Fatal(err)
+		}
+	}()
+
+	otel.SetTracerProvider(s.TracerProvider())
+	otel.SetMeterProvider(s.MeterProvider())
+	global.SetLoggerProvider(s.LoggerProvider())
+
 	otel.SetTextMapPropagator(
 		propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}),
 	)
