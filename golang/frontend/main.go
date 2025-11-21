@@ -9,9 +9,9 @@ import (
 	"os"
 
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
-	otelconf "go.opentelemetry.io/contrib/otelconf/v0.3.0"
+	"go.opentelemetry.io/contrib/otelconf"
+	_ "go.opentelemetry.io/contrib/otelconf"
 	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/log/global"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/trace"
 )
@@ -23,30 +23,7 @@ var (
 )
 
 func main() {
-	b, err := os.ReadFile("/etc/otelconf.yaml")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	c, err := otelconf.ParseYAML(b)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	s, err := otelconf.NewSDK(otelconf.WithOpenTelemetryConfiguration(*c))
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer func() {
-		if err := s.Shutdown(context.Background()); err != nil {
-			log.Fatal(err)
-		}
-	}()
-
-	otel.SetTracerProvider(s.TracerProvider())
-	otel.SetMeterProvider(s.MeterProvider())
-	global.SetLoggerProvider(s.LoggerProvider())
+	defer otelconf.Shutdown(context.Background())
 	otel.SetTextMapPropagator(
 		propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}),
 	)

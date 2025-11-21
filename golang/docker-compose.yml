@@ -1,6 +1,7 @@
 version: "2.4"
 
 x-common-env: &common-env
+  OTEL_EXPERIMENTAL_CONFIG_FILE: /etc/otelconf.yaml
   HONEYCOMB_API_KEY: ${HONEYCOMB_API_KEY}
   OTEL_EXPORTER_OTLP_ENDPOINT: api.honeycomb.io
   OTEL_RESOURCE_ATTRIBUTES: app.running-in=docker
