@@ -1,6 +1,6 @@
 file_format: "1.0"
 disabled: false
-log_level:
+log_level: info
 
 tracer_provider:
   processors:
