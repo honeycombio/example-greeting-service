@@ -6,15 +6,13 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
-	"os"
 	"time"
 
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
+	"go.opentelemetry.io/contrib/otelconf"
+	_ "go.opentelemetry.io/contrib/otelconf"
 	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
-	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	"go.opentelemetry.io/otel/propagation"
-	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	"go.opentelemetry.io/otel/trace"
 )
 
@@ -43,19 +41,8 @@ func yearHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	ctx := context.Background()
-	exporter, _ := otlptrace.New(ctx, otlptracegrpc.NewClient(
-		otlptracegrpc.WithEndpoint(os.Getenv("OTEL_EXPORTER_OTLP_ENDPOINT")),
-		otlptracegrpc.WithHeaders(map[string]string{
-			"x-honeycomb-team": os.Getenv("HONEYCOMB_API_KEY"),
-		}),
-	))
-	tracerProvider := sdktrace.NewTracerProvider(
-		sdktrace.WithBatcher(exporter),
-	)
-	defer tracerProvider.Shutdown(ctx)
+	defer otelconf.Shutdown(context.Background())
 
-	otel.SetTracerProvider(tracerProvider)
 	otel.SetTextMapPropagator(
 		propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}),
 	)
