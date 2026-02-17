@@ -22,3 +22,7 @@ tracer_provider:
             headers:
               - name: x-honeycomb-team
                 value: ${HONEYCOMB_API_KEY}
+propagator:
+  composite:
+    - tracecontext:
+    - baggage:

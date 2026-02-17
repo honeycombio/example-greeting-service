@@ -8,6 +8,8 @@ services:
     image: frontend-go-auto:local
     ports:
       - 7007:7007
+    volumes:
+      - ../otelconf.yaml:/otelconf.yaml:ro
 
   message:
     build:
@@ -16,6 +18,8 @@ services:
     image: message-go-auto:local
     ports:
       - 9000:9000
+    volumes:
+      - ../otelconf.yaml:/otelconf.yaml:ro
 
   name:
     build:
@@ -24,6 +28,8 @@ services:
     image: name-go-auto:local
     ports:
       - 8000:8000
+    volumes:
+      - ../otelconf.yaml:/otelconf.yaml:ro
 
   year:
     build:
@@ -32,4 +38,6 @@ services:
     image: year-go-auto:local
     ports:
       - 6001:6001
+    volumes:
+      - ../otelconf.yaml:/otelconf.yaml:ro
 
