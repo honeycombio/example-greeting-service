@@ -2,6 +2,11 @@ file_format: "1.0"
 disabled: false
 log_level: info
 
+resource:
+  attributes:
+    - name: service.name
+      value: ${OTEL_SERVICE_NAME}
+
 logger_provider:
   processors:
     - batch:
@@ -22,3 +27,8 @@ tracer_provider:
             headers:
               - name: x-honeycomb-team
                 value: ${HONEYCOMB_API_KEY}
+
+propagator:
+  composite:
+    - tracecontext:
+    - baggage:
