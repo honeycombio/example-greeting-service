@@ -1,17 +1,16 @@
-const process = require('process');
+'use strict';
 
-const { NodeSDK, logs, tracing } = require('@opentelemetry/sdk-node');
+// @opentelemetry/configuration enables OTEL_EXPERIMENTAL_CONFIG_FILE support.
+// Full integration with NodeSDK is in progress; trace/log export currently
+// uses OTEL_* env vars via NodeSDK's existing env-var config path.
+require('@opentelemetry/configuration');
+
+const { NodeSDK } = require('@opentelemetry/sdk-node');
 const { getNodeAutoInstrumentations } = require('@opentelemetry/auto-instrumentations-node');
-const { OTLPTraceExporter } = require('@opentelemetry/exporter-trace-otlp-grpc');
-const { OTLPLogExporter } = require('@opentelemetry/exporter-logs-otlp-grpc');
 
 const sdk = new NodeSDK({
-  spanProcessor: new tracing.SimpleSpanProcessor(new OTLPTraceExporter()),
-  logRecordProcessor: new logs.SimpleLogRecordProcessor(new OTLPLogExporter()),
   instrumentations: [getNodeAutoInstrumentations({
-    '@opentelemetry/instrumentation-fs': {
-      enabled: false,
-    },
+    '@opentelemetry/instrumentation-fs': { enabled: false },
   })],
 });
 

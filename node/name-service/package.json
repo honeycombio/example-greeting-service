@@ -5,14 +5,17 @@
   "main": "main.js",
   "scripts": {
     "dev": "nodemon main.js",
-    "start": "node main.js",
+    "start": "node -r ./tracing.js main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.70.0",
+    "@opentelemetry/configuration": "^0.212.0",
+    "@opentelemetry/sdk-node": "^0.212.0",
     "express": "^4.18.3",
-    "honeycomb-beeline": "^4.1.0",
     "node-fetch": "^2.6.12"
   },
   "devDependencies": {

@@ -11,9 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@honeycombio/opentelemetry-node": "^0.7.0",
-    "@opentelemetry/api": "^1.4.1",
-    "@opentelemetry/auto-instrumentations-node": "^0.42.0",
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.70.0",
+    "@opentelemetry/configuration": "^0.212.0",
+    "@opentelemetry/sdk-node": "^0.212.0",
     "cors": "^2.8.5",
     "express": "^4.18.3",
     "node-fetch": "^2.6.1"
