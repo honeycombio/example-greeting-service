@@ -1,16 +1,7 @@
 'use strict';
-const beeline = require('honeycomb-beeline');
 
-beeline({
-  // Get this via https://ui.honeycomb.io/account after signing up for Honeycomb
-  writeKey: process.env.HONEYCOMB_API_KEY,
-  // The name of your app is a good choice to start with
-  dataset: process.env.HONEYCOMB_DATASET,
-  serviceName: process.env.SERVICE_NAME || 'node-name-service',
-  apiHost: process.env.HONEYCOMB_API_ENDPOINT || 'https://api.honeycomb.io',
-  httpTraceParserHook: beeline.w3c.httpTraceParserHook,
-  httpTracePropagationHook: beeline.w3c.httpTracePropagationHook,
-});
+const { trace } = require('@opentelemetry/api');
+const tracer = trace.getTracer('name-service');
 
 const express = require('express');
 const fetch = require('node-fetch');
@@ -25,15 +16,21 @@ const yearURL = `${YEAR_ENDPOINT}/year`;
 // App
 const app = express();
 app.get('/name', async (req, res) => {
-  beeline.addContext({ someContext: 'year' });
-  const yearSpan = beeline.startSpan({ name: '✨ call /year ✨' });
-  const year = await getYear(yearURL);
-  beeline.finishSpan(yearSpan);
-  const nameSpan = beeline.startSpan({ name: 'look up name based on year' });
-  const name = determineName(year);
-  beeline.addTraceContext({ user_name: name });
-  beeline.finishSpan(nameSpan);
-  res.send(`${name}`);
+  const activeSpan = trace.getActiveSpan();
+  if (activeSpan) activeSpan.setAttribute('someContext', 'year');
+
+  const year = await tracer.startActiveSpan('✨ call /year ✨', async (span) => {
+    const result = await getYear(yearURL);
+    span.end();
+    return result;
+  });
+
+  return tracer.startActiveSpan('look up name based on year', async (span) => {
+    const name = determineName(year);
+    span.setAttribute('user_name', name);
+    span.end();
+    res.send(`${name}`);
+  });
 });
 
 const names = new Map([
@@ -58,7 +55,8 @@ const getYear = async (url) =>
     })
     .then((text) => {
       text = Number(text);
-      beeline.addTraceContext({ year: text });
+      const activeSpan = trace.getActiveSpan();
+      if (activeSpan) activeSpan.setAttribute('year', text);
       return text;
     })
     .catch((err) => console.error(`Problem getting year: ${err}`));
